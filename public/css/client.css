@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+:root {
+    --black_color: #101010;
+    --orange_principal: #D87D4A;
+    --orange_hover: #FBAF85;
+    --hard_gray: #191919;
+    --mid_gray: #6C6C6C;
+    --soft_gray: #F1F1F1;
+    --broken_white: #FAFAFA;
+    --white_color: #FFFFFF;
+    --input_border: #CFCFCF;
+
+}
