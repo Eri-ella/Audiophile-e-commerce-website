@@ -46,3 +46,18 @@ Route::get('/cart', function () {
     $cart = session('cart', []);
     return view('client.cart', ['cart' => $cart]);
 })->name('cart'); 
+Route::get('/description', function () {
+    return view('layout.description_layout');
+});
+
+Route::get('/product', function () {
+    return view('layout.product_layout');
+});
+
+Route::get('/cartbox', function () {
+    return view('client.cart_box');
+});
+
+Route::get('/paymentbox', function () {
+    return view('client.payment_box');
+});
