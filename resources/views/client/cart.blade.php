@@ -1,5 +1,6 @@
-<script src="https://cdn.tailwindcss.com"></script>
+@extends('layout.client_layout')
 
+@section('acceuil-content')
 @php
     $total      = 0;
     $shipping   = 50;
@@ -172,3 +173,4 @@
     eMoney.addEventListener('change', toggleFields);
     cash.addEventListener('change', toggleFields);
 </script>
+@endsection

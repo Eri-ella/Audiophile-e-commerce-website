@@ -1,4 +1,6 @@
-<script src="https://cdn.tailwindcss.com"></script>
+@extends('layout.client_layout')
+
+@section('acceuil-content')
 <section class="bg-[#101010] py-16 text-center md:py-24">
     <h1 class="text-4xl font-bold uppercase tracking-[2px] text-white">Earphones</h1>
 </section>
@@ -22,3 +24,6 @@
              class="h-[280px] w-auto object-contain md:h-[400px]">
     </div>
 </section>
+<div class='hidden menu justify-center md:hidden'>@include('layout.product_layout')</div>
+<div class='justify-center'>@include('layout.description_layout')</div>
+@endsection

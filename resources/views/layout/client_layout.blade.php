@@ -14,20 +14,20 @@
             <a href=""><p class='text-3xl font-bold'>audiophile</p></a>
         </div>
         <ul class='md:flex hidden uppercase gap-5 text-sm font-semibold tracking-[.15rem]'>
-            <a href="#">
+            <a href={{ Route('acceuil') }}>
                 <li class='hover:text-(--orange_principal)'>home</li>
             </a>
-            <a href="#">
+            <a href={{ Route('headphones') }}>
                 <li class='hover:text-(--orange_principal)'>headphones</li>
             </a>
-            <a href="#">
+            <a href={{ Route('speakers') }}>
                 <li class='hover:text-(--orange_principal)'>speakers</li>
             </a>
-            <a href="#">
+            <a href={{ Route('earphones') }}>
                 <li class='hover:text-(--orange_principal)'>earphones</li>
             </a>    
         </ul>
-        <a href="#"><iconify-icon icon="mdi-light:cart" class='text-2xl cart-box-clicker'></iconify-icon></a>
+        <a href={{ Route('cart') }}><iconify-icon icon="mdi-light:cart" class='text-2xl cart-box-clicker'></iconify-icon></a>
     </header>
     <div class='hidden menu justify-center md:hidden'>@include('layout.product_layout')</div>
     @yield('acceuil-content')
@@ -38,18 +38,18 @@
                 <a href=""><p class='text-3xl font-bold'>audiophile</p></a>
             </div>
             <ul class='flex flex-row max-[460px]:flex-col max-[460px]:items-center items-end uppercase gap-4 max-[460px]:gap-7 text-sm font-medium pr-5 pl-5 md:pl-0 py-10 md:py-0'>
-                <a href="#">
+                <a href={{ Route('acceuil') }}>
                     <li class='hover:text-(--orange_principal)'>home</li>
                 </a>
-                <a href="#">
+                <a href={{ Route('headphones') }}>
                     <li class='hover:text-(--orange_principal)'>headphones</li>
                 </a>
-                <a href="#">
+                <a href={{ Route('speakers') }}>
                     <li class='hover:text-(--orange_principal)'>speakers</li>
                 </a>
-                <a href="#">
+                <a href={{ Route('earphones') }}>
                     <li class='hover:text-(--orange_principal)'>earphones</li>
-                </a>  
+                </a>    
             </ul>
         </div>
         <div class='flex max-[460px]:flex-col size-full items-center justify-between grow gap-40 max-[460px]:gap-10 relative'>
