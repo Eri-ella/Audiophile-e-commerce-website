@@ -45,4 +45,4 @@ Route::get('/earphone1', function () {
 Route::get('/cart', function () {
     $cart = session('cart', []);
     return view('client.cart', ['cart' => $cart]);
-})->name('cart');
+})->name('cart'); 
