@@ -18,10 +18,10 @@ Route::get('/product', function () {
     return view('layout.product_layout');
 });
 
-Route::get('/cart', function () {
+Route::get('/cartbox', function () {
     return view('client.cart_box');
 });
 
-Route::get('/payment', function () {
+Route::get('/paymentbox', function () {
     return view('client.payment_box');
 });
