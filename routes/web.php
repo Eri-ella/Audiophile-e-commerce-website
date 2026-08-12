@@ -17,3 +17,11 @@ Route::get('/description', function () {
 Route::get('/product', function () {
     return view('layout.product_layout');
 });
+
+Route::get('/cart', function () {
+    return view('client.cart_box');
+});
+
+Route::get('/payment', function () {
+    return view('client.payment_box');
+});

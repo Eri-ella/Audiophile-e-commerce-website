@@ -13,7 +13,7 @@
             <iconify-icon icon="material-symbols:menu" class='md:hidden text-3xl mt-2 menu-clicker'></iconify-icon>
             <a href=""><p class='text-3xl font-bold'>audiophile</p></a>
         </div>
-        <ul class='md:flex hidden uppercase gap-4 text-sm font-medium'>
+        <ul class='md:flex hidden uppercase gap-5 text-sm font-semibold tracking-[.15rem]'>
             <a href="#">
                 <li class='hover:text-(--orange_principal)'>home</li>
             </a>
@@ -27,7 +27,7 @@
                 <li class='hover:text-(--orange_principal)'>earphones</li>
             </a>    
         </ul>
-        <a href="#"><iconify-icon icon="mdi-light:cart" class='text-2xl'></iconify-icon></a>
+        <a href="#"><iconify-icon icon="mdi-light:cart" class='text-2xl cart-box-clicker'></iconify-icon></a>
     </header>
     <div class='hidden menu justify-center md:hidden'>@include('layout.product_layout')</div>
     @yield('acceuil-content')
