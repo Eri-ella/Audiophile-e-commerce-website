@@ -35,3 +35,7 @@ Route::get('/connexion-admin', [ConnexionController::class, 'index'])->name('con
 Route::get('/lateral', function(){
     return view('admin.lateral_bar');
 })->name('lateral'); 
+
+Route::get('/nav', function(){
+    return view('admin.nav_bar');
+})->name('nav'); 

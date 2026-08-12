@@ -16,25 +16,25 @@
         <div class='w-full h-[1px] bg-(--mid_gray)'></div>
         <div class='flex flex-col gap-2'>
             <h4 class='uppercase text-(--white_color)/50'>général</h4>
-            <p class='onglet flex items-center gap-2 p-2 rounded-lg bg-(--orange_principal)'><iconify-icon icon="hugeicons:menu-square" class=''></iconify-icon>Tableau de bord</p>
+            <p class='onglet flex items-center gap-2 p-2 rounded-lg bg-(--orange_principal) cursor-pointer'><iconify-icon icon="hugeicons:menu-square" class=''></iconify-icon>Tableau de bord</p>
         </div>
         <div class='flex flex-col gap-2'>
             <h4 class='uppercase text-(--white_color)/50'>catalogue</h4>
-            <p class='onglet flex items-center gap-2 p-2 rounded-lg'><iconify-icon icon="mdi:cube-outline" class=''></iconify-icon>Produits</p>
-            <p class='onglet flex items-center gap-2 p-2 rounded-lg'><iconify-icon icon="ic:baseline-plus" class=''></iconify-icon>Ajouter un article</p>
+            <p class='onglet flex items-center gap-2 p-2 rounded-lg cursor-pointer'><iconify-icon icon="mdi:cube-outline" class=''></iconify-icon>Produits</p>
+            <p class='onglet flex items-center gap-2 p-2 rounded-lg cursor-pointer'><iconify-icon icon="ic:baseline-plus" class=''></iconify-icon>Ajouter un article</p>
         </div>
         <div class='flex flex-col gap-2'>
             <h4 class='uppercase text-(--white_color)/50'>activité</h4>
-            <p class='onglet flex items-center gap-2 p-2 rounded-lg'><iconify-icon icon="material-symbols-light:note-outline-sharp" class=''></iconify-icon>Transactions</p>
-            <p class='onglet flex items-center gap-2 p-2 rounded-lg'><iconify-icon icon="mynaui:users" class=''></iconify-icon>Utilisateurs</p>
+            <p class='onglet flex items-center gap-2 p-2 rounded-lg cursor-pointer'><iconify-icon icon="material-symbols-light:note-outline-sharp" class=''></iconify-icon>Transactions</p>
+            <p class='onglet flex items-center gap-2 p-2 rounded-lg cursor-pointer'><iconify-icon icon="mynaui:users" class=''></iconify-icon>Utilisateurs</p>
         </div>
         <div class='flex flex-col gap-2'>
             <h4 class='uppercase text-(--white_color)/50'>compte</h4>
-            <p class='onglet flex items-center gap-2 p-2 rounded-lg'><iconify-icon icon="uil:setting" class=''></iconify-icon>Paramètres</p>
+            <p class='onglet flex items-center gap-2 p-2 rounded-lg cursor-pointer'><iconify-icon icon="uil:setting" class=''></iconify-icon>Paramètres</p>
         </div>
         <div class='flex flex-col gap-2 w-40 absolute bottom-5'>
             <div class='w-full h-[1px] bg-(--mid_gray)'></div>
-            <p class='flex items-center gap-2 p-2'><iconify-icon icon="mdi:logout" class=''></iconify-icon>Déconnexion</p>
+            <p class='flex items-center gap-2 p-2 cursor-pointer'><iconify-icon icon="mdi:logout" class=''></iconify-icon>Déconnexion</p>
         </div>
     </div>
 @endsection
