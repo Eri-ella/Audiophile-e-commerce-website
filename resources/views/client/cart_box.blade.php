@@ -15,6 +15,6 @@
             <span class='text-(--mid_gray) uppercase'>total</span>
             <span class='text-medium text-xl tracking-[.25rem]'>$<span>0</span></span>
         </div>
-        <a href="#" class='flex justify-center items-center w-full h-13 text-(--white_color) bg-(--orange_principal) uppercase font-semibold hover:bg-(--orange_hover)'>checkout</a>
+        <a href={{ Route('cart') }} class='flex justify-center items-center w-full h-13 text-(--white_color) bg-(--orange_principal) uppercase font-semibold hover:bg-(--orange_hover)'>checkout</a>
     </div>
 @endsection

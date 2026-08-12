@@ -27,10 +27,11 @@
                 <li class='hover:text-(--orange_principal)'>earphones</li>
             </a>    
         </ul>
-        <a href={{ Route('cart') }}><iconify-icon icon="mdi-light:cart" class='text-2xl cart-box-clicker'></iconify-icon></a>
+        <iconify-icon icon="mdi-light:cart" class='text-2xl cart-box-clicker'></iconify-icon>
     </header>
     <div class='hidden menu justify-center md:hidden'>@include('layout.product_layout')</div>
     @yield('acceuil-content')
+    <div class='hidden cart-box fixed top-35 right-25 z-20'>@include('client.cart_box')</div>
     <footer class='flex flex-col justify-between items-center bg-(--hard_black) text-(--white_color) md:px-35 px-10 py-10 min-h-100 relative'>
         <div class='flex flex-col md:flex-row justify-between w-full max-[460px]:items-center '>
             <div>

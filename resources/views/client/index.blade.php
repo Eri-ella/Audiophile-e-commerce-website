@@ -3,7 +3,6 @@
 @section('acceuil-content')
     <section class='flex text-(--white_color) bg-(--black_color) font-semibold relative min-h-screen px-40 py-10'>
         <span class='bg-(--mid_gray)/10 w-full min-[800px]:w-[80%] h-[1px] z-20 top-0 left-0 min-[800px]:left-35 absolute'></span>
-        <div class='hidden cart-box absolute top-5 right-20'>@include('client.cart_box')</div>
         <div class='flex flex-col gap-10 w-full z-10 justify-center max-[750px]:items-center max-[750px]:text-center '>
             <p class='text-(--mid_gray) uppercase tracking-[.5em]'>new product</p>
             <h2 class='font-bold text-5xl uppercase max-w-90'>XX99 Mark II Headphones</h2>
@@ -11,7 +10,7 @@
             <a href={{ Route('headphile1') }} class='flex items-center justify-center bg-(--orange_principal) hover:bg-(--orange_hover) w-35 h-10 uppercase'>see product</a>
         </div>
         <div class='absolute right-0 min-[800px]:right-30 top-0 bg-radial from-[#222222] from-0% to-(--black_color) to-65%'>
-            <img src="{{ asset('page_acceuil/casque_acceuil.png') }}" alt="" class='min-w-150'>
+            <img src="{{ asset('page_acceuil/casque_acceuil.png') }}" alt="headphone" class='min-w-150'>
         </div>
     </section>
 
