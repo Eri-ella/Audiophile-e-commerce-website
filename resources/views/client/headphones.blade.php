@@ -1,7 +1,7 @@
 @extends('layout.client_layout')
 
 @section('acceuil-content')
-<section class="bg-[#101010] py-12 text-center md:py-16">
+<section class="bg-(--hard_black) py-12 text-center md:py-16">
     <h1 class="text-4xl font-bold uppercase tracking-[2px] text-white">Headphones</h1>
 </section>
 
