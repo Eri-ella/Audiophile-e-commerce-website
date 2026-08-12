@@ -1,7 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProductController;
+use App\Http\Controllers\Front\ProductController;
+use App\Http\Controllers\Back\ConnexionController;
+
+// ** client **
 
 Route::get('/', [ProductController::class, 'index']) -> name('acceuil');
 
@@ -25,3 +28,10 @@ Route::get('/earphone1', [ProductController::class, 'earphone1'])->name('earphon
 
 Route::get('/cart', [ProductController::class, 'cart'])->name('cart'); 
 
+// ** admin **
+
+Route::get('/connexion-admin', [ConnexionController::class, 'index'])->name('connexion-admin'); 
+
+Route::get('/lateral', function(){
+    return view('admin.lateral_bar');
+})->name('lateral'); 

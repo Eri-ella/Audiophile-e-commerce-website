@@ -1,0 +1,40 @@
+@extends('layout.simple_layout')
+
+@section('content')
+@vite(['public/js/admin.js'])
+    <div class='flex flex-col min-h-screen max-w-50 bg-(--black_color) text-(--white_color) text-sm gap-5 p-5 relative'>
+        <svg height="150" width="150" xmlns="" class='absolute z-10 top-0 left-0'>
+            <circle r="90" cx="40" cy="40" fill="none" stroke="#de936715" stroke-width="2" />
+            <circle r="60" cx="40" cy="40" fill="none" stroke="#de93672a" stroke-width="2" />
+            <circle r="35" cx="40" cy="40" fill="none" stroke="#de936749" stroke-width="2" />
+            <circle r="20" cx="40" cy="40" fill="none" stroke="#de93676c" stroke-width="2" />
+        </svg>
+        <div class='flex flex-col gap-2 z-20'>
+            <h2 class='text-xl font-bold'>audio<span class=' text-(--orange_principal)'>file</span></h2>
+            <p class='uppercase text-(--white_color)/50'>administration</p>
+        </div>
+        <div class='w-full h-[1px] bg-(--mid_gray)'></div>
+        <div class='flex flex-col gap-2'>
+            <h4 class='uppercase text-(--white_color)/50'>général</h4>
+            <p class='onglet flex items-center gap-2 p-2 rounded-lg bg-(--orange_principal)'><iconify-icon icon="hugeicons:menu-square" class=''></iconify-icon>Tableau de bord</p>
+        </div>
+        <div class='flex flex-col gap-2'>
+            <h4 class='uppercase text-(--white_color)/50'>catalogue</h4>
+            <p class='onglet flex items-center gap-2 p-2 rounded-lg'><iconify-icon icon="mdi:cube-outline" class=''></iconify-icon>Produits</p>
+            <p class='onglet flex items-center gap-2 p-2 rounded-lg'><iconify-icon icon="ic:baseline-plus" class=''></iconify-icon>Ajouter un article</p>
+        </div>
+        <div class='flex flex-col gap-2'>
+            <h4 class='uppercase text-(--white_color)/50'>activité</h4>
+            <p class='onglet flex items-center gap-2 p-2 rounded-lg'><iconify-icon icon="material-symbols-light:note-outline-sharp" class=''></iconify-icon>Transactions</p>
+            <p class='onglet flex items-center gap-2 p-2 rounded-lg'><iconify-icon icon="mynaui:users" class=''></iconify-icon>Utilisateurs</p>
+        </div>
+        <div class='flex flex-col gap-2'>
+            <h4 class='uppercase text-(--white_color)/50'>compte</h4>
+            <p class='onglet flex items-center gap-2 p-2 rounded-lg'><iconify-icon icon="uil:setting" class=''></iconify-icon>Paramètres</p>
+        </div>
+        <div class='flex flex-col gap-2 w-40 absolute bottom-5'>
+            <div class='w-full h-[1px] bg-(--mid_gray)'></div>
+            <p class='flex items-center gap-2 p-2'><iconify-icon icon="mdi:logout" class=''></iconify-icon>Déconnexion</p>
+        </div>
+    </div>
+@endsection
