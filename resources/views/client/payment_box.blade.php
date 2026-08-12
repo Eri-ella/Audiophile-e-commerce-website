@@ -8,7 +8,7 @@
         <h4 class='font-medium uppercase text-2xl'>thank you <br>for your order</h4>
         <p class='text-(--mid_gray) mb-5'>You will receive an email confirmation shortly.</p>
         <div class='grid grid-cols-5 h-25'>
-            <div class='col-span-3 bg-(--soft_gray) rounded-tl-lg rounded-bl-lg flex justify-between items-center p-3 gap-2'>
+            <div class='col-span-3 bg-(--soft_gray) rounded-tl-lg rounded-bl-lg flex justify-between items-center p-3 gap-2 font-medium'>
                 <img src="{{ asset('page_acceuil/earphones.png') }}" alt="product" class='max-h-10'>
                 <div>
                     <p>product name</p>
