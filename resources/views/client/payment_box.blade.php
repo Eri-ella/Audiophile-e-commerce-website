@@ -3,7 +3,7 @@
 @section('content')
     <div class='flex flex-col px-7 py-10 rounded-lg bg-(--white_color) text-(--hard_black) max-w-110 h-120 z-20 gap-5'>
         <div class='bg-(--orange_principal) text-(--white_color) max-w-13 h-13 flex items-center justify-center rounded-full'>
-            <iconify-icon icon="fluent-mdl2:accept-medium" class='md:hidden text-3xl'></iconify-icon>
+            <iconify-icon icon="fluent-mdl2:accept-medium" class='md:hidden text-3xl mt-2'></iconify-icon>
         </div>
         <h4 class='font-medium uppercase text-2xl'>thank you <br>for your order</h4>
         <p class='text-(--mid_gray) mb-5'>You will receive an email confirmation shortly.</p>
