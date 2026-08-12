@@ -1,6 +1,8 @@
-<script src="https://cdn.tailwindcss.com"></script>
+@extends('layout.client_layout')
+
+@section('acceuil-content')
 <section class="bg-[#101010] py-12 text-center md:py-16">
-    <h1 class="text-4xl font-bold uppercase tracking-[2px] text-white">Headphones</h1>
+    <h1 class="text-4xl font-bold uppercase tracking-[2px] text-white">Speakers</h1>
 </section>
 <section class="mx-auto grid w-full max-w-[1950px] grid-cols-1 items-center gap-12 px-6 py-10 sm:px-10 md:grid-cols-2 md:gap-24 md:px-20 md:py-14 lg:px-32 xl:px-40">
     <div class="order-2 mr-auto inline-flex w-fit items-center justify-center rounded-xl bg-[#F1F1F1] p-4 md:order-none md:p-6">
@@ -41,3 +43,6 @@
              class="h-[280px] w-auto object-contain md:h-[400px]">
     </div>
 </section>
+<div class='hidden menu justify-center md:hidden'>@include('layout.product_layout')</div>
+<div class='justify-center'>@include('layout.description_layout')</div>
+@endsection

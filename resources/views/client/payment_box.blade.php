@@ -21,6 +21,6 @@
                 <span class='font-bold text-xl'>$ <span>599</span></span>
             </div>
         </div>
-        <a href="" class='flex justify-center items-center w-full h-13 text-(--white_color) bg-(--orange_principal) uppercase font-semibold'>back to home</a>
+        <a href="" class='flex justify-center items-center w-full h-13 text-(--white_color) bg-(--orange_principal) uppercase font-semibold hover:bg-(--orange_hover)'>back to home</a>
     </div>
 @endsection

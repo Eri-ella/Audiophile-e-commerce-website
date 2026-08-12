@@ -1,5 +1,6 @@
-<script src="https://cdn.tailwindcss.com"></script>
+@extends('layout.client_layout')
 
+@section('acceuil-content')
 <div class="mx-auto w-full max-w-[1113px] px-6 sm:px-12 lg:px-8">
 
     <a href="{{ url()->previous() }}" class="mt-8 mb-6 inline-block text-sm text-[#808080] hover:text-[#D87D4A] md:mt-20 md:mb-14">
@@ -114,6 +115,8 @@
     </section>
 
 </div>
+<div class='hidden menu justify-center md:hidden'>@include('layout.product_layout')</div>
+<div class='justify-center'>@include('layout.description_layout')</div>
 
 <script>
     function updateQty(delta) {
@@ -123,3 +126,5 @@
         el.textContent = val;
     }
 </script>
+
+@endsection

@@ -1,63 +1,27 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProductController;
 
-Route::get('/', function () {
-    return view('client.index');
-});
+Route::get('/', [ProductController::class, 'index']) -> name('acceuil');
 
-Route::get('/headphones', function () {
-    return view('client.headphones');
-});
+Route::get('/headphones', [ProductController::class, 'headphones']) -> name('headphones');
 
-Route::get('/speakers', function () {
-    return view('client.speakers');
-});
+Route::get('/speakers', [ProductController::class, 'speakers']) -> name('speakers');
 
-Route::get('/earphones', function () {
-    return view('client.earphones');
-});
+Route::get('/earphones', [ProductController::class, 'earphones']) -> name('earphones');
 
-Route::get('/headphile1', function () {
-    return view('client.headphile1');
-})->name('headphile1');
+Route::get('/headphile1', [ProductController::class, 'headphile1'])->name('headphile1');
 
-Route::get('/headphile2', function () {
-    return view('client.headphile2');
-})->name('headphile2');
+Route::get('/headphile2', [ProductController::class, 'headphile2'])->name('headphile2');
 
-Route::get('/headphile3', function () {
-    return view('client.headphile3');
-})->name('headphile3');
+Route::get('/headphile3', [ProductController::class, 'headphile3'])->name('headphile3');
 
-Route::get('/speaker1', function () {
-    return view('client.speaker1');
-})->name('speaker1');
+Route::get('/speaker1', [ProductController::class, 'speaker1'])->name('speaker1');
 
-Route::get('/speaker2', function () {
-    return view('client.speaker2');
-})->name('speaker2');
+Route::get('/speaker2', [ProductController::class, 'speaker2'])->name('speaker2');
 
-Route::get('/earphone1', function () {
-    return view('client.earphone1');
-})->name('earphone1');
+Route::get('/earphone1', [ProductController::class, 'earphone1'])->name('earphone1');
 
-Route::get('/cart', function () {
-    $cart = session('cart', []);
-    return view('client.cart', ['cart' => $cart]);
-})->name('cart'); 
-Route::get('/description', function () {
-    return view('layout.description_layout');
-});
+Route::get('/cart', [ProductController::class, 'cart'])->name('cart'); 
 
-Route::get('/product', function () {
-    return view('layout.product_layout');
-});
-
-Route::get('/cartbox', function () {
-    return view('client.cart_box');
-});
-
-Route::get('/paymentbox', function () {
-    return view('client.payment_box');
-});

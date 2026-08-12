@@ -2,7 +2,7 @@
 
 @section('acceuil-content')
     <section class='flex text-(--white_color) bg-(--black_color) font-semibold relative min-h-screen px-40 py-10'>
-        <span class='bg-(--mid_gray) w-full min-[800px]:w-[80%] h-[1px] z-20 top-0 left-0 min-[800px]:left-35 absolute'></span>
+        <span class='bg-(--mid_gray)/10 w-full min-[800px]:w-[80%] h-[1px] z-20 top-0 left-0 min-[800px]:left-35 absolute'></span>
         <div class='hidden cart-box absolute top-5 right-20'>@include('client.cart_box')</div>
         <div class='flex flex-col gap-10 w-full z-10 justify-center max-[750px]:items-center max-[750px]:text-center '>
             <p class='text-(--mid_gray) uppercase tracking-[.5em]'>new product</p>
@@ -38,7 +38,7 @@
             <div class='z-10 flex flex-col gap-10 max-[700px]:my-15 max-[700px]:items-center max-[700px]:text-center'>
                 <h2 class='font-bold text-5xl uppercase max-w-50'>ZX9 speaker</h2>
                 <p class='text-(--white_color)/50 max-w-90'>Upgrade to premium speakers that are phenomenally built to deliver truly remarkable sound.</p>
-                <a href="" class='flex items-center justify-center bg-(--hard_black) hover:bg-(--hard_gray) w-35 h-10 uppercase'>see product</a>
+                <a href="" class='flex items-center justify-center bg-(--hard_black) hover:bg-[#222222] w-35 h-10 uppercase'>see product</a>
             </div>
         </div>
 
