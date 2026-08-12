@@ -1,7 +1,9 @@
 @extends('layout.client_layout')
 
 @section('acceuil-content')
-<section class="bg-(--hard_black) py-16 text-center md:py-24">
+
+<section class="bg-(--hard_black) py-16 text-center md:py-24 relative">
+    <span class='bg-(--mid_gray)/10 w-full min-[800px]:w-[80%] h-[1px] z-20 top-0 left-0 min-[800px]:left-35 absolute'></span>
     <h1 class="text-4xl font-bold uppercase tracking-[2px] text-white">Earphones</h1>
 </section>
 

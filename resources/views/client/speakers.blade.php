@@ -1,7 +1,8 @@
 @extends('layout.client_layout')
 
 @section('acceuil-content')
-<section class="bg-(--hard_black) py-12 text-center md:py-16">
+<section class="bg-(--hard_black) py-12 text-center md:py-16 relative">
+    <span class='bg-(--mid_gray)/10 w-full min-[800px]:w-[80%] h-[1px] z-20 top-0 left-0 min-[800px]:left-35 absolute'></span>
     <h1 class="text-4xl font-bold uppercase tracking-[2px] text-white">Speakers</h1>
 </section>
 <section class="mx-auto grid w-full max-w-[1950px] grid-cols-1 items-center gap-12 px-6 py-10 sm:px-10 md:grid-cols-2 md:gap-24 md:px-20 md:py-14 lg:px-32 xl:px-40">

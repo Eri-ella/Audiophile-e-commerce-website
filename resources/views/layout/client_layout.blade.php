@@ -11,7 +11,7 @@
     <header class='flex justify-between items-center bg-(--hard_black) text-(--white_color) md:px-35 px-10 py-10'>
         <div class='flex items-center gap-5'>
             <iconify-icon icon="material-symbols:menu" class='md:hidden text-3xl mt-2 menu-clicker'></iconify-icon>
-            <a href=""><p class='text-3xl font-bold'>audiophile</p></a>
+            <a href={{ Route('acceuil') }}><p class='text-3xl font-bold'>audiophile</p></a>
         </div>
         <ul class='md:flex hidden uppercase gap-5 text-sm font-semibold tracking-[.15rem]'>
             <a href={{ Route('acceuil') }}>
@@ -35,7 +35,7 @@
         <div class='flex flex-col md:flex-row justify-between w-full max-[460px]:items-center '>
             <div>
                 <span class='w-20 h-1 bg-(--orange_principal) absolute top-0 max-[460px]:left-[40%]'></span>
-                <a href=""><p class='text-3xl font-bold'>audiophile</p></a>
+                <a href={{ Route('acceuil') }}><p class='text-3xl font-bold'>audiophile</p></a>
             </div>
             <ul class='flex flex-row max-[460px]:flex-col max-[460px]:items-center items-end uppercase gap-4 max-[460px]:gap-7 text-sm font-medium pr-5 pl-5 md:pl-0 py-10 md:py-0'>
                 <a href={{ Route('acceuil') }}>
