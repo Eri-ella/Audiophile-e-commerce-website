@@ -31,3 +31,7 @@ Route::get('/cart', [ProductController::class, 'cart'])->name('cart');
 // ** admin **
 
 Route::get('/connexion-admin', [ConnexionController::class, 'index'])->name('connexion-admin'); 
+
+Route::get('/lateral', function(){
+    return view('admin.lateral_bar');
+})->name('lateral'); 
