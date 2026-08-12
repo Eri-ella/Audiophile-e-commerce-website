@@ -147,7 +147,7 @@
                 </div>
 
                 <button type="submit"
-                        class="mt-8 block w-full rounded-lg bg-[#D87D4A] py-4 text-center text-sm font-bold uppercase tracking-[0.1em] text-white transition-colors duration-300 hover:bg-[#FBAF85]">
+                        class="mt-8 block w-full bg-[#D87D4A] py-4 text-center text-sm font-bold uppercase tracking-[0.1em] text-white transition-colors duration-300 hover:bg-[#FBAF85]">
                     Continue &amp; Pay
                 </button>
             </div>

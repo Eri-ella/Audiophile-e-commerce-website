@@ -2,15 +2,18 @@
     $elements = [
         "elt1" => [ 
             "url" => 'page_acceuil/headphones.png', 
-            "name" => 'headphones'
+            "name" => 'headphones',
+            "route" => 'headphones'
         ],
         "elt2" => [ 
             "url" => 'page_acceuil/speakers.png', 
-            "name" => 'speakers'
+            "name" => 'speakers',
+            "route" => 'speakers'
         ],
         "elt3" => [ 
             "url" => 'page_acceuil/earphones.png', 
-            "name" => 'earphones'
+            "name" => 'earphones',
+            "route" => 'earphones'
         ],
     ]
 @endphp
@@ -29,7 +32,7 @@
             <div class='size-full pt-25 pb-5 flex flex-col bg-(--soft_gray) rounded-lg uppercase justify-center items-center relative gap-3 text-(--mid_gray) hover:text-(--orange_principal)'>
                 <img src="{{ asset($element["url"]) }}" alt="{{ $element["name"] }}" class='absolute bottom-15 z-10 max-h-50'>
                 <h3 class='font-medium text-(--black_color)'>{{ $element["name"] }}</h3>
-                <a href="#" class='flex gap-2'>
+                <a href={{ route($element["route"]) }} class='flex gap-2'>
                     <p class='text-sm'>shop</p>
                     <iconify-icon icon="weui:arrow-filled" class='text-2xl text-(--orange_principal)'></iconify-icon>
                 </a> 
