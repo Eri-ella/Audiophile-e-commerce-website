@@ -18,6 +18,7 @@
             <h3 class='uppercase font-medium text-xl'>connexion</h3>
             <p class=' text-(--mid_gray)'>Accédez à votre tableau de bord administrateur.</p>
             <form action="" method="POST" class='flex flex-col gap-5'>
+                @csrf
                 <p class='uppercase font-medium'>adresse e-mail</p>
                 <input type="email" name="mail" placeholder="admin@audiophile.com" class='border-1 border-(--mid_gray)/50 hover:border-(--orange_hover) focus:outline-none focus:border-(--orange_hover) rounded-lg px-4 py-1 w-full'>
                 <p class='uppercase font-medium'>mot de passe</p>
