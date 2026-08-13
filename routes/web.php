@@ -26,20 +26,28 @@ Route::get('/speaker2', [ProductController::class, 'speaker2'])->name('speaker2'
 
 Route::get('/earphone1', [ProductController::class, 'earphone1'])->name('earphone1');
 
-Route::get('/cart', [ProductController::class, 'cart'])->name('cart'); 
+Route::get('/cart', [ProductController::class, 'cart'])->name('cart');
+
+// ** cart actions **
+
+Route::post('/cart/add/{slug}', [ProductController::class, 'addToCart'])->name('cart.add');
+
+Route::post('/cart/update/{slug}', [ProductController::class, 'updateCart'])->name('cart.update');
+
+Route::post('/cart/remove-all', [ProductController::class, 'removeAllCart'])->name('cart.removeAll');
 
 // ** admin **
 
-Route::get('/connexion-admin', [ConnexionController::class, 'index'])->name('connexion-admin'); 
+Route::get('/connexion-admin', [ConnexionController::class, 'index'])->name('connexion-admin');
 
 Route::get('/lateral', function(){
     return view('admin.lateral_bar');
-})->name('lateral'); 
+})->name('lateral');
 
 Route::get('/nav', function(){
     return view('admin.nav_bar');
-})->name('nav'); 
+})->name('nav');
 
 Route::get('/produit', function(){
     return view('admin.produit');
-})->name('produit'); 
+})->name('produit');

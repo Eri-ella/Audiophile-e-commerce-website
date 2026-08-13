@@ -30,15 +30,22 @@
             </p>
 
             <div class="flex items-center gap-4">
-                <div class="flex h-12 items-center bg-[#F1F1F1]">
-                    <button type="button" onclick="updateQty(-1)" class="h-full w-10 text-sm font-bold text-[#808080] transition-colors hover:text-[#D87D4A]">-</button>
-                    <span id="qty" class="w-6 text-center text-sm font-bold text-[#101010]">0</span>
-                    <button type="button" onclick="updateQty(1)" class="h-full w-10 text-sm font-bold text-[#808080] transition-colors hover:text-[#D87D4A]">+</button>
-                </div>
+                <form action="{{ route('cart.add', 'headphile1') }}" method="POST" class="flex items-center gap-4">
+                    @csrf
+                    <input type="hidden" name="name" value="XX99 Mark II Headphones">
+                    <input type="hidden" name="price" value="2999">
+                    <input type="hidden" name="image" value="page_autre/audiophile_black.jpg">
 
-                <button type="button" class="inline-block bg-[#D87D4A] px-8 py-3.5 text-sm font-bold uppercase tracking-[0.1em] text-white transition-colors duration-300 hover:bg-[#FBAF85]">
-                    Add to cart
-                </button>
+                    <div class="flex h-12 items-center bg-[#F1F1F1]">
+                        <button type="button" onclick="updateQty(-1)" class="h-full w-10 text-sm font-bold text-[#808080] transition-colors hover:text-[#D87D4A]">-</button>
+                        <input type="number" name="qty" id="qty-select" value="1" min="1" readonly class="w-6 border-none bg-transparent text-center text-sm font-bold text-[#101010] focus:outline-none">
+                        <button type="button" onclick="updateQty(+1)" class="h-full w-10 text-sm font-bold text-[#808080] transition-colors hover:text-[#D87D4A]">+</button>
+                    </div>
+
+                    <button type="submit" class="inline-block bg-[#D87D4A] px-8 py-3.5 text-sm font-bold uppercase tracking-[0.1em] text-white transition-colors duration-300 hover:bg-[#FBAF85]">
+                        Add to cart
+                    </button>
+                </form>
             </div>
         </div>
     </section>
@@ -120,10 +127,10 @@
 
 <script>
     function updateQty(delta) {
-        const el = document.getElementById('qty');
-        let val = parseInt(el.textContent) + delta;
-        if (val < 0) val = 0;
-        el.textContent = val;
+        const el = document.getElementById('qty-select');
+        let val = parseInt(el.value) + delta;
+        if (val < 1) val = 1;
+        el.value = val;
     }
 </script>
 @endsection

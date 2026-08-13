@@ -61,4 +61,48 @@ class ProductController extends Controller
     public function earphone1 () {
         return view('client.earphone1');
     }
+
+    // ** cart actions **
+
+    public function addToCart (Request $request, string $slug) {
+        $cart = session('cart', []);
+        $qtyAdded = (int) $request->input('qty', 1);
+
+        $cart[$slug] = [
+            'name'  => $request->input('name'),
+            'price' => (float) $request->input('price'),
+            'image' => $request->input('image'),
+            'qty'   => ($cart[$slug]['qty'] ?? 0) + $qtyAdded,
+        ];
+
+        session(['cart' => $cart]);
+
+        $total = collect($cart)->sum('qty');
+
+        return back()->with('cart_success', [
+            'qty'   => $qtyAdded,
+            'total' => $total,
+        ]);
+    }
+
+    public function updateCart (Request $request, string $slug) {
+        $cart = session('cart', []);
+        $delta = (int) $request->input('delta');
+
+        if (isset($cart[$slug])) {
+            $cart[$slug]['qty'] = max(0, $cart[$slug]['qty'] + $delta);
+            if ($cart[$slug]['qty'] === 0) {
+                unset($cart[$slug]);
+            }
+        }
+
+        session(['cart' => $cart]);
+
+        return back();
+    }
+
+    public function removeAllCart () {
+        session()->forget('cart');
+        return back();
+    }
 }
