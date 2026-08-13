@@ -25,4 +25,11 @@ class Order extends Model
     public function deliveries () {
         return this->HasOne(Delivery::class);
     }
+
+    public function products(): BelongsToMany
+    {
+        return $this->belongsToMany(Product::class)
+                    ->withPivot('details')
+                    ->withTimestamps();
+    }
 }

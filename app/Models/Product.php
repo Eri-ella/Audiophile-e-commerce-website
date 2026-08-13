@@ -33,9 +33,15 @@ class Product extends Model
 
     public function contents(): BelongsToMany
     {
-        return $this->belongsToMany(Content::class, 'product_id')
+        return $this->belongsToMany(Content::class)
                     ->withPivot('quantities')
                     ->withTimestamps();
     }
 
+    public function orders(): BelongsToMany
+    {
+        return $this->belongsToMany(Order::class)
+                    ->withPivot('details')
+                    ->withTimestamps();
+    }
 }
