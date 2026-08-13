@@ -1,20 +1,62 @@
-@extends('layout.simple_layout')
+@php
+    $cart = $cart ?? session('cart', []);
+    $total = collect($cart)->sum(fn ($item) => $item['price'] * $item['qty']);
+    $count = collect($cart)->sum('qty');
+@endphp
 
-@section('content')
-    <div class='flex flex-col px-7 py-10 rounded-lg bg-(--white_color) text-(--hard_black) max-w-90 h-100 z-20'>
-        <div class='flex justify-between'>
-            <h4 class='font-medium text-xl uppercase'>cart (<span>0</span>)</h4>
-            <a href="#" class='text-(--mid_gray) underline hover:text-(--orange_principal)'>Remove all</a>
-        </div>
-        <div class='flex flex-col gap-7'>
-            <div class='w-50 h-[1px] bg-(--mid_gray) my-5'></div>
-            <h4 class='font-normal text-2xl'>Your Cart is empty.</h4>
-            <p class='text-(--mid_gray)'>Continue shopping on the audiophile website <a href="#" class='text-(--mid_gray) hover:underline text-(--orange_principal)'>homepage.</a></p>
-        </div>
-        <div class='flex justify-between my-5'>
-            <span class='text-(--mid_gray) uppercase'>total</span>
-            <span class='text-medium text-xl tracking-[.25rem]'>$<span>0</span></span>
-        </div>
-        <a href={{ Route('cart') }} class='flex justify-center items-center w-full h-13 text-(--white_color) bg-(--orange_principal) uppercase font-semibold hover:bg-(--orange_hover)'>checkout</a>
+<div class="w-[380px] max-w-[90vw] rounded-lg bg-white p-7 shadow-[0_20px_50px_rgba(0,0,0,0.15)]">
+
+    <div class="mb-6 flex items-center justify-between">
+        <h4 class="text-xl font-medium uppercase text-[#101010]">Cart (<span>{{ $count }}</span>)</h4>
+
+        @if (count($cart) > 0)
+            <form action="{{ route('cart.removeAll') }}" method="POST">
+                @csrf
+                <button type="submit" class="text-sm text-[#808080] underline hover:text-[#D87D4A]">Remove all</button>
+            </form>
+        @else
+            <a href="#" class="text-sm text-[#808080] underline hover:text-[#D87D4A]">Remove all</a>
+        @endif
     </div>
-@endsection
+
+    <div class="mb-6 h-px w-full bg-black/10"></div>
+
+    @forelse ($cart as $slug => $item)
+        <div class="mb-6 flex items-center gap-4 last:mb-0">
+            <img src="{{ asset($item['image']) }}"
+                 alt="{{ $item['name'] }}"
+                 class="h-16 w-16 flex-shrink-0 rounded-lg bg-[#F1F1F1] object-cover">
+
+            <div class="flex flex-col">
+                <h6 class="text-sm font-bold uppercase text-[#101010]">{{ $item['name'] }}</h6>
+                <p class="text-sm font-bold text-[#808080]">$ {{ number_format($item['price'], 0, ',', ',') }}</p>
+            </div>
+
+            <form action="{{ route('cart.update', $slug) }}" method="POST" class="ml-auto flex h-8 items-center bg-[#F1F1F1]">
+                @csrf
+                <button type="submit" name="delta" value="-1" id="qty-dec-{{ $slug }}" class="h-full w-8 text-sm font-bold text-[#808080] hover:text-[#D87D4A]">-</button>
+                <span id="qty-{{ $slug }}" class="w-6 text-center text-sm font-bold text-[#101010]">{{ $item['qty'] }}</span>
+                <button type="submit" name="delta" value="1" id="qty-inc-{{ $slug }}" class="h-full w-8 text-sm font-bold text-[#808080] hover:text-[#D87D4A]">+</button>
+            </form>
+        </div>
+    @empty
+        <div class="mb-6">
+            <p class="mb-6 text-2xl text-[#101010]">Your Cart is empty.</p>
+            <p class="text-sm text-[#808080]">
+                Continue shopping on the audiophile website
+                <a href="{{ route('acceuil') }}" class="text-[#D87D4A] hover:underline">homepage</a>.
+            </p>
+        </div>
+    @endforelse
+
+    <div class="flex items-center justify-between border-t border-black/10 pt-6">
+        <p class="text-sm uppercase text-[#808080]">Total</p>
+        <p class="text-lg font-bold text-[#101010]">$ {{ number_format($total, 0, ',', ',') }}</p>
+    </div>
+
+    <a href="{{ route('cart') }}"
+       class="mt-6 block w-full bg-(--orange_principal) py-3.5 text-center text-sm font-bold uppercase tracking-[0.1em] text-white transition-colors duration-300 hover:bg-[#101010]">
+        Checkout
+    </a>
+
+</div>
