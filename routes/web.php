@@ -39,3 +39,7 @@ Route::get('/lateral', function(){
 Route::get('/nav', function(){
     return view('admin.nav_bar');
 })->name('nav'); 
+
+Route::get('/produit', function(){
+    return view('admin.produit');
+})->name('produit'); 
