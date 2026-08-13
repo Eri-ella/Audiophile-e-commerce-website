@@ -1,7 +1,8 @@
+@extends('layout.client_layout')
 
-<script src="https://cdn.tailwindcss.com"></script>
-
-<section class="bg-[#101010] py-12 text-center md:py-16">
+@section('acceuil-content')
+<section class="bg-(--hard_black) py-12 text-center md:py-16 relative">
+    <span class='bg-(--mid_gray)/10 w-full min-[800px]:w-[80%] h-[1px] z-20 top-0 left-0 min-[800px]:left-35 absolute'></span>
     <h1 class="text-4xl font-bold uppercase tracking-[2px] text-white">Headphones</h1>
 </section>
 
@@ -62,3 +63,6 @@
          class="h-[280px] w-auto object-contain md:h-[400px]">
 </div>
 </section>
+<div class='hidden menu justify-center md:hidden'>@include('layout.product_layout')</div>
+<div class='justify-center'>@include('layout.description_layout')</div>
+@endsection
