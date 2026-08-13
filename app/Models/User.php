@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password'])]
+#[Fillable(['name', 'email', 'password', 'role', 'telephone'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -28,5 +28,20 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    protected function isAdmin(): bool
+    {
+        return $this->role == 'admin';
+    }
+
+    public function scopeClients($query)
+    {
+        return $query->where('role', 'client');
+    }
+
+    public function scopeAdmin($query)
+    {
+        return $query->where('role', 'admin');
     }
 }
