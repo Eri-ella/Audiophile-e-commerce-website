@@ -7,64 +7,44 @@ use App\Http\Controllers\Controller;
 
 class ProductController extends Controller
 {
-    public function index () {
+    public function index()
+    {
         return view('client.index');
     }
 
-    public function cart () {
-        $cart = session('cart', []);
-        return view('client.cart', ['cart' => $cart]);
+    public function cart()
+    {
+        return view('client.cart', ['cart' => session('cart', [])]);
     }
 
-    // ** navbar **
+    // ** Navbar **
+    public function headphones() { return view('client.headphones'); }
+    public function speakers()   { return view('client.speakers'); }
+    public function earphones()  { return view('client.earphones'); }
 
-    public function headphones () {
-        return view('client.headphones');
+    
+    public function show(string $slug)
+    {
+        // Mapping : slug → vue Blade
+        $views = [
+            // Casques
+            'xx99-mark-ii'  => 'client.headphone',
+            'xx99-mark-i'   => 'client.headphone',
+            'xx59'          => 'client.headphone',
+            // Speakers
+            'zx9-speaker'   => 'client.speaker',
+            'zx7-speaker'   => 'client.speaker',
+            // Earphones
+            'yx1-earphones' => 'client.earphone',
+        ];
+
+        $view = $views[$slug] ?? abort(404);
+        return view($view, compact('slug'));
     }
 
-    public function speakers () {
-        return view('client.speakers');
-    }
-
-    public function earphones () {
-        return view('client.earphones');
-    }
-
-    // ** each product **
-
-    // headphones
-
-    public function headphile1 () {
-        return view('client.headphile1');
-    }
-
-    public function headphile2 () {
-        return view('client.headphile2');
-    }
-
-    public function headphile3 () {
-        return view('client.headphile3');
-    }
-
-    // speakers
-
-    public function speaker1 () {
-        return view('client.speaker1');
-    }
-
-    public function speaker2 () {
-        return view('client.speaker2');
-    }
-
-    // earphones
-
-    public function earphone1 () {
-        return view('client.earphone1');
-    }
-
-    // ** cart actions **
-
-    public function addToCart (Request $request, string $slug) {
+    // ** Cart actions (version simple avec rechargement) **
+    public function addToCart(Request $request, string $slug)
+    {
         $cart = session('cart', []);
         $qtyAdded = (int) $request->input('qty', 1);
 
@@ -77,15 +57,14 @@ class ProductController extends Controller
 
         session(['cart' => $cart]);
 
-        $total = collect($cart)->sum('qty');
-
         return back()->with('cart_success', [
             'qty'   => $qtyAdded,
-            'total' => $total,
+            'total' => collect($cart)->sum('qty'),
         ]);
     }
 
-    public function updateCart (Request $request, string $slug) {
+    public function updateCart(Request $request, string $slug)
+    {
         $cart = session('cart', []);
         $delta = (int) $request->input('delta');
 
@@ -97,12 +76,13 @@ class ProductController extends Controller
         }
 
         session(['cart' => $cart]);
-
         return back();
     }
 
-    public function removeAllCart () {
+    public function removeAllCart()
+    {
         session()->forget('cart');
+        
         return back();
     }
 }
