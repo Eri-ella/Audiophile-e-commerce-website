@@ -4,40 +4,32 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Front\ProductController;
 use App\Http\Controllers\Back\ConnexionController;
 
-// ** client **
+// ** Client **
+Route::get('/', [ProductController::class, 'index'])->name('acceuil');
 
-Route::get('/', [ProductController::class, 'index']) -> name('acceuil');
+Route::get('/headphones', [ProductController::class, 'headphones'])->name('headphones');
+Route::get('/speakers',   [ProductController::class, 'speakers'])->name('speakers');
+Route::get('/earphones',  [ProductController::class, 'earphones'])->name('earphones');
 
-Route::get('/headphones', [ProductController::class, 'headphones']) -> name('headphones');
+// ** Route unique et dynamique **
+Route::get('/product/{slug}', [ProductController::class, 'show'])->name('product.show');
 
-Route::get('/speakers', [ProductController::class, 'speakers']) -> name('speakers');
-
-Route::get('/earphones', [ProductController::class, 'earphones']) -> name('earphones');
-
-Route::get('/headphile1', [ProductController::class, 'headphile1'])->name('headphile1');
-
-Route::get('/headphile2', [ProductController::class, 'headphile2'])->name('headphile2');
-
-Route::get('/headphile3', [ProductController::class, 'headphile3'])->name('headphile3');
-
-Route::get('/speaker1', [ProductController::class, 'speaker1'])->name('speaker1');
-
-Route::get('/speaker2', [ProductController::class, 'speaker2'])->name('speaker2');
-
-Route::get('/earphone1', [ProductController::class, 'earphone1'])->name('earphone1');
+// ** Anciens liens (redirigent proprement) **
+Route::get('/headphile1', fn () => redirect()->route('product.show', 'xx99-mark-ii'))->name('headphile1');
+Route::get('/headphile2', fn () => redirect()->route('product.show', 'xx99-mark-i'))->name('headphile2');
+Route::get('/headphile3', fn () => redirect()->route('product.show', 'xx59'))->name('headphile3');
+Route::get('/speaker1',   fn () => redirect()->route('product.show', 'zx9-speaker'))->name('speaker1');
+Route::get('/speaker2',   fn () => redirect()->route('product.show', 'zx7-speaker'))->name('speaker2');
+Route::get('/earphone1',  fn () => redirect()->route('product.show', 'yx1-earphones'))->name('earphone1');
 
 Route::get('/cart', [ProductController::class, 'cart'])->name('cart');
 
-// ** cart actions **
-
-Route::post('/cart/add/{slug}', [ProductController::class, 'addToCart'])->name('cart.add');
-
+// ** Cart actions **
+Route::post('/cart/add/{slug}',    [ProductController::class, 'addToCart'])->name('cart.add');
 Route::post('/cart/update/{slug}', [ProductController::class, 'updateCart'])->name('cart.update');
+Route::post('/cart/remove-all',    [ProductController::class, 'removeAllCart'])->name('cart.removeAll');
 
-Route::post('/cart/remove-all', [ProductController::class, 'removeAllCart'])->name('cart.removeAll');
-
-// ** admin **
-
+// ** Admin **
 Route::get('/connexion-admin', [ConnexionController::class, 'index'])->name('connexion-admin');
 
 Route::get('/lateral', function(){
