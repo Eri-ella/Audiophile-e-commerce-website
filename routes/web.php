@@ -47,3 +47,7 @@ Route::get('/product', function(){
 Route::get('/transaction', function(){
     return view('admin.transaction');
 })->name('transaction');
+
+Route::get('/user', function(){
+    return view('admin.user');
+})->name('user');

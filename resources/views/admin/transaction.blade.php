@@ -59,23 +59,23 @@
             </select>
         </span>
     </div>
-    <div class='w-full overflow-hidden rounded-lg bg-(--white_color) border-1 border-gray-100'>
-        <table class=' p-2 text-sm w-full border-separate border-spacing-y-3'>
+    <div class='w-full rounded-lg bg-(--white_color) border-1 border-gray-400'>
+        <table class='p-2 text-sm w-full border-collapse'>
             <thead>
                 <tr class="text-left uppercase text-(--mid_gray) font-normal border border-gray-400 rounded-lg ">
-                    <th class="px-4 pb-2">n° commande</th>
-                    <th class="px-4 pb-2">client</th>
-                    <th class="px-4 pb-2">date</th>
-                    <th class="px-4 pb-2">articles</th>
-                    <th class="px-4 pb-2">paiement</th>
-                    <th class="px-4 pb-2">statut</th>
-                    <th class="px-4 pb-2"></th>
+                    <th class="pl-2 py-2">n° commande</th>
+                    <th class="py-2">client</th>
+                    <th class="py-2">date</th>
+                    <th class="py-2">articles</th>
+                    <th class="py-2">paiement</th>
+                    <th class="py-2">statut</th>
+                    <th class="py-2"></th>
                 </tr>
             </thead>
             <tbody>
                 @forelse ($products as $product)
                     <tr class='border border-gray-400 rounded-lg'>
-                        <td class='p-4 bg-white border-l border-t border-b border-gray-400 rounded-l-lg'>
+                        <td class='p-2 '>
                             <span class='font-medium'>#<span>{{ $product["numero"] }}</span>
                         </td>
                         <td class='capitalize'>{{ $product["mail"] }}</td>
@@ -93,7 +93,7 @@
                                 <span class="ml-1">{{ $product["status"] }}</span>
                             </div>
                         </td>
-                        <td class='text-(--mid_gray)'>
+                        <td class='text-(--mid_gray) text-xl'>
                             <iconify-icon icon="iconamoon:eye-thin" class=''></iconify-icon>
                         </td>
                     </tr>

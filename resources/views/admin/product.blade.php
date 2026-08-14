@@ -54,21 +54,22 @@
             </select>
         </span>
     </div>
-    <div class='w-full overflow-hidden rounded-lg bg-(--white_color) border-1 border-gray-100'>
-        <table class=' p-2 text-sm w-full'>
+    <div class='w-full overflow-hidden rounded-lg bg-(--white_color) border-1 border-gray-400'>
+        <table class=' p-2 text-sm w-full border-collapse'>
             <thead>
                 <tr class="text-left uppercase text-(--mid_gray) font-normal border border-gray-400 rounded-lg ">
-                    <th>produit</th>
-                    <th>catégorie</th>
-                    <th>prix</th>
-                    <th>stock</th>
-                    <th>statut</th>
+                    <th class="pl-4 pb-2">produit</th>
+                    <th class="pb-2">catégorie</th>
+                    <th class="pb-2">prix</th>
+                    <th class="pb-2">stock</th>
+                    <th class="pb-2">statut</th>
+                    <th class="pb-2"></th>
                 </tr>
             </thead>
             <tbody>
                 @forelse ($products as $product)
                     <tr class='border border-gray-400 rounded-lg'>
-                        <td class='flex items-center gap-2 my-2 ml-2'>
+                        <td class=' p-2 flex items-center gap-2 my-2 ml-2'>
                             <span class='bg-(--mid_gray)/25 size-10 flex items-center justify-center rounded-lg'>
                                 <iconify-icon icon="ri:headphone-line"></iconify-icon>
                             </span>
