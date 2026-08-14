@@ -80,12 +80,16 @@
                         <td class='capitalize'>{{ $product["category"] }}</td>
                         <td>$<span>{{ $product["price"] }}</span></td>
                         <td>{{ $product["stock"] }}</td>
-                        <td class='flex items-center justify-center uppercase bg-red-200 text-red-400 max-w-25 rounded-lg'><iconify-icon icon="icon-park-outline:dot"></iconify-icon><span>{{ $product["status"] }}</span></td>
+                        <td>
+                            <div class='flex items-center justify-center uppercase bg-red-200 text-red-400 max-w-25 rounded-lg'>
+                                <iconify-icon icon="icon-park-outline:dot"></iconify-icon>
+                                <span>{{ $product["status"] }}</span>
+                            </div>
+                        </td>
                         <td class='text-(--mid_gray)'>
                             <iconify-icon icon="streamline-ultimate:pen-write" class=''></iconify-icon>
                         </td>
                         <td class='text-(--mid_gray)'>
-                        <td >
                             <iconify-icon icon="tabler:trash" class=''></iconify-icon>
                         </td>
                     </tr>
