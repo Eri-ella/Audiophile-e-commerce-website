@@ -26,13 +26,24 @@ class UserFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'role' => fake()->randomElement(['client', 'admin']),
+            'role' => 'client',
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'telephone' => fake()->e164PhoneNumber(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
         ];
+    }
+
+    /**
+     * Indicate when the user is an admin.
+     */
+    public function admin(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => 'admin',
+            'password' => Hash::make('password'), // Un mot de passe par défaut pour l'admin
+        ]);
     }
 
     /**
