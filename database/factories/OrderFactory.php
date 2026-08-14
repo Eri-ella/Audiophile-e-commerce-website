@@ -21,8 +21,8 @@ class OrderFactory extends Factory
             'amount' => fake()->numberBetween(300, 20000),
             'status' => fake()->randomElement(['en attente', 'validee']),
             
-            'client_id' => Order::factory(),
-            'delivery_id' => Product::factory(),
+            'client_id' => User::factory(),
+            'delivery_id' => Delivery::factory(),
         ];
     }
 }

@@ -18,7 +18,10 @@ class QuantityFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'value' => fake()->numberBetween(1, 10),
+            
+            'content_id' => Content::factory(),
+            'product_id' => Product::factory(),
         ];
     }
 }
