@@ -31,6 +31,19 @@ Route::post('/cart/remove-all',    [ProductController::class, 'removeAllCart'])-
 
 // ** Admin **
 Route::get('/connexion-admin', [ConnexionController::class, 'index'])->name('connexion-admin');
-Route::get('/lateral', fn () => view('admin.lateral_bar'))->name('lateral');
-Route::get('/nav',     fn () => view('admin.nav_bar'))->name('nav');
-Route::get('/produit', fn () => view('admin.produit'))->name('produit');
+
+Route::get('/lateral', function(){
+    return view('admin.lateral_bar');
+})->name('lateral');
+
+Route::get('/nav', function(){
+    return view('admin.nav_bar');
+})->name('nav');
+
+Route::get('/product', function(){
+    return view('admin.product');
+})->name('product');
+
+Route::get('/transaction', function(){
+    return view('admin.transaction');
+})->name('transaction');
