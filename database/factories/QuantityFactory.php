@@ -3,6 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\Quantity;
+use App\Models\Content;
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
