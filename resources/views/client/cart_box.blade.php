@@ -55,7 +55,7 @@
     </div>
 
     <a href="{{ route('cart') }}"
-       class="mt-6 block w-full bg-(--orange_principal) py-3.5 text-center text-sm font-bold uppercase tracking-[0.1em] text-white transition-colors duration-300 hover:bg-[#101010]">
+       class="mt-6 block w-full bg-(--orange_principal) py-3.5 text-center text-sm font-bold uppercase tracking-[0.1em] text-white transition-colors duration-300 hover:bg-(--orange_hover)">
         Checkout
     </a>
 

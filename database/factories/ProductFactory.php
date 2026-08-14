@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,7 +22,7 @@ class ProductFactory extends Factory
             'name' => fake()->name(),
             'stock' => fake()->numberBetween(0, 200),
             'status' => fake()->randomElement(['active', 'inactive']),
-            'price' => fake()->randomFloat(2),
+            'price' => $this->faker->randomFloat(2, 10, 1000), 
             'description' => fake()->paragraph(10),
             'features' => fake()->text(200),
             'image_description' => 'page_autre/audiophile_black.jpg',
