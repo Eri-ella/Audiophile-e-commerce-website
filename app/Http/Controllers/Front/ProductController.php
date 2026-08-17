@@ -42,13 +42,14 @@ class ProductController extends Controller
         return view($view, compact('slug'));
     }
 
-    // ** Cart actions (version simple avec rechargement) **
+    // ** Cart actions **
     public function addToCart(Request $request, string $slug)
     {
         $cart = session('cart', []);
         $qtyAdded = (int) $request->input('qty', 1);
 
         $cart[$slug] = [
+            'id'    => $request->input('id'),
             'name'  => $request->input('name'),
             'price' => (int) $request->input('price'),
             'image' => $request->input('image'),

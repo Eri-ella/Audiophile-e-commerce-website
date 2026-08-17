@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Front\ProductController;
 use App\Http\Controllers\Back\ConnexionController;
+use App\Http\Controllers\Front\PaymentController;
 
 // ** Client **
 Route::get('/', [ProductController::class, 'index'])->name('acceuil');
@@ -23,6 +24,10 @@ Route::get('/speaker2',   fn () => redirect()->route('product.show', 'zx7-speake
 Route::get('/earphone1',  fn () => redirect()->route('product.show', 'yx1-earphones'))->name('earphone1');
 
 Route::get('/cart', [ProductController::class, 'cart'])->name('cart');
+
+// ** Payment actions **
+Route::post('/payment', [PaymentController::class, 'store'])->name('payment.store');
+Route::get('/payment/{id}', [PaymentController::class, 'show'])->name('payment.show');
 
 // ** Cart actions **
 Route::post('/cart/add/{slug}',    [ProductController::class, 'addToCart'])->name('cart.add');
@@ -47,3 +52,8 @@ Route::get('/product', function(){
 Route::get('/transaction', function(){
     return view('admin.transaction');
 })->name('transaction');
+
+Route::get('/user', function(){
+    return view('admin.user');
+})->name('user');
+

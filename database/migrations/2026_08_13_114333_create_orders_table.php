@@ -19,6 +19,7 @@ return new class extends Migration
 
             $table->foreignId('client_id')->constrained('users');
             $table->foreignId('delivery_id')->constrained('deliveries');
+            $table->foreignId('payment_id')->constrained('payments');
         });
     }
 

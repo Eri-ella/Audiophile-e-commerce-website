@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('deliveries', function (Blueprint $table) {
+        Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->string('address');
-            $table->string('city');
-            $table->string('country');
-            $table->string('zip_code');
+            $table->string('type')->default('e-money');
+            $table->string('number')->nullable();
+            $table->integer('pin')->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('deliveries');
+        Schema::dropIfExists('payment');
     }
 };

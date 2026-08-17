@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Order;
 use App\Models\User;
+use App\Models\Payment;
 use App\Models\Delivery;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -25,6 +26,7 @@ class OrderFactory extends Factory
             
             'client_id' => User::factory(),
             'delivery_id' => Delivery::factory(),
+            'payment_id' => Payment::factory(),
         ];
     }
 }

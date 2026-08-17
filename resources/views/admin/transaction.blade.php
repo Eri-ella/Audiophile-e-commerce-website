@@ -59,37 +59,49 @@
             </select>
         </span>
     </div>
-    <div class='w-full overflow-hidden rounded-lg bg-(--white_color) border-1 border-gray-100'>
-        <table class=' p-2 text-sm w-full'>
+    <div class='w-full rounded-lg bg-(--white_color) border-1 border-gray-400'>
+        <table class='p-2 text-sm w-full border-collapse'>
             <thead>
                 <tr class="text-left uppercase text-(--mid_gray) font-normal border border-gray-400 rounded-lg ">
-                    <th>n° commande</th>
-                    <th>client</th>
-                    <th>date</th>
-                    <th>articles</th>
-                    <th>montant</th>
-                    <th>paiement</th>
-                    <th>statut</th>
+                    <th class="pl-2 py-2">n° commande</th>
+                    <th class="py-2">client</th>
+                    <th class="py-2">date</th>
+                    <th class="py-2">articles</th>
+                    <th class="py-2">paiement</th>
+                    <th class="py-2">statut</th>
+                    <th class="py-2"></th>
                 </tr>
             </thead>
             <tbody>
                 @forelse ($products as $product)
                     <tr class='border border-gray-400 rounded-lg'>
-                        <td>
+                        <td class='p-2 '>
                             <span class='font-medium'>#<span>{{ $product["numero"] }}</span>
                         </td>
                         <td class='capitalize'>{{ $product["mail"] }}</td>
                         <td>{{ $product["date"] }}</td>
                         <td>$<span>{{ $product["price"] }}</span></td>
-                        <td class='flex items-center justify-center uppercase bg-red-200 text-red-400 max-w-25 rounded-lg'><iconify-icon icon="icon-park-outline:dot"></iconify-icon>{{ $product["paiement"] }}</td>
-                        <td class='flex items-center justify-center uppercase bg-orange-200 text-orange-400 max-w-25 rounded-lg'><iconify-icon icon="icon-park-outline:dot"></iconify-icon>{{ $product["status"] }}</td>
-                        <td class='text-(--mid_gray)'>
+                        <td>
+                            <div class='flex items-center justify-center uppercase bg-red-200 text-red-400 max-w-25 max-h-5 rounded-lg py-1 px-2 text-xs font-semibold'>
+                                <iconify-icon icon="icon-park-outline:dot"></iconify-icon>
+                                <span class="ml-1">{{ $product["paiement"] }}</span>
+                            </div>
+                        </td>                        
+                        <td>
+                            <div class='flex items-center justify-center uppercase bg-orange-200 text-orange-400 max-w-25 max-h-5 rounded-lg py-1 px-2 text-xs font-semibold'>
+                                <iconify-icon icon="icon-park-outline:dot"></iconify-icon>
+                                <span class="ml-1">{{ $product["status"] }}</span>
+                            </div>
+                        </td>
+                        <td class='text-(--mid_gray) text-xl'>
                             <iconify-icon icon="iconamoon:eye-thin" class=''></iconify-icon>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        Il n'y aucun element dans ce tableau
+                        <td colspan="7" class="text-center py-4 text-gray-500">
+                            Il n'y a aucun élément dans ce tableau
+                        </td>
                     </tr>
                 @endforelse
                 
