@@ -2,13 +2,13 @@
 
 namespace Database\Factories;
 
-use App\Models\Delivery;
+use App\Models\Payment;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<Delivery>
+ * @extends Factory<Payment>
  */
-class DeliveryFactory extends Factory
+class PaymentFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,10 +18,9 @@ class DeliveryFactory extends Factory
     public function definition(): array
     {
         return [
-            'address' => fake()->address(),
-            'city' => fake()->city(),
-            'country' => fake()->country(),
-            'zip_code'  => fake()->postcode(),
+            'type' => fake()->randomElement(['e-money', 'cash']),
+            'number' => fake()->numerify('+22997######'),
+            'pin' => fake()->numerify('####'),
         ];
     }
 }
