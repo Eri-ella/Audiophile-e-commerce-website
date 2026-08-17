@@ -1,36 +1,7 @@
-@php
-    $products = [
-        "elt1" => [ 
-            "name" => 'XX99 Mark II',
-            "ref" => 'HP-XX99-2',
-            "category" => 'casques',
-            "price" => 2999,
-            "stock" => 18,
-            "status" => 'en stock',
-        ],
-        "elt2" => [ 
-            "name" => 'XX99 Mark II',
-            "ref" => 'HP-XX99-2',
-            "category" => 'casques',
-            "price" => 2999,
-            "stock" => 18,
-            "status" => 'en stock',
-        ],
-        "elt3" => [ 
-            "name" => 'XX99 Mark II',
-            "ref" => 'HP-XX99-2',
-            "category" => 'casques',
-            "price" => 2999,
-            "stock" => 18,
-            "status" => 'en stock',
-        ],
-    ]
-@endphp
-
 @extends('layout.simple_layout')
 
 @section('content')
-<form class='flex flex-col gap-2'>
+<form method='POST' class='flex flex-col gap-2'>
     @csrf
     <div class='flex flex-row w-full bg-(--broken_white) text-xs gap-5 p-5'>
         <section class='w-full flex flex-col gap-3'>
@@ -57,9 +28,8 @@
                         <div class='w-full flex flex-col'>
                             <label for="status" class='font-medium'>Statut</label>
                             <select id="status" name="status" class='mt-2 w-full border-1 border-(--mid_gray)/50 hover:border-(--orange_hover) focus:outline-none focus:border-(--orange_hover) rounded-lg px-2 py-1 bg-(--white_color) placeholder:text-(--mid_gray)'>
-                                <option value="" >Headphones</option>
-                                <option value="" >Speakers</option>
-                                <option value="" >Earphones</option>
+                                <option value="" >Active</option>
+                                <option value="" >Inactive</option>
                             </select> 
                         </div>
                     </div>
