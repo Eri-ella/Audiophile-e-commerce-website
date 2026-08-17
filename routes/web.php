@@ -49,6 +49,11 @@ Route::get('/product', function(){
     return view('admin.product');
 })->name('product');
 
+Route::get('/addProduct', function(){
+    return view('admin.add_product');
+})->name('addProduct');
+
+
 Route::get('/transaction', function(){
     return view('admin.transaction');
 })->name('transaction');
