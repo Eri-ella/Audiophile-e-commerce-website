@@ -50,7 +50,7 @@ class ProductController extends Controller
 
         $cart[$slug] = [
             'name'  => $request->input('name'),
-            'price' => (float) $request->input('price'),
+            'price' => (int) $request->input('price'),
             'image' => $request->input('image'),
             'qty'   => ($cart[$slug]['qty'] ?? 0) + $qtyAdded,
         ];
