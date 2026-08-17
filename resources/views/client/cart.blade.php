@@ -20,7 +20,7 @@
             Go Back
         </a>
 
-        <form action="{{ route('cart') }}" method="POST" class="flex flex-col gap-6 md:flex-row md:items-start">
+        <form action="{{ route('payment.store') }}" method="POST" class="flex flex-col gap-6 md:flex-row md:items-start">
             @csrf
 
             {{-- ===== Formulaire gauche ===== --}}

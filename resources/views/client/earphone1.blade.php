@@ -35,7 +35,7 @@
                     <span id="qty" class="w-6 text-center text-sm font-bold text-[#101010]">0</span>
                     <button type="button" onclick="updateQty(1)" class="h-full w-10 text-sm font-bold text-[#808080] transition-colors hover:text-[#D87D4A]">+</button>
                 </div>
-
+                
                 <button type="button" class="inline-block bg-[#D87D4A] px-8 py-3.5 text-sm font-bold uppercase tracking-[0.1em] text-white transition-colors duration-300 hover:bg-[#FBAF85]">
                     Add to cart
                 </button>
