@@ -3,7 +3,7 @@
 @section('content')
 <form method='POST' class='flex flex-col gap-2'>
     @csrf
-    <div class='flex flex-row w-full bg-(--broken_white) text-xs gap-5 p-5'>
+    <div class='flex max-[800px]:flex-col w-full bg-(--broken_white) text-xs gap-5 p-5'>
         <section class='w-full flex flex-col gap-3'>
             <p class='text-(--mid_gray) uppercase font-semibold text-xs'>Produit /<span class='text-(--orange_principal)'> Ajouter un appareil</span></p>
             <h2 class='uppercase font-semibold text-2xl'>ajouter un appareil</h2>

@@ -45,6 +45,10 @@ Route::get('/nav', function(){
     return view('admin.nav_bar');
 })->name('nav');
 
+Route::get('/bord', function(){
+    return view('admin.tableau_bord');
+})->name('bord');
+
 Route::get('/product', function(){
     return view('admin.product');
 })->name('product');
