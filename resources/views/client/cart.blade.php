@@ -16,7 +16,7 @@
 <div class="min-h-screen w-full bg-[#F2F2F2] pb-24">
     <div class="mx-auto w-full max-w-[1110px] px-10 py-8 sm:px-16 md:py-14">
 
-        <a href="{{ url()->previous() }}" class="mb-6 inline-block text-sm text-[#101010]/50 transition-colors hover:text-[#D87D4A] md:mb-10">
+        <a href="{{ url()->previous() }}" class="mb-6 inline-block text-sm text-[#101010]/50 transition-colors hover:text-{--orange_principal} md:mb-10">
             Go Back
         </a>
 
@@ -25,7 +25,7 @@
 
             {{-- ===== Formulaire gauche ===== --}}
             <div class="w-full rounded-xl bg-white p-10 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.08)] md:flex-1 md:p-12">
-                <h2 class="mb-8 text-2xl font-bold uppercase tracking-wide text-[#101010] md:mb-10 md:text-3xl">
+                <h2 class="mb-8 text-2xl font-bold uppercase tracking-wide text-{--black_color} md:mb-10 md:text-3xl">
                     Checkout
                 </h2>
 
@@ -132,7 +132,7 @@
                         <img src="{{ asset($item['image']) }}" alt="{{ $item['name'] }}" class="h-16 w-16 rounded-lg object-cover">
                         <div class="flex flex-col">
                             <h6 class="text-sm font-bold text-[#101010]">{{ $item['name'] }}</h6>
-                            <p class="text-sm font-bold text-[#101010]/50">$ {{ number_format($item['price'], 0, ',', ',') }}</p>
+                            <p class="text-lg font-bold text-[#000000]">$ {{ number_format($shipping, 0, ',', '') }}</p>
                         </div>
                         <p class="ml-auto text-sm font-bold text-[#101010]/50">x{{ $item['qty'] }}</p>
                     </div>

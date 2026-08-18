@@ -2,24 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Content extends Model
 {
-    use HasFactory;
-
-    protected $fillable = [
-        'product_id',
-       
-    ];
+    protected $fillable = ['name'];
 
     public function products(): BelongsToMany
     {
-        return $this->belongsToMany(Product::class)
-                    ->withPivot('quantities')
+        return $this->belongsToMany(Product::class, 'quantities', 'content_id', 'product_id')
+                    ->withPivot('value')
                     ->withTimestamps();
     }
 }

@@ -22,7 +22,7 @@ class DetailFactory extends Factory
         return [
             'quantity' => fake()->numberBetween(1, 5),
             'order_id' => Order::factory(),
-            'product_id' => Product::factory(),
+            'product_id' => Product::inRandomOrder()->first()?->id ?? Product::factory(),
         ];
     }
 }

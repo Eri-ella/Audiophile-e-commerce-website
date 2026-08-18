@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -18,11 +17,6 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
@@ -31,9 +25,9 @@ class User extends Authenticatable
         ];
     }
 
-    protected function isAdmin(): bool
+    public function isAdmin(): bool
     {
-        return $this->role == 'admin';
+        return $this->role === 'admin';
     }
 
     public function scopeClients($query)
@@ -46,7 +40,9 @@ class User extends Authenticatable
         return $query->where('role', 'admin');
     }
 
-    public function clients () {
-        return this->HasMany(Order::class);
+    //  un client a plusieurs commandes
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
     }
 }
