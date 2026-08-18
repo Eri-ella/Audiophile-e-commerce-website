@@ -42,3 +42,28 @@ Route::get('/admin/nav',     fn () => view('admin.nav_bar'))->name('nav');
 Route::get('/admin/product', fn () => view('admin.product'))->name('product');
 Route::get('/admin/transaction', fn () => view('admin.transaction'))->name('transaction');
 Route::get('/admin/user',    fn () => view('admin.user'))->name('user');
+Route::get('/lateral', function(){
+    return view('admin.lateral_bar');
+})->name('lateral');
+
+Route::get('/nav', function(){
+    return view('admin.nav_bar');
+})->name('nav');
+
+Route::get('/product', function(){
+    return view('admin.product');
+})->name('product');
+
+Route::get('/addProduct', function(){
+    return view('admin.add_product');
+})->name('addProduct');
+
+
+Route::get('/transaction', function(){
+    return view('admin.transaction');
+})->name('transaction');
+
+Route::get('/user', function(){
+    return view('admin.user');
+})->name('user');
+
