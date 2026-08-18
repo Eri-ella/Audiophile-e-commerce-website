@@ -58,6 +58,10 @@ Route::get('/product', function(){
     return view('admin.product');
 })->name('product');
 
+Route::get('/category', function(){
+    return view('admin.category');
+})->name('category');
+
 Route::get('/addProduct', function(){
     return view('admin.add_product');
 })->name('addProduct');

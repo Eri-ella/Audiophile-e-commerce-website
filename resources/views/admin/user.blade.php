@@ -26,7 +26,7 @@
     <div class='w-full overflow-hidden rounded-lg bg-(--white_color) border-1 border-gray-400'>
         <table class=' p-2 text-sm w-full border-collapse'>
             <thead>
-                <tr class="text-left uppercase text-(--mid_gray) font-normal border border-gray-400 rounded-lg ">
+                <tr class="text-left uppercase text-(--mid_gray) font-normal border border-gray-200 rounded-lg ">
                     <th class="pl-4 pb-2">client</th>
                     <th class="pb-2">e-mail</th>
                     <th class="pb-2">telephone</th>
@@ -37,7 +37,7 @@
             </thead>
             <tbody>
                 @forelse ($products as $product)
-                    <tr class='border border-gray-400 rounded-lg'>
+                    <tr class='border border-gray-200 rounded-lg'>
                         <td class=' p-2 flex items-center gap-2 my-2 ml-2'>
                             <span class='bg-(--black_color) text-(--white_color) font-medium size-10 flex items-center justify-center rounded-full'>
                                 {{ $product["initial"] }}
