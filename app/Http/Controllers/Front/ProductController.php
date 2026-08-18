@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Front;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 
 class ProductController extends Controller
 {
@@ -17,43 +18,60 @@ class ProductController extends Controller
         return view('client.cart', ['cart' => session('cart', [])]);
     }
 
-    // ** Navbar **
-    public function headphones() { return view('client.headphones'); }
-    public function speakers()   { return view('client.speakers'); }
-    public function earphones()  { return view('client.earphones'); }
-
-    
-    public function show(string $slug)
+    // ** Navbar : passe les produits depuis la BDD **
+    public function headphones()
     {
-        // Mapping : slug → vue Blade
-        $views = [
-            // Casques
-            'xx99-mark-ii'  => 'client.headphone',
-            'xx99-mark-i'   => 'client.headphone',
-            'xx59'          => 'client.headphone',
-            // Speakers
-            'zx9-speaker'   => 'client.speaker',
-            'zx7-speaker'   => 'client.speaker',
-            // Earphones
-            'yx1-earphones' => 'client.earphone',
-        ];
-
-        $view = $views[$slug] ?? abort(404);
-        return view($view, compact('slug'));
+        $products = Product::whereHas('categories', fn ($q) => $q->where('name', 'headphones'))->get();
+        return view('client.headphones', compact('products'));
     }
 
-    // ** Cart actions **
-    public function addToCart(Request $request, string $slug)
+    public function speakers()
+    {
+        $products = Product::whereHas('categories', fn ($q) => $q->where('name', 'speakers'))->get();
+        return view('client.speakers', compact('products'));
+    }
+
+    public function earphones()
+    {
+        $products = Product::whereHas('categories', fn ($q) => $q->where('name', 'earphones'))->get();
+        return view('client.earphones', compact('products'));
+    }
+
+    // ** Page produit : utilise l'ID au lieu du slug **
+    public function show(int $id)
+    {
+        $product = Product::with(['categories', 'contents'])->findOrFail($id);
+
+        $views = [
+            'headphones' => 'client.headphone',
+            'speakers'   => 'client.speaker',
+            'earphones'  => 'client.earphone',
+        ];
+
+        $view = $views[$product->categories?->name] ?? abort(404);
+
+        // 3 autres produits pour "You may also like"
+        $others = Product::where('id', '!=', $product->id)
+                         ->with('categories')
+                         ->latest()
+                         ->limit(3)
+                         ->get();
+
+        return view($view, compact('product', 'others'));
+    }
+
+    // ** Cart : utilise l'ID au lieu du slug **
+    public function addToCart(Request $request, int $id)
     {
         $cart = session('cart', []);
         $qtyAdded = (int) $request->input('qty', 1);
 
-        $cart[$slug] = [
-            'id'    => $request->input('id'),
+        $cart[$id] = [
+            'id'    => $id,
             'name'  => $request->input('name'),
             'price' => (int) $request->input('price'),
             'image' => $request->input('image'),
-            'qty'   => ($cart[$slug]['qty'] ?? 0) + $qtyAdded,
+            'qty'   => ($cart[$id]['qty'] ?? 0) + $qtyAdded,
         ];
 
         session(['cart' => $cart]);
@@ -64,15 +82,15 @@ class ProductController extends Controller
         ]);
     }
 
-    public function updateCart(Request $request, string $slug)
+    public function updateCart(Request $request, int $id)
     {
         $cart = session('cart', []);
         $delta = (int) $request->input('delta');
 
-        if (isset($cart[$slug])) {
-            $cart[$slug]['qty'] = max(0, $cart[$slug]['qty'] + $delta);
-            if ($cart[$slug]['qty'] === 0) {
-                unset($cart[$slug]);
+        if (isset($cart[$id])) {
+            $cart[$id]['qty'] = max(0, $cart[$id]['qty'] + $delta);
+            if ($cart[$id]['qty'] === 0) {
+                unset($cart[$id]);
             }
         }
 
@@ -83,7 +101,6 @@ class ProductController extends Controller
     public function removeAllCart()
     {
         session()->forget('cart');
-        
         return back();
     }
 }

@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Product extends Model
@@ -31,10 +30,11 @@ class Product extends Model
         return $this->belongsTo(Category::class, 'category_id');
     }
 
+    // ✅ Table pivot = quantities, colonne quantité = value
     public function contents(): BelongsToMany
     {
-        return $this->belongsToMany(Content::class)
-                    ->withPivot('quantities')
+        return $this->belongsToMany(Content::class, 'quantities', 'product_id', 'content_id')
+                    ->withPivot('value')
                     ->withTimestamps();
     }
 

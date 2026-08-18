@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('role')->default('client');
+            $table->string('role')->default('client');          // client par défaut, admin pour le patron
             $table->string('email', 191)->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('telephone');
-            $table->string('password')->nullable();
+            $table->string('telephone')->nullable();            // ✅ corrigé : nullable
+            $table->string('password')->nullable();             // ✅ nullable : un client guest n'a pas de vrai mot de passe
             $table->rememberToken();
             $table->timestamps();
         });
@@ -33,7 +33,7 @@ return new class extends Migration
             $table->string('id', 191)->primary();
             $table->foreignId('user_id')->nullable()->index();
             $table->string('ip_address', 45)->nullable();
-            $table->text('user_agent')->nullable();
+            $table->string('user_agent')->text()->nullable();
             $table->longText('payload');
             $table->integer('last_activity')->index();
         });
