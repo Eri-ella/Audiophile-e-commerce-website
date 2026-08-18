@@ -50,6 +50,10 @@ Route::get('/nav', function(){
     return view('admin.nav_bar');
 })->name('nav');
 
+Route::get('/bord', function(){
+    return view('admin.tableau_bord');
+})->name('bord');
+
 Route::get('/product', function(){
     return view('admin.product');
 })->name('product');
@@ -58,6 +62,9 @@ Route::get('/addProduct', function(){
     return view('admin.add_product');
 })->name('addProduct');
 
+Route::get('/setting', function(){
+    return view('admin.setting');
+})->name('setting');
 
 Route::get('/transaction', function(){
     return view('admin.transaction');
