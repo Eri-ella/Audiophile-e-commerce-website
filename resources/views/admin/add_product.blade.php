@@ -1,13 +1,12 @@
-@extends('layout.simple_layout')
-
-@section('content')
+<div class='flex flex-col w-full bg-(--broken_white) gap-5 p-5'>
+    <p class='text-(--mid_gray) uppercase font-semibold text-xs'>Produit /<span class='text-(--orange_principal)'> Ajouter un appareil</span></p>
+    <h2 class='uppercase font-semibold text-2xl'>ajouter un appareil</h2>
+    <p class='text-(--mid_gray) text-base sm:pr-5'>Créez une nouvelle fiche produit visible sur la boutique</p>
+</div>
 <form method='POST' class='flex flex-col gap-2'>
     @csrf
-    <div class='flex max-[800px]:flex-col w-full bg-(--broken_white) text-xs gap-5 p-5'>
+    <div class='flex max-[800px]:flex-col w-full bg-(--broken_white) text-xs gap-3 p-5'>
         <section class='w-full flex flex-col gap-3'>
-            <p class='text-(--mid_gray) uppercase font-semibold text-xs'>Produit /<span class='text-(--orange_principal)'> Ajouter un appareil</span></p>
-            <h2 class='uppercase font-semibold text-2xl'>ajouter un appareil</h2>
-            <p class='text-(--mid_gray) text-base sm:pr-5'>Créez une nouvelle fiche produit visible sur la boutique</p>
             
             <div class='bg-(--white_color) flex flex-col gap-3 p-5 rounded-lg shadow-lg'>
                 <div class='flex flex-col gap-3'>
@@ -61,7 +60,7 @@
                         </div>
                         <a href=""  class='text-(--orange_principal) uppercase font-semibold text-sm'>+ Ajouter une ligne</a>
                     </div>
-                <div>
+                </div>
             </div>    
         </section>    
         <section class='w-full h-fit flex flex-col gap-3 bg-(--white_color) flex flex-col gap-3 p-5 rounded-lg shadow-lg'>
@@ -69,7 +68,6 @@
             <div class='flex gap-5'> 
                 <div class='relative'>
                     <label for="couverture" class='font-medium'>Image de couverture</label>
-                    <iconify-icon icon="pajamas:import" class='text-(--orange_principal) absolute top-15 left-[40%] text-6xl'></iconify-icon>
                     <input 
                         type="file" 
                         id="couverture"
@@ -91,7 +89,6 @@
                 </div>
                 <div class='relative'>
                     <label for="couverture" class='font-medium'>Image 1</label>
-                    <iconify-icon icon="pajamas:import" class='text-(--orange_principal) absolute top-15 left-[40%] text-6xl'></iconify-icon>
                     <input 
                         type="file" 
                         id="couverture"
@@ -115,7 +112,6 @@
                 <div class='flex gap-5'> 
                 <div class='relative'>
                     <label for="couverture" class='font-medium'>Image 2</label>
-                    <iconify-icon icon="pajamas:import" class='text-(--orange_principal) absolute top-15 left-[40%] text-6xl'></iconify-icon>
                     <input 
                         type="file" 
                         id="couverture"
@@ -137,7 +133,6 @@
                 </div>
                 <div class='relative'>
                     <label for="couverture" class='font-medium'>Image 3</label>
-                    <iconify-icon icon="pajamas:import" class='text-(--orange_principal) absolute top-15 left-[40%] text-6xl'></iconify-icon>
                     <input 
                         type="file" 
                         id="couverture"
@@ -158,14 +153,11 @@
                     
                 </div> 
             </div> 
-    </section>
+        </section>
     </div> 
     <div class='bg-(--mid_gray)/50 w-[80%] h-[1px] self-center'> </div> 
     <div class='flex w-full justify-end gap-5 p-5'>
         <a href=""  class='flex justify-center items-center h-10 border-1 border-(--mid_gray)/50 px-3 uppercase font-semibold hover:border-(--black_color) rounded-lg'>Annuler</a>
         <a href=""  class='flex justify-center items-center h-10 text-(--white_color) bg-(--orange_principal) px-3 uppercase font-semibold hover:bg-(--orange_hover) rounded-lg'>Enregistrer le produit</a>
-
     </div>
 </form>
-
-@endsection
