@@ -1,24 +1,26 @@
 <?php
 
 namespace App\Models;
-// use Database\Factories\PaymenyFactory;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Payment extends Model
 {
-    use HasFactory, Notifiable;
+    use HasFactory;
 
     protected $fillable = [
+        'order_id',
         'type',
-        'number',
-        'pin',
+        'status',
+        'fedapay_id',
+        // ❌ SUPPRIMER 'number' et 'pin' (sécurité)
     ];
 
-    public function orders () {
-        return $this->hasOne(Order::class);
+    // Un payment appartient à UNE commande
+    public function order(): BelongsTo
+    {
+        return $this->belongsTo(Order::class);
     }
 }

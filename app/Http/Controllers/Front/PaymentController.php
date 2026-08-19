@@ -3,134 +3,184 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use App\Models\User;
-use App\Models\Order;
 use App\Models\Delivery;
+use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Product;
-use App\Models\Detail;
+use App\Models\User;
+use FedaPay\FedaPay;
+use FedaPay\Transaction;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PaymentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
+    // ===== Affiche le formulaire de paiement (checkout) =====
     public function create()
     {
-        //
+        $cart = session('cart', []);
+
+        if (empty($cart)) {
+            return redirect()->route('cart');
+        }
+
+        return view('client.checkout', ['cart' => $cart]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    // ===== Traite la soumission du formulaire =====
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email',
-            'phone' => 'required|regex:/^[\+\s\-\d+]+$/|min:10',
-            'address' => 'required|string|max:255',
-            'zip' => 'required|numeric',
-            'city' => 'required|string|max:255',
-            'country' => 'required|string|max:255',
+            'name'           => 'required|string|max:255',
+            'email'          => 'required|email',
+            'phone'          => 'required|min:8',
+            'address'        => 'required|string|max:255',
+            'zip'            => 'required|numeric',
+            'city'           => 'required|string|max:255',
+            'country'        => 'required|string|max:255',
             'payment_method' => 'required|in:e-money,cash',
-            'e_money_number' => 'nullable',
-            'e_money_pin' => 'nullable',
         ]);
 
-        $commandeId = DB::transaction(function () use ($validated, $request) {
+        $cart = session('cart', []);
+        if (empty($cart)) {
+            return redirect()->route('cart');
+        }
+
+        $total      = collect($cart)->sum(fn ($i) => $i['price'] * $i['qty']);
+        $grandTotal = $total + 50;
+
+        // 🟦 1. Tout créer en BDD
+        $commandeId = DB::transaction(function () use ($validated, $cart, $grandTotal) {
             $client = User::updateOrCreate(
                 ['email' => $validated['email']],
-                ['name' => $validated['name'], 'telephone' => $validated['phone']]
+                [
+                    'name'      => $validated['name'],
+                    'telephone' => $validated['phone'],
+                    'role'      => 'client',
+                    'password'  => bcrypt(str()->random(12)),
+                ]
             );
 
-            $commande = new Order();
-            $commande->client_id = $client->id;
-            $commande->amount = collect(session('cart', []))->sum(fn ($item) => $item['price'] * $item['qty']);
+            $delivery = Delivery::create([
+                'address'  => $validated['address'],
+                'zip_code' => $validated['zip'],
+                'city'     => $validated['city'],
+                'country'  => $validated['country'],
+            ]);
 
-            $delivery = new Delivery();
-            $delivery->address = $validated['address'];
-            $delivery->zip_code = $validated['zip'];
-            $delivery->city = $validated['city'];
-            $delivery->country = $validated['country'];
-            $delivery->save();
+            $commande = Order::create([
+                'client_id'   => $client->id,
+                'delivery_id' => $delivery->id,
+                'amount'      => $grandTotal,
+                'status'      => $validated['payment_method'] === 'cash' ? 'paid' : 'pending',
+            ]);
 
-            $payment = new Payment();
-            $payment->type = $validated['payment_method'];
-            $payment->number = $validated['e_money_number'];
-            $payment->pin = $validated['e_money_pin'];
-            $payment->save();
+            $payment = Payment::create([
+                'order_id' => $commande->id,
+                'type'     => $validated['payment_method'],
+                'status'   => $validated['payment_method'] === 'cash' ? 'approved' : 'pending',
+            ]);
 
-            $commande->delivery_id = $delivery->id;
-            $commande->payment_id = $payment->id;
-            $commande->save();
+            $commande->update(['payment_id' => $payment->id]);
 
-            $attachedCount = 0;
-
-            foreach (session('cart', []) as $slug => $item) {
-                $product = !empty($item['id']) 
-                    ? Product::find($item['id']) 
-                    : Product::where('name', $item['name'])->first();
-                
-                if ($product) {
-                    $commande->products()->attach($product->id, ['quantity' => $item['qty']]);
-                    $attachedCount++;
-                }
+            foreach ($cart as $id => $item) {
+                $commande->products()->attach($id, ['quantity' => $item['qty']]);
+                Product::where('id', $id)->decrement('stock', $item['qty']);
             }
-
-            if ($attachedCount === 0) {
-                throw new \Exception('Aucun produit n\'a pu être associé à cette commande.');
-            }
-
-            session()->forget('cart');
 
             return $commande->id;
         });
 
-        return redirect()->route('payment.show', $commandeId); 
+        // 💵 CASH → direct au résumé
+        if ($validated['payment_method'] === 'cash') {
+            session()->forget('cart');
+            return redirect()->route('payment.show', $commandeId);
+        }
+
+        // 💳 E-MONEY → appel FedaPay
+        $commande = Order::with('client')->findOrFail($commandeId);
+
+        FedaPay::setApiKey(config('services.fedapay.secret'));
+        FedaPay::setEnvironment(config('services.fedapay.env'));
+
+        try {
+            $transaction = Transaction::create([
+                'amount'      => (int) round($commande->amount),
+                'currency'    => ['iso' => 'XOF'],
+                'description' => 'Commande #' . $commande->id . ' - Audiophile',
+                'customer'    => [
+                    'email'        => $commande->client->email,
+                    'firstname'    => $commande->client->name,
+                    'lastname'     => $commande->client->name,
+                    'phone_number' => [
+                        'number'  => preg_replace('/[^0-9+]/', '', $commande->client->telephone ?? ''),
+                        'country' => 'bj',
+                    ],
+                ],
+                'callback_url' => route('payment.callback', $commande->id),
+            ]);
+
+            Payment::where('order_id', $commande->id)->update(['fedapay_id' => $transaction->id]);
+
+            // ✅ Génération du lien de paiement, puis redirection
+            $token = $transaction->generateToken();
+
+            return redirect($token->url);
+
+        } catch (\Throwable $e) {
+            // En cas d'erreur FedaPay : retour au checkout avec message
+            $commande->update(['status' => 'failed']);
+
+            return redirect()
+                ->route('cart')
+                ->withErrors(['payment' => 'Service de paiement indisponible : ' . $e->getMessage()]);
+        }
     }
 
-    /**
-     * Display the specified resource.
-     */
+    // 🔄 FedaPay renvoie le client ici après paiement
+    public function callback(Request $request, $orderId)
+    {
+        $commande = Order::findOrFail($orderId);
+        $payment  = Payment::where('order_id', $commande->id)->first();
+
+        FedaPay::setApiKey(config('services.fedapay.secret'));
+        FedaPay::setEnvironment(config('services.fedapay.env'));
+
+        $transactionId = $request->query('id') ?? $request->query('transaction_id') ?? $payment?->fedapay_id;
+        $transaction   = Transaction::retrieve($transactionId);
+
+        if ($transaction && $transaction->status === 'approved') {
+            $commande->update(['status' => 'paid']);
+            $payment?->update(['status' => 'approved']);
+            session()->forget('cart');
+            return redirect()->route('cart_box', $orderId);
+        }
+
+        $commande->update(['status' => 'failed']);
+        $payment?->update(['status' => 'declined']);
+        return view('client.payment_failed', compact('commande'));
+    }
+
     public function show(string $id)
     {
         $commande = Order::with(['client', 'delivery', 'payment', 'products'])->findOrFail($id);
 
-        return view('client.payment_box', ['commande' => $commande]);
-    }
+        // On reconstruit un tableau au même format que session('cart')
+        // pour pouvoir réutiliser exactement le composant cart_box.
+        $cart = [];
+        foreach ($commande->products as $product) {
+            $cart[$product->id] = [
+                'name'  => $product->name,
+                'price' => $product->price,
+                'image' => $product->image,
+                'qty'   => $product->pivot->quantity,
+            ];
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return view('client.cart_box', [
+            'cart'     => $cart,
+            'commande' => $commande,
+            'readonly' => true,
+        ]);
     }
 }

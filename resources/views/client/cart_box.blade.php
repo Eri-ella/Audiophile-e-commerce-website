@@ -2,8 +2,9 @@
     $cart = $cart ?? session('cart', []);
     $total = collect($cart)->sum(fn ($item) => $item['price'] * $item['qty']);
     $count = collect($cart)->sum('qty');
+    $readonly = $readonly ?? false;
 @endphp
-
+@vite(['public/js/client.js'])
 <div class="w-[380px] max-w-[90vw] rounded-lg bg-white p-7 shadow-[0_20px_50px_rgba(0,0,0,0.15)]">
 
     <div class="mb-6 flex items-center justify-between">

@@ -2,31 +2,23 @@
 
 namespace Database\Factories;
 
-use App\Models\Order;
-use App\Models\User;
-use App\Models\Payment;
 use App\Models\Delivery;
+use App\Models\Order;
+use App\Models\Payment;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends Factory<Order>
- */
 class OrderFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
         return [
-            'amount' => fake()->numberBetween(300, 20000),
-            'status' => fake()->randomElement(['en attente', 'validee']),
-            
-            'client_id' => User::factory(),
+            // ✅ Un des 5 vrais clients (pas de client fantôme)
+            'client_id'   => User::where('role', 'client')->inRandomOrder()->first()?->id ?? User::factory(),
             'delivery_id' => Delivery::factory(),
-            'payment_id' => Payment::factory(),
+            'payment_id'  => Payment::factory(),   // ✅ sûr maintenant (Payment ne crée plus d'order)
+            'amount'      => fake()->numberBetween(500, 20000),
+            'status'      => fake()->randomElement(['paid', 'pending', 'failed']),
         ];
     }
 }
