@@ -27,9 +27,6 @@
     ]
 @endphp
 
-@extends('layout.simple_layout')
-
-@section('content')
 <div class='bg-(--broken_white) flex flex-col gap-3 p-5'>
     <h2 class='uppercase font-semibold text-2xl'>Produits</h2>
     <p class='text-(--mid_gray) text-base sm:pr-5'>Gérez le catalogue d'appareils audio de la boutique</p>
@@ -104,5 +101,3 @@
         </table>
     </div>
 </div>
-
-@endsection

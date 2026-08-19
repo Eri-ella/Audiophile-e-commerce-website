@@ -27,9 +27,6 @@
     ]
 @endphp
 
-@extends('layout.simple_layout')
-
-@section('content')
 <div class='bg-(--broken_white) flex flex-col gap-3 p-5'>
     <div class='flex justify-between'>
         <span>
@@ -40,7 +37,7 @@
             <a href=""  class='flex justify-center items-center px-3 py-2 border-1 border-gray-200 uppercase font-semibold hover:bg-gray-100 rounded-lg'>Exporter en csv</a>
         </span>
     </div>
-    <div class='flex gap-5'>
+    <div class='flex gap-5 flex-wrap'>
         <span>
             <input type="text" name="search_product" placeholder="Rechercher une commande" class='border-1 border-(--mid_gray)/50 hover:border-(--orange_hover) focus:outline-none focus:border-(--orange_hover) rounded-lg px-4 py-1 min-w-60 bg-(--white_color) placeholder:text-(--mid_gray)'>
         </span>
@@ -59,10 +56,10 @@
             </select>
         </span>
     </div>
-    <div class='w-full rounded-lg bg-(--white_color) border-1 border-gray-400'>
+    <div class='w-full rounded-lg bg-(--white_color) border-1 border-gray-200'>
         <table class='p-2 text-sm w-full border-collapse'>
             <thead>
-                <tr class="text-left uppercase text-(--mid_gray) font-normal border border-gray-400 rounded-lg ">
+                <tr class="text-left uppercase text-(--mid_gray) font-normal border border-gray-200 rounded-lg ">
                     <th class="pl-2 py-2">n° commande</th>
                     <th class="py-2">client</th>
                     <th class="py-2">date</th>
@@ -74,7 +71,7 @@
             </thead>
             <tbody>
                 @forelse ($products as $product)
-                    <tr class='border border-gray-400 rounded-lg'>
+                    <tr class='border border-gray-200 rounded-lg'>
                         <td class='p-2 '>
                             <span class='font-medium'>#<span>{{ $product["numero"] }}</span>
                         </td>
@@ -109,5 +106,3 @@
         </table>
     </div>
 </div>
-
-@endsection

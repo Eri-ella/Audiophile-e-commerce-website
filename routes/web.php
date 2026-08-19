@@ -37,44 +37,8 @@ Route::post('/cart/remove-all',  [ProductController::class, 'removeAllCart'])->n
 // ** Admin : préfixe tout avec /admin pour éviter les conflits **
 Route::get('/connexion-admin', [ConnexionController::class, 'index'])->name('connexion-admin');
 
-Route::get('/admin/lateral', fn () => view('admin.lateral_bar'))->name('lateral');
-Route::get('/admin/nav',     fn () => view('admin.nav_bar'))->name('nav');
-Route::get('/admin/product', fn () => view('admin.product'))->name('product');
-Route::get('/admin/transaction', fn () => view('admin.transaction'))->name('transaction');
-Route::get('/admin/user',    fn () => view('admin.user'))->name('user');
-Route::get('/lateral', function(){
-    return view('admin.lateral_bar');
-})->name('lateral');
 
-Route::get('/nav', function(){
-    return view('admin.nav_bar');
-})->name('nav');
-
-Route::get('/bord', function(){
-    return view('admin.tableau_bord');
-})->name('bord');
-
-Route::get('/product', function(){
-    return view('admin.product');
-})->name('product');
-
-Route::get('/category', function(){
-    return view('admin.category');
-})->name('category');
-
-Route::get('/addProduct', function(){
-    return view('admin.add_product');
-})->name('addProduct');
-
-Route::get('/setting', function(){
-    return view('admin.setting');
-})->name('setting');
-
-Route::get('/transaction', function(){
-    return view('admin.transaction');
-})->name('transaction');
-
-Route::get('/user', function(){
-    return view('admin.user');
-})->name('user');
+Route::get('/admin', function(){
+    return view('admin.admin_page');
+})->name('admin');
 
