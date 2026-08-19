@@ -47,3 +47,8 @@ Route::get('/admin/addProduct',  fn () => view('admin.add_product'))->name('addP
 Route::get('/admin/setting',     fn () => view('admin.setting'))->name('setting');
 Route::get('/admin/transaction', fn () => view('admin.transaction'))->name('transaction');
 Route::get('/admin/user',        fn () => view('admin.user'))->name('user');
+
+Route::get('/admin', function(){
+    return view('admin.admin_page');
+})->name('admin');
+

@@ -24,9 +24,8 @@
     ]
 @endphp
 
-@extends('layout.simple_layout')
+@vite(['public/js/admin.js'])
 
-@section('content')
 <div class='bg-(--broken_white) flex flex-col gap-3 p-5 bg-(--broken_white)'>
     <div>
         <h2 class='uppercase font-semibold text-2xl'>tableau de bord</h2>
@@ -75,7 +74,7 @@
             <div></div>
             <div></div>
         </div>
-        <div class='min-[800px]:w-1/4 w-full bg-(--white_color) p-5 rounded-lg shadow-sm''>
+        <div class='min-[800px]:w-1/4 w-full bg-(--white_color) p-5 rounded-lg shadow-sm'>
             <h3 class='flex items-center uppercase text-xl font-medium'>meileures ventes</h3>
             <div class='flex flex-col'>
                 <div class='flex items-center justify-between'>
@@ -156,4 +155,3 @@
     
 </div>
 
-@endsection

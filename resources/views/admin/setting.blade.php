@@ -1,13 +1,10 @@
-@extends('layout.simple_layout')
-
-@section('content')
     <div class='flex flex-col w-full bg-(--broken_white) text-xs gap-5 p-5'>
         <h2 class='uppercase font-semibold text-2xl'>administrateur</h2>
         <p class='text-(--mid_gray) sm:pr-5'>Personalisez cet espace à votre image</p>
             
         <div class='flex flex-row w-full gap-5'>
 
-            <section class='flex items-center flex-col gap-3 bg-(--white_color) p-5 rounded-lg shadow-lg'>
+            <section class='flex items-center flex-col gap-3 bg-(--white_color) py-5 px-10 rounded-lg shadow-lg'>
                 
                 <div class='flex items-center justify-center size-30 bg-(--black_color) text-(--white_color) text-4xl rounded-full'>JH</div>
                 <p class='font-medium text-base'>Jean Houessou</p>
@@ -49,5 +46,3 @@
         </div> 
     </div> 
     
-
-@endsection
