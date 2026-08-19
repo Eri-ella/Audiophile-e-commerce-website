@@ -25,52 +25,25 @@ Route::get('/earphone1',  fn () => redirect('/product/6'))->name('earphone1');
 
 Route::get('/cart', [ProductController::class, 'cart'])->name('cart');
 
-// ** Payment **
-Route::post('/payment', [PaymentController::class, 'store'])->name('payment.store');
-Route::get('/payment/{id}', [PaymentController::class, 'show'])->name('payment.show');
-
 // ** Cart : utilise l'ID **
 Route::post('/cart/add/{id}',    [ProductController::class, 'addToCart'])->name('cart.add');
 Route::post('/cart/update/{id}', [ProductController::class, 'updateCart'])->name('cart.update');
 Route::post('/cart/remove-all',  [ProductController::class, 'removeAllCart'])->name('cart.removeAll');
 
-// ** Admin : préfixe tout avec /admin pour éviter les conflits **
+// ** Payment **
+Route::get('/checkout', [PaymentController::class, 'create'])->name('checkout');
+Route::post('/payment', [PaymentController::class, 'store'])->name('payment.store');
+Route::get('/payment/{id}', [PaymentController::class, 'show'])->name('payment.show');
+Route::get('/payment/callback/{orderId}', [PaymentController::class, 'callback'])->name('payment.callback');
+
+// ** Admin : tout préfixé avec /admin pour éviter les conflits de noms **
 Route::get('/connexion-admin', [ConnexionController::class, 'index'])->name('connexion-admin');
 
-Route::get('/admin/lateral', fn () => view('admin.lateral_bar'))->name('lateral');
-Route::get('/admin/nav',     fn () => view('admin.nav_bar'))->name('nav');
-Route::get('/admin/product', fn () => view('admin.product'))->name('product');
+Route::get('/admin/lateral',     fn () => view('admin.lateral_bar'))->name('lateral');
+Route::get('/admin/nav',         fn () => view('admin.nav_bar'))->name('nav');
+Route::get('/admin/bord',        fn () => view('admin.tableau_bord'))->name('bord');
+Route::get('/admin/product',     fn () => view('admin.product'))->name('product');
+Route::get('/admin/addProduct',  fn () => view('admin.add_product'))->name('addProduct');
+Route::get('/admin/setting',     fn () => view('admin.setting'))->name('setting');
 Route::get('/admin/transaction', fn () => view('admin.transaction'))->name('transaction');
-Route::get('/admin/user',    fn () => view('admin.user'))->name('user');
-Route::get('/lateral', function(){
-    return view('admin.lateral_bar');
-})->name('lateral');
-
-Route::get('/nav', function(){
-    return view('admin.nav_bar');
-})->name('nav');
-
-Route::get('/bord', function(){
-    return view('admin.tableau_bord');
-})->name('bord');
-
-Route::get('/product', function(){
-    return view('admin.product');
-})->name('product');
-
-Route::get('/addProduct', function(){
-    return view('admin.add_product');
-})->name('addProduct');
-
-Route::get('/setting', function(){
-    return view('admin.setting');
-})->name('setting');
-
-Route::get('/transaction', function(){
-    return view('admin.transaction');
-})->name('transaction');
-
-Route::get('/user', function(){
-    return view('admin.user');
-})->name('user');
-
+Route::get('/admin/user',        fn () => view('admin.user'))->name('user');
