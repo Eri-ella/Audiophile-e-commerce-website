@@ -44,13 +44,10 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/admin', function () {
         return view('admin.admin_page');
     })->name('admin');
+    
+    Route::get('/logout', [ConnexionController::class, 'logout'])->name('logout');
 
     // apexcharts
     Route::get('/admin/dashboard/sales-data', [DashboardController::class, 'salesData'])
     ->name('admin.dashboard.sales-data');
 });
-    Route::get('/logout', [ConnexionController::class, 'logout'])->name('logout');
-
-Route::get('/test', function () {
-    return view('admin.test');
-})->name('test');
