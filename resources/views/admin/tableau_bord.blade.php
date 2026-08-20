@@ -66,15 +66,15 @@
         </div>   
     </div>
     <div class='flex max-[800px]:flex-col w-full gap-5'>
-        <div class='flex flex-col justify-between min-[800px]:w-3/4 w-full h-100 bg-(--white_color) p-5 rounded-lg shadow-sm''>
+        <div class='flex flex-col justify-between min-[800px]:grow-2 w-full h-100 bg-(--white_color) p-5 rounded-lg shadow-sm overflow-hidden'>
             <div class='flex justify-between items-center'>
                 <h3 class='flex items-center uppercase text-xl font-medium'><iconify-icon icon="icon-park-outline:dot" class='text-(--orange_principal)'></iconify-icon>aperçu des ventes</h3>
                 <p class='text-(--orange_principal)'>12 derniers mois</p>
             </div>
-            <div></div>
+            <div id="sales-chart" class='w-full'></div>
             <div></div>
         </div>
-        <div class='min-[800px]:w-1/4 w-full bg-(--white_color) p-5 rounded-lg shadow-sm'>
+        <div class='min-w-75 bg-(--white_color) p-5 rounded-lg shadow-sm'>
             <h3 class='flex items-center uppercase text-xl font-medium'>meileures ventes</h3>
             <div class='flex flex-col'>
                 <div class='flex items-center justify-between'>

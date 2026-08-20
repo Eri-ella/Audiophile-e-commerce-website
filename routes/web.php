@@ -2,8 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Front\ProductController;
-use App\Http\Controllers\Back\ConnexionController;
 use App\Http\Controllers\Front\PaymentController;
+use App\Http\Controllers\Back\ConnexionController;
+use App\Http\Controllers\Back\dashboardController;
+use Illuminate\Auth\Middleware\Authenticate;
 
 // ** Client **
 Route::get('/', [ProductController::class, 'index'])->name('acceuil');
@@ -34,11 +36,21 @@ Route::post('/cart/add/{id}',    [ProductController::class, 'addToCart'])->name(
 Route::post('/cart/update/{id}', [ProductController::class, 'updateCart'])->name('cart.update');
 Route::post('/cart/remove-all',  [ProductController::class, 'removeAllCart'])->name('cart.removeAll');
 
-// ** Admin : préfixe tout avec /admin pour éviter les conflits **
-Route::get('/connexion-admin', [ConnexionController::class, 'index'])->name('connexion-admin');
+// ** Admin **
+Route::get('/connexion-admin', [ConnexionController::class, 'showLoginForm'])->name('connexion-admin.form');
+Route::post('/connexion-admin', [ConnexionController::class, 'login'])->name('connexion-admin.login');
 
+Route::middleware(['auth'])->group(function(){
+    Route::get('/admin', function () {
+        return view('admin.admin_page');
+    })->name('admin');
 
-Route::get('/admin', function(){
-    return view('admin.admin_page');
-})->name('admin');
+    // apexcharts
+    Route::get('/admin/dashboard/sales-data', [DashboardController::class, 'salesData'])
+    ->name('admin.dashboard.sales-data');
+});
+    Route::get('/logout', [ConnexionController::class, 'logout'])->name('logout');
 
+Route::get('/test', function () {
+    return view('admin.test');
+})->name('test');

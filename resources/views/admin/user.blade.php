@@ -17,7 +17,7 @@
     <p class='text-(--mid_gray) text-base sm:pr-5'>Clients inscrits sur la boutique</p>
     <div class='flex gap-5'>
         <span>
-            <input type="text" name="search_product" placeholder="Rechercher un produit" class='border-1 border-(--mid_gray)/50 hover:border-(--orange_hover) focus:outline-none focus:border-(--orange_hover) rounded-lg px-4 py-1 min-w-50 bg-(--white_color) placeholder:text-(--mid_gray)'>
+            <input type="text" name="search_product" placeholder="Rechercher un utilisateur" class='border-1 border-(--mid_gray)/50 hover:border-(--orange_hover) focus:outline-none focus:border-(--orange_hover) rounded-lg px-4 py-1 min-w-50 bg-(--white_color) placeholder:text-(--mid_gray)'>
         </span>
     </div>
     <div class='w-full overflow-hidden rounded-lg bg-(--white_color) border-1 border-gray-200'>

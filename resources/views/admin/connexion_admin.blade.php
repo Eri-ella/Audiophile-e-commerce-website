@@ -17,13 +17,16 @@
             <p class='text-3xl font-bold'>audio<span class=' text-(--orange_principal)'>file</span></p>
             <h3 class='uppercase font-medium text-xl'>connexion</h3>
             <p class=' text-(--mid_gray)'>Accédez à votre tableau de bord administrateur.</p>
-            <form action="" method="POST" class='flex flex-col gap-5'>
+            <form action="{{ route('connexion-admin.login') }}" method="POST" class='flex flex-col gap-5'>
                 @csrf
                 <p class='uppercase font-medium'>adresse e-mail</p>
-                <input type="email" name="mail" placeholder="admin@audiophile.com" class='border-1 border-(--mid_gray)/50 hover:border-(--orange_hover) focus:outline-none focus:border-(--orange_hover) rounded-lg px-4 py-1 w-full'>
+                <input type="email" name="mail" value="{{ old('email') }}" required placeholder="admin@audiophile.com" class='border-1 border-(--mid_gray)/50 hover:border-(--orange_hover) focus:outline-none focus:border-(--orange_hover) rounded-lg px-4 py-1 w-full'>
+                @error('email')
+                    <span class="text-red-600">{{ $message }}</span>
+                @enderror
                 <p class='uppercase font-medium'>mot de passe</p>
                 <input type="password" name="passe" placeholder=". . . . ." class='border-1 border-(--mid_gray)/50  hover:border-(--orange_hover) focus:outline-none focus:border-(--orange_hover) rounded-lg px-4 py-1 w-full'>
-                <input type="submit" value="se connecter" class='flex justify-center items-center w-full h-13 text-(--white_color) bg-(--orange_principal) uppercase font-semibold hover:bg-(--orange_hover) rounded-lg'>
+                <input type="submit" value="se connecter" required class='flex justify-center items-center w-full h-13 text-(--white_color) bg-(--orange_principal) uppercase font-semibold hover:bg-(--orange_hover) rounded-lg'>
             </form>
         </div>
     </div>
