@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 // use Database\Factories\DetailFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
-// use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 // use App\Models\Product;
 // use App\Models\Order;
 
@@ -20,10 +21,10 @@ class Detail extends Model
         'product_id',
     ];
 
-    // public function product(): HasOne
-    // {
-    //     return $this->hasOne(Product::class);
-    // }
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
+    }
     
     // public function order(): HasOne
     // {

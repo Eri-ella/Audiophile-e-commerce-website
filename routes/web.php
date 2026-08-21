@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Front\ProductController;
 use App\Http\Controllers\Front\PaymentController;
 use App\Http\Controllers\Back\ConnexionController;
-use App\Http\Controllers\Back\dashboardController;
+use App\Http\Controllers\Back\DashboardController;
 use Illuminate\Auth\Middleware\Authenticate;
 
 // ** Client **
@@ -41,10 +41,8 @@ Route::get('/connexion-admin', [ConnexionController::class, 'showLoginForm'])->n
 Route::post('/connexion-admin', [ConnexionController::class, 'login'])->name('connexion-admin.login');
 
 Route::middleware(['auth'])->group(function(){
-    Route::get('/admin', function () {
-        return view('admin.admin_page');
-    })->name('admin');
-    
+    Route::get('/admin', [DashboardController::class,'index'])->name('admin');
+
     Route::get('/logout', [ConnexionController::class, 'logout'])->name('logout');
 
     // apexcharts
