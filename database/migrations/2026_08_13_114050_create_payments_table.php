@@ -6,25 +6,21 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
+            // ✅ Pas de constrained() : la table orders n'existe pas encore à ce stade
+            $table->foreignId('order_id')->nullable()->index();
             $table->string('type')->default('e-money');
-            $table->string('number')->nullable();
-            $table->integer('pin')->nullable();
+            $table->string('status')->default('pending');
+            $table->string('fedapay_id')->nullable();
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('payment');
+        Schema::dropIfExists('payments');   // ✅ corrigé : 'payments' pas 'payment'
     }
 };

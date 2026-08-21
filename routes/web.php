@@ -27,14 +27,16 @@ Route::get('/earphone1',  fn () => redirect('/product/6'))->name('earphone1');
 
 Route::get('/cart', [ProductController::class, 'cart'])->name('cart');
 
-// ** Payment **
-Route::post('/payment', [PaymentController::class, 'store'])->name('payment.store');
-Route::get('/payment/{id}', [PaymentController::class, 'show'])->name('payment.show');
-
 // ** Cart : utilise l'ID **
 Route::post('/cart/add/{id}',    [ProductController::class, 'addToCart'])->name('cart.add');
 Route::post('/cart/update/{id}', [ProductController::class, 'updateCart'])->name('cart.update');
 Route::post('/cart/remove-all',  [ProductController::class, 'removeAllCart'])->name('cart.removeAll');
+
+// ** Payment **
+Route::get('/checkout', [PaymentController::class, 'create'])->name('checkout');
+Route::post('/payment', [PaymentController::class, 'store'])->name('payment.store');
+Route::get('/payment/{id}', [PaymentController::class, 'show'])->name('payment.show');
+Route::get('/payment/callback/{orderId}', [PaymentController::class, 'callback'])->name('payment.callback');
 
 // ** Admin **
 Route::get('/connexion-admin', [ConnexionController::class, 'showLoginForm'])->name('connexion-admin.form');
@@ -42,7 +44,6 @@ Route::post('/connexion-admin', [ConnexionController::class, 'login'])->name('co
 
 Route::middleware(['auth'])->group(function(){
     Route::get('/admin', [DashboardController::class,'index'])->name('admin');
-
     Route::post('/logout', [ConnexionController::class, 'logout'])->name('logout');
 
     // apexcharts
