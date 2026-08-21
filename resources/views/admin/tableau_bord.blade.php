@@ -111,16 +111,13 @@
                             <td>$<span>{{ $order->amount }}</span></td>                    
                             <td>
                                 @if($order->status == 'en attente')
-                                <div class='flex items-center justify-center uppercase bg-orange-200 text-orange-400 max-w-25 max-h-5 rounded-lg py-1 px-2 text-xs font-semibold'>
-                                    <iconify-icon icon="icon-park-outline:dot"></iconify-icon>
-                                    <span class="ml-1">{{ $order->status }}</span>
-                                </div>
+                                <div class='flex items-center justify-center uppercase bg-orange-200 text-orange-400 max-w-25 max-h-5 rounded-lg py-1 px-2 text-xs font-semibold'>                                    
                                 @else
                                 <div class='flex items-center justify-center uppercase bg-green-200 text-green-400 max-w-25 max-h-5 rounded-lg py-1 px-2 text-xs font-semibold'>
+                                @endif
                                     <iconify-icon icon="icon-park-outline:dot"></iconify-icon>
                                     <span class="ml-1">{{ $order->status }}</span>
                                 </div>
-                                @endif
                             </td>
                             <td>{{ $order->created_at->format('d/m/y') }}</td>
                         </tr>

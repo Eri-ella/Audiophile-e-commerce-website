@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\Product;              
 use App\Models\User;              
 use App\Models\Detail;              
+use App\Models\Payment;              
 use App\Models\Category;              
 use Illuminate\Http\Request;
 
@@ -72,7 +73,7 @@ class DashboardController extends Controller
         })->take(3);
 
         // ** transactions recentes **
-        $orders = Order::with('client')
+        $orders = Order::with(['client', 'payment'])
             ->take(10)
             ->get();
 
