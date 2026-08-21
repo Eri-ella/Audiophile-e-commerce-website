@@ -1,29 +1,3 @@
-@php
-    $products = [
-        "elt1" => [ 
-            "numero" => 'AP-10482',
-            "mail" => 'client@mail.com',
-            "date" => '08 août 2026',
-            "montant" => 2999,
-            "status" => 'en attente',
-        ],
-        "elt2" => [ 
-            "numero" => 'AP-10482',
-            "mail" => 'client@mail.com',
-            "date" => '07 août 2026',
-            "montant" => 2999,
-            "status" => 'en attente',
-        ],
-        "elt3" => [ 
-            "numero" => 'AP-10482',
-            "mail" => 'client@mail.com',
-            "date" => '04 août 2026',
-            "montant" => 2999,
-            "status" => 'en attente',
-        ],
-    ]
-@endphp
-
 @vite(['public/js/admin.js'])
 
 <div class='bg-(--broken_white) flex flex-col gap-3 p-5 bg-(--broken_white)'>
@@ -157,11 +131,8 @@
                             </td>
                         </tr>
                     @endforelse
-                    
                 </tbody>
             </table>
         </div>
     </div>
-    
 </div>
-

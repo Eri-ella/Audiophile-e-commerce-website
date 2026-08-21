@@ -7,12 +7,16 @@ use App\Models\Order;
 use App\Models\Product;              
 use App\Models\User;              
 use App\Models\Detail;              
+use App\Models\Category;              
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
     // ** affichage du contenu du dashboard
     public function index() {
+        //**
+        // TABLEAU DE BORD
+        //  */
         // ** activités **
         // ** revenu 
         $current_month = now();
@@ -72,6 +76,13 @@ class DashboardController extends Controller
             ->take(10)
             ->get();
 
+        //**
+        // PRODUIT
+        //  */
+        $products = Product::with('categories')
+            ->take(10)
+            ->get();
+
         return view('admin.admin_page',
             compact('total_amount',
                     'increase_percent',
@@ -82,7 +93,8 @@ class DashboardController extends Controller
                     'total_user',
                     'increase_user',
                     'details',
-                    'orders'));
+                    'orders',
+                    'products'));
     }
 
 
