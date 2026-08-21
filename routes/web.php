@@ -43,9 +43,8 @@ Route::post('/connexion-admin', [ConnexionController::class, 'login'])->name('co
 Route::middleware(['auth'])->group(function(){
     Route::get('/admin', [DashboardController::class,'index'])->name('admin');
 
-    Route::get('/logout', [ConnexionController::class, 'logout'])->name('logout');
+    Route::post('/logout', [ConnexionController::class, 'logout'])->name('logout');
 
     // apexcharts
-    Route::get('/admin/dashboard/sales-data', [DashboardController::class, 'salesData'])
-    ->name('admin.dashboard.sales-data');
+    Route::get('/admin/dashboard/sales-data', [DashboardController::class, 'salesData'])->name('admin.dashboard.sales-data');
 });

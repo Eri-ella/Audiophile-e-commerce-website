@@ -88,7 +88,7 @@
     <div class='flex flex-col gap-5 bg-(--white_color) p-5 rounded-lg shadow-sm'>
         <span class='flex justify-between items-center'>
             <h3 class='flex items-center uppercase text-xl font-medium'>transactions récentes</h3>
-            <a href="" class='text-(--orange_principal)'>Voir tout</a>
+            <p class='transaction-clicker text-(--orange_principal) cursor-pointer'>Voir tout</p>
         </span>
         <div class='w-full rounded-lg bg-(--white_color)'>
             <table class='p-2 text-sm w-full border-collapse'>

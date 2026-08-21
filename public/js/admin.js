@@ -2,7 +2,8 @@ import ApexCharts from 'apexcharts';
 
 // change de couleur des onglets selectionnés - admin
 
-function toggleOnglet () {
+// change de couleur des onglets selectionnés - admin
+function toggleOnglet() {
     const onglet_tab = document.querySelectorAll('.onglet');
     
     onglet_tab.forEach(element => {
@@ -16,6 +17,66 @@ function toggleOnglet () {
             element.classList.add('hover:bg-[#d18459]');
             element.classList.remove('hover:bg-(--mid_gray)');
         });
+    });
+}
+
+// Gérer le clic sur "Voir tout" dans les transactions
+function handleTransactionClicker() {
+    const transaction_clicker = document.querySelector('.transaction-clicker');
+    const transaction_onglet = document.querySelector('.onglet-transaction');
+    const pageId = transaction_onglet?.dataset.page;
+    
+    if (!transaction_clicker || !transaction_onglet) return;
+    
+    transaction_clicker.addEventListener('click', (e) => {
+        e.preventDefault();
+        
+        const page = document.getElementById(pageId);
+        const toutesLesPages = document.querySelectorAll('[id$="-page"]');
+        
+        if (page && transaction_onglet) {
+            changePage(page, toutesLesPages);
+            
+            const onglet_tab = document.querySelectorAll('.onglet');
+            onglet_tab.forEach(elt => {
+                elt.classList.remove('bg-(--orange_principal)');
+                elt.classList.remove('hover:bg-[#d18459]');
+                elt.classList.add('hover:bg-(--mid_gray)/50');
+            });
+            transaction_onglet.classList.add('bg-(--orange_principal)');
+            transaction_onglet.classList.add('hover:bg-[#d18459]');
+            transaction_onglet.classList.remove('hover:bg-(--mid_gray)');
+        }
+    });
+}
+
+// Gérer le clic sur "+ Ajouter un appareil" dans les produits
+function handleProductClicker() {
+    const product_clicker = document.querySelector('.product-clicker');
+    const product_onglet = document.querySelector('.onglet-product');
+    const pageId = product_onglet?.dataset.page;
+    
+    if (!product_clicker || !product_onglet) return;
+    
+    product_clicker.addEventListener('click', (e) => {
+        e.preventDefault();
+        
+        const page = document.getElementById(pageId);
+        const toutesLesPages = document.querySelectorAll('[id$="-page"]');
+        
+        if (page && product_onglet) {
+            changePage(page, toutesLesPages);
+            
+            const onglet_tab = document.querySelectorAll('.onglet');
+            onglet_tab.forEach(elt => {
+                elt.classList.remove('bg-(--orange_principal)');
+                elt.classList.remove('hover:bg-[#d18459]');
+                elt.classList.add('hover:bg-(--mid_gray)/50');
+            });
+            product_onglet.classList.add('bg-(--orange_principal)');
+            product_onglet.classList.add('hover:bg-[#d18459]');
+            product_onglet.classList.remove('hover:bg-(--mid_gray)');
+        }
     });
 }
 
@@ -84,4 +145,6 @@ document.addEventListener('DOMContentLoaded', function() {
     toggleOnglet();
     togglePage();
     initSalesChart();
+    handleTransactionClicker();
+    handleProductClicker();
 });

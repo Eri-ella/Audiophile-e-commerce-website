@@ -1,7 +1,7 @@
-<div class='bg-(--broken_white) flex flex-col gap-3 p-5'>
+<div class='bg-(--broken_white) flex flex-col gap-5 p-5'>
     <h2 class='uppercase font-semibold text-2xl'>Produits</h2>
     <p class='text-(--mid_gray) text-base sm:pr-5'>Gérez le catalogue d'appareils audio de la boutique</p>
-    <a href=""  class='flex justify-center items-center w-full h-10 text-(--white_color) bg-(--orange_principal) uppercase font-semibold hover:bg-(--orange_hover) rounded-lg'>+ Ajouter un appareil</a>
+    <p class='product-clicker flex justify-center items-center w-full h-10 text-(--white_color) bg-(--orange_principal) uppercase font-semibold hover:bg-(--orange_hover) rounded-lg cursor-pointer'>+ Ajouter un appareil</p>
     <div class='flex gap-5'>
         <span>
             <input type="text" name="search_product" placeholder="Rechercher un produit" class='border-1 border-(--mid_gray)/50 hover:border-(--orange_hover) focus:outline-none focus:border-(--orange_hover) rounded-lg px-4 py-1 min-w-50 bg-(--white_color) placeholder:text-(--mid_gray)'>
@@ -26,12 +26,12 @@
         <table class=' p-2 text-sm w-full border-collapse'>
             <thead>
                 <tr class="text-left uppercase text-(--mid_gray) font-normal border border-gray-200 rounded-lg ">
-                    <th class="pl-4 pb-2">produit</th>
-                    <th class="pb-2">catégorie</th>
-                    <th class="pb-2">prix</th>
-                    <th class="pb-2">stock</th>
-                    <th class="pb-2">statut</th>
-                    <th class="pb-2"></th>
+                    <th class="pl-4 py-2">produit</th>
+                    <th class="py-2">catégorie</th>
+                    <th class="py-2">prix</th>
+                    <th class="py-2">stock</th>
+                    <th class="py-2">statut</th>
+                    <th class="py-2"></th>
                 </tr>
             </thead>
             <tbody>

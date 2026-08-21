@@ -1,4 +1,4 @@
-<div class='bg-(--broken_white) flex flex-col gap-3 p-5'>
+<div class='bg-(--broken_white) flex flex-col gap-5 p-5'>
     <div class='flex justify-between'>
         <span>
             <h2 class='uppercase font-semibold text-2xl'>transactions</h2>
