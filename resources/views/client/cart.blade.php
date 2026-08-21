@@ -108,7 +108,6 @@
                         </div>
                     </div>
 
-                    {{--  Message informatif pour e-money (remplace les champs supprimés) --}}
                     <div id="e-money-fields" class="mt-6 rounded-lg bg-[#FAFAFA] p-5 text-sm leading-[1.7] text-[#101010]/70">
                         <p class="mb-2 flex items-center gap-2 font-bold text-[#101010]">
                              Paiement sécurisé
@@ -127,7 +126,6 @@
             <div class="w-full rounded-xl bg-white p-6 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.08)] md:w-[350px] md:flex-shrink-0 md:p-8">
                 <h5 class="mb-8 text-lg font-medium uppercase tracking-[0.15em] text-[#000000]">Summary</h5>
 
-                {{-- Liste des articles --}}
                 @forelse ($cart as $item)
                     <div class="mb-4 flex items-center gap-4 last:mb-6">
                         <img src="{{ asset($item['image']) }}" alt="{{ $item['name'] }}" class="h-16 w-16 rounded-lg object-cover">
@@ -141,7 +139,6 @@
                     <p class="mb-6 text-sm text-[#808080]">Your cart is empty.</p>
                 @endforelse
 
-                {{-- Totaux --}}
                 <div class="space-y-2 border-t border-black/10 pt-4">
                     <div class="flex items-start justify-between">
                         <p class="text-lg uppercase text-[#000000]/50">Total</p>
@@ -186,8 +183,49 @@
     eMoney.addEventListener('change', toggleFields);
     cash.addEventListener('change', toggleFields);
     
-    // État initial
     toggleFields();
 </script>
+
+{{-- ============================================================ --}}
+{{-- ✅ MODALE RÉCAP APRÈS PAIEMENT - FOND FLOUTÉ                   --}}
+{{-- ============================================================ --}}
+@if (isset($commande) && $commande)
+<div class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/50 px-4 py-8 backdrop-blur-md">
+
+    <div class="w-full max-w-[480px] rounded-xl bg-white p-8 shadow-2xl">
+
+        <h1 class="mb-2 text-xl font-bold uppercase leading-snug text-[#101010]">
+            Thank you for your order
+        </h1>
+        <p class="mb-6 text-sm text-[#808080]">
+            Commande #{{ $commande->id }} — email de confirmation sous peu.
+        </p>
+
+        {{-- ✅ PRODUITS avec la bonne image (image_1 avec fallback sur image_description) --}}
+        <div class="rounded-lg bg-[#F2F2F2] p-4">
+            @foreach ($commande->products as $product)
+                <div class="mb-4 flex items-center gap-3 last:mb-0">
+                    <img src="{{ asset($product->image_1 ?? $product->image_description) }}" 
+                         alt="{{ $product->name }}"
+                         class="h-12 w-12 flex-shrink-0 rounded-lg object-cover">
+                    <p class="text-sm font-bold text-[#101010]">{{ $product->name }}</p>
+                    <p class="ml-auto text-sm font-bold text-[#808080]">x{{ $product->pivot->quantity }}</p>
+                </div>
+            @endforeach
+        </div>
+
+        {{-- ✅ TOTAL EN BAS, SANS FOND NOIR --}}
+        <div class="mt-4 flex items-center justify-between border-t border-black/10 pt-4">
+            <p class="text-sm uppercase text-[#808080]">Grand total</p>
+            <p class="text-lg font-bold text-[#D87D4A]">$ {{ number_format($commande->amount, 0, ',', ',') }}</p>
+        </div>
+
+        <a href="{{ route('acceuil') }}"
+           class="mt-6 block bg-[#D87D4A] py-3 text-center text-xs font-bold uppercase tracking-[0.15em] text-white transition-colors hover:bg-[#FBAF85]">
+            Back to home
+        </a>
+    </div>
+</div>
+@endif
 
 @endsection

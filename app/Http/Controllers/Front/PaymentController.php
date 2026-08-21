@@ -8,6 +8,8 @@ use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Product;
 use App\Models\User;
+use App\Mail\OrderConfirmedMail;
+use Illuminate\Support\Facades\Mail;
 use FedaPay\FedaPay;
 use FedaPay\Transaction;
 use Illuminate\Http\Request;
@@ -18,13 +20,22 @@ class PaymentController extends Controller
     // ===== Affiche le formulaire de paiement (checkout) =====
     public function create()
     {
+        $confirmedId = session('confirmed_order_id');
         $cart = session('cart', []);
 
-        if (empty($cart)) {
+        if (empty($cart) && !$confirmedId) {
             return redirect()->route('cart');
         }
 
-        return view('client.checkout', ['cart' => $cart]);
+        $commande = null;
+        if ($confirmedId) {
+            $commande = Order::with(['client', 'delivery', 'payment', 'products'])->find($confirmedId);
+        }
+
+        return view('client.cart', [
+            'cart'     => $cart,
+            'commande' => $commande,
+        ]);
     }
 
     // ===== Traite la soumission du formulaire =====
@@ -91,10 +102,15 @@ class PaymentController extends Controller
             return $commande->id;
         });
 
-        // 💵 CASH → direct au résumé
+        // 💵 CASH → on reste sur checkout + modale + email
         if ($validated['payment_method'] === 'cash') {
             session()->forget('cart');
-            return redirect()->route('payment.show', $commandeId);
+
+            $commande = Order::with(['client', 'delivery', 'products'])->find($commandeId);
+            Mail::to($commande->client->email)->send(new OrderConfirmedMail($commande));
+
+            // ✅ Redirection vers cart avec commande en flash
+            return redirect()->route('cart')->with('confirmed_order_id', $commandeId);
         }
 
         // 💳 E-MONEY → appel FedaPay
@@ -122,13 +138,11 @@ class PaymentController extends Controller
 
             Payment::where('order_id', $commande->id)->update(['fedapay_id' => $transaction->id]);
 
-            // ✅ Génération du lien de paiement, puis redirection
             $token = $transaction->generateToken();
 
             return redirect($token->url);
 
         } catch (\Throwable $e) {
-            // En cas d'erreur FedaPay : retour au checkout avec message
             $commande->update(['status' => 'failed']);
 
             return redirect()
@@ -153,7 +167,12 @@ class PaymentController extends Controller
             $commande->update(['status' => 'paid']);
             $payment?->update(['status' => 'approved']);
             session()->forget('cart');
-            return redirect()->route('cart_box', $orderId);
+
+            $commande->load(['client', 'delivery', 'products']);
+            Mail::to($commande->client->email)->send(new OrderConfirmedMail($commande));
+
+            // ✅ On revient sur cart + modale
+            return redirect()->route('cart')->with('confirmed_order_id', $orderId);
         }
 
         $commande->update(['status' => 'failed']);
@@ -165,14 +184,12 @@ class PaymentController extends Controller
     {
         $commande = Order::with(['client', 'delivery', 'payment', 'products'])->findOrFail($id);
 
-        // On reconstruit un tableau au même format que session('cart')
-        // pour pouvoir réutiliser exactement le composant cart_box.
         $cart = [];
         foreach ($commande->products as $product) {
             $cart[$product->id] = [
                 'name'  => $product->name,
                 'price' => $product->price,
-                'image' => $product->image,
+                'image' => $product->image_1 ?? $product->image_description,
                 'qty'   => $product->pivot->quantity,
             ];
         }
