@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Front;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\Order;
 
 class ProductController extends Controller
 {
@@ -15,7 +16,18 @@ class ProductController extends Controller
 
     public function cart()
     {
-        return view('client.cart', ['cart' => session('cart', [])]);
+        $cart = session('cart', []);
+
+        // 🆕 Vérifie si on vient de payer (pour afficher la modale de récap)
+        $confirmedId = session('confirmed_order_id');
+        $commande = $confirmedId
+            ? Order::with(['client', 'delivery', 'products'])->find($confirmedId)
+            : null;
+
+        return view('client.cart', [
+            'cart'     => $cart,
+            'commande' => $commande,
+        ]);
     }
 
     // ** Navbar : passe les produits depuis la BDD **
@@ -50,7 +62,6 @@ class ProductController extends Controller
 
         $view = $views[$product->categories?->name] ?? abort(404);
 
-        // 3 autres produits pour "You may also like"
         $others = Product::where('id', '!=', $product->id)
                          ->with('categories')
                          ->latest()
