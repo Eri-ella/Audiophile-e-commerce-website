@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Back;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 use App\Http\Controllers\Controller;
 use App\Models\Order;              
 use App\Models\Product;              
@@ -9,7 +12,6 @@ use App\Models\User;
 use App\Models\Detail;              
 use App\Models\Payment;              
 use App\Models\Category;              
-use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
@@ -81,14 +83,22 @@ class DashboardController extends Controller
         // PRODUIT
         //  */
         $products = Product::with('categories')
-            ->take(10)
             ->get();
 
         //**
         // CATEGORIE
         //  */
-        $categories = Category::all()
-            ->take(10);
+        $categories = Category::all();
+
+        //**
+        // UTILISATEURS
+        //  */
+        $users = User::with('orders')->get();
+
+        //**
+        // PARAMETRE
+        //  */
+        $admin = Auth::user();
 
         return view('admin.admin_page',
             compact('total_amount',
@@ -102,12 +112,10 @@ class DashboardController extends Controller
                     'details',
                     'orders',
                     'products',
-                    'categories'));
+                    'categories',
+                    'users',
+                    'admin'));
     }
-
-
-
-
 
     // ** graphe **
     // sales dates 

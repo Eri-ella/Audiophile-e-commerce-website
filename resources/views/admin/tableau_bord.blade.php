@@ -20,7 +20,7 @@
         </div>                
         <div class='flex flex-col justify-between max-w-75 h-45 p-5 rounded-lg bg-(--white_color) shadow-sm'>                
             <div class='flex justify-between'>                
-                <div class='flex justify-center items-center text-(--orange_principal) bg-(--orange_principal)/25 rounded-lg size-10 text-xl'><iconify-icon icon="boxicons:dollar-filled"></iconify-icon></div>
+                <div class='flex justify-center items-center text-(--orange_principal) bg-(--orange_principal)/25 rounded-lg size-10 text-xl'><iconify-icon icon="weui:shop-outlined"></iconify-icon></div>
                 @if ($increase_order > 0)
                     <div class=' flex items-center text-green-700 text-sm'><iconify-icon icon="ant-design:rise-outlined"></iconify-icon>&nbsp<span>{{ $increase_order }}</span></div>
                 @else
@@ -32,7 +32,7 @@
         </div>   
         <div class='flex flex-col justify-between max-w-75 h-45 p-5 rounded-lg bg-(--white_color) shadow-sm'>                
             <div class='flex justify-between'>                
-                <div class='flex justify-center items-center text-(--orange_principal) bg-(--orange_principal)/25 rounded-lg size-10 text-xl'><iconify-icon icon="boxicons:dollar-filled"></iconify-icon></div>
+                <div class='flex justify-center items-center text-(--orange_principal) bg-(--orange_principal)/25 rounded-lg size-10 text-xl'><iconify-icon icon="mdi:cube-outline"></iconify-icon></div>
                 @if ($out_of_stock_product == 0)
                     <div class=' flex items-center text-green-700 text-sm'><iconify-icon icon="ant-design:rise-outlined"></iconify-icon>&nbsp<span>{{ $out_of_stock_product }}</span>&nbsp en rupture</div>
                 @else
@@ -44,7 +44,7 @@
         </div>   
         <div class='flex flex-col justify-between max-w-75 h-45 p-5 rounded-lg bg-(--white_color) shadow-sm'>                
             <div class='flex justify-between'>                
-                <div class='flex justify-center items-center text-(--orange_principal) bg-(--orange_principal)/25 rounded-lg size-10 text-xl'><iconify-icon icon="boxicons:dollar-filled"></iconify-icon></div>
+                <div class='flex justify-center items-center text-(--orange_principal) bg-(--orange_principal)/25 rounded-lg size-10 text-xl'><iconify-icon icon="mynaui:users"></iconify-icon></div>
                 @if ($increase_user > 0)
                     <div class=' flex items-center text-green-700 text-sm'><iconify-icon icon="ant-design:rise-outlined"></iconify-icon>&nbsp<span>{{ $increase_user }}</span></div>
                 @else

@@ -33,19 +33,19 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse ($products as $product)
+                @forelse ($users as $user)
                     <tr class='border border-gray-200 rounded-lg'>
                         <td class=' p-2 flex items-center gap-2 my-2 ml-2'>
                             <span class='bg-(--black_color) text-(--white_color) font-medium size-10 flex items-center justify-center rounded-full'>
-                                {{ $product["initial"] }}
+                                {{ collect(explode(' ', $user->name))->map(fn($w) => mb_substr($w, 0, 1))->join('') }}
                             </span>
-                            <span class='font-medium capitalize'>{{ $product["name"] }}</span>
+                            <span class='font-medium capitalize'>{{ $user->name }}</span>
                         </td>
-                        <td class=''>{{ $product["email"] }}</td>
-                        <td class=''>{{ $product["telephone"] }}</td>
-                        <td>{{ $product["number"] }}</td>
-                        <td>$<span>{{ $product["amount"] }}</span></td>
-                        <td>{{ $product["date"] }} </td>
+                        <td class=''>{{ $user->email }}</td>
+                        <td class=''>{{ $user->telephone }}</td>
+                        <td>{{ $user->orders->count() }}</td>
+                        <td>$<span>{{ $user->orders->sum('amount') }}</span></td>
+                        <td>{{ $user->orders->last()?->created_at?->format('d/m/y') }} </td>
                     </tr>
                 @empty
                     <tr>
