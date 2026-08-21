@@ -1,20 +1,3 @@
-@php
-    $categories = [
-        "elt1" => [ 
-            "name" => 'casques',
-            "status" => 'inactif',
-        ],
-        "elt2" => [ 
-            "name" => 'casques',
-            "status" => 'inactif',
-        ],
-        "elt3" => [ 
-            "name" => 'casques',
-            "status" => 'inactif',
-        ],
-    ]
-@endphp
-
 <div class='bg-(--broken_white) flex flex-col gap-3 p-5'>
     <h2 class='uppercase font-semibold text-2xl'>catégories</h2>
     <p class='text-(--mid_gray) text-base sm:pr-5'>Gérez les catégories des appareils audio de la boutique</p>
@@ -43,12 +26,19 @@
             <tbody>
                 @forelse ($categories as $category)
                     <tr class='border border-gray-100 rounded-lg'>
-                        <td class='capitalize p-2'>{{ $category["name"] }}</td>
+                        <td class='capitalize p-2'>{{ $category->name }}</td>
                         <td>
+                            @if($category->status == 'Inactive')
                             <div class='flex items-center justify-center uppercase bg-red-200 text-red-400 max-w-25 rounded-lg'>
                                 <iconify-icon icon="icon-park-outline:dot"></iconify-icon>
-                                <span>{{ $category["status"] }}</span>
+                                <span>{{ $category->status }}</span>
                             </div>
+                            @else
+                            <div class='flex items-center justify-center uppercase bg-green-200 text-green-400 max-w-25 rounded-lg'>
+                                <iconify-icon icon="icon-park-outline:dot"></iconify-icon>
+                                <span>{{ $category->status }}</span>
+                            </div>
+                            @endif
                         </td>
                         <td class='text-(--mid_gray)'>
                             <iconify-icon icon="streamline-ultimate:pen-write" class=''></iconify-icon>
@@ -72,7 +62,6 @@
         <section class='w-full flex flex-col gap-3'>
             <h2 class='uppercase font-semibold text-2xl'>ajouter une catégorie</h2>
             <p class='text-(--mid_gray) text-base sm:pr-5'>Créez une nouvelle catégorie pour les produits de la boutique</p>
-            
             <div class='bg-(--white_color) flex flex-col gap-3 p-5 rounded-lg shadow-lg'>
                     <div>
                         <label for="name" class='font-medium'>Nom de la catégorie</label>

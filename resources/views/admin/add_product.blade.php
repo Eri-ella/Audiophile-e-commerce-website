@@ -5,7 +5,7 @@
 </div>
 <form method='POST' class='flex flex-col gap-2'>
     @csrf
-    <div class='flex max-[800px]:flex-col w-full bg-(--broken_white) text-xs gap-3 p-5'>
+    <div class='flex max-[1000px]:flex-col w-full bg-(--broken_white) text-xs gap-3 p-5'>
         <section class='w-full flex flex-col gap-3'>
             
             <div class='bg-(--white_color) flex flex-col gap-3 p-5 rounded-lg shadow-lg'>

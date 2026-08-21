@@ -83,6 +83,12 @@ class DashboardController extends Controller
             ->take(10)
             ->get();
 
+        //**
+        // CATEGORIE
+        //  */
+        $categories = Category::all()
+            ->take(10);
+
         return view('admin.admin_page',
             compact('total_amount',
                     'increase_percent',
@@ -94,7 +100,8 @@ class DashboardController extends Controller
                     'increase_user',
                     'details',
                     'orders',
-                    'products'));
+                    'products',
+                    'categories'));
     }
 
 
