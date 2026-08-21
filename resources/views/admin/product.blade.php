@@ -1,36 +1,7 @@
-@php
-    $products = [
-        "elt1" => [ 
-            "name" => 'XX99 Mark II',
-            "ref" => 'HP-XX99-2',
-            "category" => 'casques',
-            "price" => 2999,
-            "stock" => 18,
-            "status" => 'en stock',
-        ],
-        "elt2" => [ 
-            "name" => 'XX99 Mark II',
-            "ref" => 'HP-XX99-2',
-            "category" => 'casques',
-            "price" => 2999,
-            "stock" => 18,
-            "status" => 'en stock',
-        ],
-        "elt3" => [ 
-            "name" => 'XX99 Mark II',
-            "ref" => 'HP-XX99-2',
-            "category" => 'casques',
-            "price" => 2999,
-            "stock" => 18,
-            "status" => 'en stock',
-        ],
-    ]
-@endphp
-
-<div class='bg-(--broken_white) flex flex-col gap-3 p-5'>
+<div class='bg-(--broken_white) flex flex-col gap-5 p-5'>
     <h2 class='uppercase font-semibold text-2xl'>Produits</h2>
     <p class='text-(--mid_gray) text-base sm:pr-5'>Gérez le catalogue d'appareils audio de la boutique</p>
-    <a href=""  class='flex justify-center items-center w-full h-10 text-(--white_color) bg-(--orange_principal) uppercase font-semibold hover:bg-(--orange_hover) rounded-lg'>+ Ajouter un appareil</a>
+    <p class='product-clicker flex justify-center items-center w-full h-10 text-(--white_color) bg-(--orange_principal) uppercase font-semibold hover:bg-(--orange_hover) rounded-lg cursor-pointer'>+ Ajouter un appareil</p>
     <div class='flex gap-5'>
         <span>
             <input type="text" name="search_product" placeholder="Rechercher un produit" class='border-1 border-(--mid_gray)/50 hover:border-(--orange_hover) focus:outline-none focus:border-(--orange_hover) rounded-lg px-4 py-1 min-w-50 bg-(--white_color) placeholder:text-(--mid_gray)'>
@@ -55,12 +26,12 @@
         <table class=' p-2 text-sm w-full border-collapse'>
             <thead>
                 <tr class="text-left uppercase text-(--mid_gray) font-normal border border-gray-200 rounded-lg ">
-                    <th class="pl-4 pb-2">produit</th>
-                    <th class="pb-2">catégorie</th>
-                    <th class="pb-2">prix</th>
-                    <th class="pb-2">stock</th>
-                    <th class="pb-2">statut</th>
-                    <th class="pb-2"></th>
+                    <th class="pl-4 py-2">produit</th>
+                    <th class="py-2">catégorie</th>
+                    <th class="py-2">prix</th>
+                    <th class="py-2">stock</th>
+                    <th class="py-2">statut</th>
+                    <th class="py-2"></th>
                 </tr>
             </thead>
             <tbody>
@@ -71,18 +42,25 @@
                                 <iconify-icon icon="ri:headphone-line"></iconify-icon>
                             </span>
                             <span class='flex flex-col text-xs'>
-                                <span class='font-medium'>{{ $product["name"] }}</span>
-                                <span class='font-light'>RÉF. <span>{{ $product["ref"] }}</span></span>
+                                <span class='font-medium'>{{ $product->name }}</span>
+                                <span class='font-light'>RÉF. <span>{{ $product->id }}</span></span>
                             </span>
                         </td>
-                        <td class='capitalize'>{{ $product["category"] }}</td>
-                        <td>$<span>{{ $product["price"] }}</span></td>
-                        <td>{{ $product["stock"] }}</td>
+                        <td class='capitalize'>{{ $product->categories->name }}</td>
+                        <td>$<span>{{ $product->price }}</span></td>
+                        <td>{{ $product->stock }}</td>
                         <td>
+                            @if($product->status == 'en attente')
                             <div class='flex items-center justify-center uppercase bg-red-200 text-red-400 max-w-25 rounded-lg'>
                                 <iconify-icon icon="icon-park-outline:dot"></iconify-icon>
-                                <span>{{ $product["status"] }}</span>
+                                <span>{{ $product->status }}</span>
                             </div>
+                            @else
+                            <div class='flex items-center justify-center uppercase bg-green-200 text-green-400 max-w-25 rounded-lg'>
+                                <iconify-icon icon="icon-park-outline:dot"></iconify-icon>
+                                <span>{{ $product->status }}</span>
+                            </div>
+                            @endif
                         </td>
                         <td class='text-(--mid_gray)'>
                             <iconify-icon icon="streamline-ultimate:pen-write" class=''></iconify-icon>
@@ -96,7 +74,6 @@
                         Il n'y aucun element dans ce tableau
                     </tr>
                 @endforelse
-                
             </tbody>
         </table>
     </div>

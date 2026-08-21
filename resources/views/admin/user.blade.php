@@ -17,7 +17,7 @@
     <p class='text-(--mid_gray) text-base sm:pr-5'>Clients inscrits sur la boutique</p>
     <div class='flex gap-5'>
         <span>
-            <input type="text" name="search_product" placeholder="Rechercher un produit" class='border-1 border-(--mid_gray)/50 hover:border-(--orange_hover) focus:outline-none focus:border-(--orange_hover) rounded-lg px-4 py-1 min-w-50 bg-(--white_color) placeholder:text-(--mid_gray)'>
+            <input type="text" name="search_product" placeholder="Rechercher un utilisateur" class='border-1 border-(--mid_gray)/50 hover:border-(--orange_hover) focus:outline-none focus:border-(--orange_hover) rounded-lg px-4 py-1 min-w-50 bg-(--white_color) placeholder:text-(--mid_gray)'>
         </span>
     </div>
     <div class='w-full overflow-hidden rounded-lg bg-(--white_color) border-1 border-gray-200'>
@@ -33,19 +33,19 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse ($products as $product)
+                @forelse ($users as $user)
                     <tr class='border border-gray-200 rounded-lg'>
                         <td class=' p-2 flex items-center gap-2 my-2 ml-2'>
                             <span class='bg-(--black_color) text-(--white_color) font-medium size-10 flex items-center justify-center rounded-full'>
-                                {{ $product["initial"] }}
+                                {{ collect(explode(' ', $user->name))->map(fn($w) => mb_substr($w, 0, 1))->join('') }}
                             </span>
-                            <span class='font-medium capitalize'>{{ $product["name"] }}</span>
+                            <span class='font-medium capitalize'>{{ $user->name }}</span>
                         </td>
-                        <td class=''>{{ $product["email"] }}</td>
-                        <td class=''>{{ $product["telephone"] }}</td>
-                        <td>{{ $product["number"] }}</td>
-                        <td>$<span>{{ $product["amount"] }}</span></td>
-                        <td>{{ $product["date"] }} </td>
+                        <td class=''>{{ $user->email }}</td>
+                        <td class=''>{{ $user->telephone }}</td>
+                        <td>{{ $user->orders->count() }}</td>
+                        <td>$<span>{{ $user->orders->sum('amount') }}</span></td>
+                        <td>{{ $user->orders->last()?->created_at?->format('d/m/y') }} </td>
                     </tr>
                 @empty
                     <tr>

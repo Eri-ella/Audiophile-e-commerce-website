@@ -5,9 +5,9 @@
             <iconify-icon icon="material-symbols:search" class='absolute right-2 top-1 text-xl text-(--mid_gray)/50 cursor-pointer'></iconify-icon>
         </div>
         <div class='flex gap-3'>
-            <div class='flex justify-center items-center w-10 h-10 bg-(--black_color) text-(--white_color) rounded-full cursor-pointer'>JH</div>
+            <div class='flex justify-center items-center w-10 h-10 bg-(--black_color) text-(--white_color) rounded-full cursor-pointer uppercase'>{{ collect(explode(' ', $admin->name))->map(fn($w) => mb_substr($w, 0, 1))->join('') }}</div>
             <div>
-                <p>Jean Houessou</p>
+                <p class='capitalize'>{{ $admin->name }}</p>
                 <p class='uppercase text-(--mid_gray) text-xs'>Administrateur</p>
             </div>
         </div>

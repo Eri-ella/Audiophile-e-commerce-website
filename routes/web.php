@@ -2,8 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Front\ProductController;
-use App\Http\Controllers\Back\ConnexionController;
 use App\Http\Controllers\Front\PaymentController;
+use App\Http\Controllers\Back\ConnexionController;
+use App\Http\Controllers\Back\DashboardController;
+use Illuminate\Auth\Middleware\Authenticate;
 
 // ** Client **
 Route::get('/', [ProductController::class, 'index'])->name('acceuil');
@@ -36,19 +38,14 @@ Route::post('/payment', [PaymentController::class, 'store'])->name('payment.stor
 Route::get('/payment/{id}', [PaymentController::class, 'show'])->name('payment.show');
 Route::get('/payment/callback/{orderId}', [PaymentController::class, 'callback'])->name('payment.callback');
 
-// ** Admin : tout préfixé avec /admin pour éviter les conflits de noms **
-Route::get('/connexion-admin', [ConnexionController::class, 'index'])->name('connexion-admin');
+// ** Admin **
+Route::get('/connexion-admin', [ConnexionController::class, 'showLoginForm'])->name('connexion-admin.form');
+Route::post('/connexion-admin', [ConnexionController::class, 'login'])->name('connexion-admin.login');
 
-Route::get('/admin/lateral',     fn () => view('admin.lateral_bar'))->name('lateral');
-Route::get('/admin/nav',         fn () => view('admin.nav_bar'))->name('nav');
-Route::get('/admin/bord',        fn () => view('admin.tableau_bord'))->name('bord');
-Route::get('/admin/product',     fn () => view('admin.product'))->name('product');
-Route::get('/admin/addProduct',  fn () => view('admin.add_product'))->name('addProduct');
-Route::get('/admin/setting',     fn () => view('admin.setting'))->name('setting');
-Route::get('/admin/transaction', fn () => view('admin.transaction'))->name('transaction');
-Route::get('/admin/user',        fn () => view('admin.user'))->name('user');
+Route::middleware(['auth'])->group(function(){
+    Route::get('/admin', [DashboardController::class,'index'])->name('admin');
+    Route::post('/logout', [ConnexionController::class, 'logout'])->name('logout');
 
-Route::get('/admin', function(){
-    return view('admin.admin_page');
-})->name('admin');
-
+    // apexcharts
+    Route::get('/admin/dashboard/sales-data', [DashboardController::class, 'salesData'])->name('admin.dashboard.sales-data');
+});

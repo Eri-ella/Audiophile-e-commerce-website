@@ -14,26 +14,29 @@
         <div class='w-full h-[1px] bg-(--mid_gray)'></div>
         <div class='flex flex-col gap-2'>
             <h4 class='uppercase text-(--white_color)/50'>général</h4>
-            <p class='onglet flex items-center gap-2 p-2 rounded-lg bg-(--orange_principal) cursor-pointer' data-page='dashboard-page'><iconify-icon icon="hugeicons:menu-square" class=''></iconify-icon>Tableau de bord</p>
+            <p class='onglet flex items-center gap-2 p-2 rounded-lg bg-(--orange_principal) cursor-pointer hover:bg-[#d18459]' data-page='dashboard-page'><iconify-icon icon="hugeicons:menu-square" class=''></iconify-icon>Tableau de bord</p>
         </div>
         <div class='flex flex-col gap-2'>
             <h4 class='uppercase text-(--white_color)/50'>catalogue</h4>
-            <p class='onglet flex items-center gap-2 p-2 rounded-lg cursor-pointer' data-page='product-page'><iconify-icon icon="mdi:cube-outline" class=''></iconify-icon>Produits</p>
-            <p class='onglet flex items-center gap-2 p-2 rounded-lg cursor-pointer' data-page='category-page'><iconify-icon icon="vaadin:lines-list" class='text-[10px]'></iconify-icon>Catégorie</p>
-            <p class='onglet flex items-center gap-2 p-2 rounded-lg cursor-pointer' data-page='add-product-page'><iconify-icon icon="ic:baseline-plus" class=''></iconify-icon>Ajouter un article</p>
+            <p class='onglet flex items-center gap-2 p-2 rounded-lg cursor-pointer hover:bg-(--mid_gray)/50' data-page='product-page'><iconify-icon icon="mdi:cube-outline" class=''></iconify-icon>Produits</p>
+            <p class='onglet flex items-center gap-2 p-2 rounded-lg cursor-pointer hover:bg-(--mid_gray)/50' data-page='category-page'><iconify-icon icon="vaadin:lines-list" class='text-[10px]'></iconify-icon>Catégorie</p>
+            <p class='onglet onglet-product flex items-center gap-2 p-2 rounded-lg cursor-pointer hover:bg-(--mid_gray)/50' data-page='add-product-page'><iconify-icon icon="ic:baseline-plus" class=''></iconify-icon>Ajouter un article</p>
         </div>
         <div class='flex flex-col gap-2'>
             <h4 class='uppercase text-(--white_color)/50'>activité</h4>
-            <p class='onglet flex items-center gap-2 p-2 rounded-lg cursor-pointer' data-page='transaction-page'><iconify-icon icon="material-symbols-light:note-outline-sharp" class=''></iconify-icon>Transactions</p>
-            <p class='onglet flex items-center gap-2 p-2 rounded-lg cursor-pointer' data-page='user-page'><iconify-icon icon="mynaui:users" class=''></iconify-icon>Utilisateurs</p>
+            <p class='onglet onglet-transaction flex items-center gap-2 p-2 rounded-lg cursor-pointer hover:bg-(--mid_gray)/50' data-page='transaction-page'><iconify-icon icon="material-symbols-light:note-outline-sharp" class=''></iconify-icon>Transactions</p>
+            <p class='onglet flex items-center gap-2 p-2 rounded-lg cursor-pointer hover:bg-(--mid_gray)/50' data-page='user-page'><iconify-icon icon="mynaui:users" class=''></iconify-icon>Utilisateurs</p>
         </div>
         <div class='flex flex-col gap-2'>
             <h4 class='uppercase text-(--white_color)/50'>compte</h4>
-            <p class='onglet flex items-center gap-2 p-2 rounded-lg cursor-pointer' data-page='setting-page'><iconify-icon icon="uil:setting" class=''></iconify-icon>Paramètres</p>
+            <p class='onglet flex items-center gap-2 p-2 rounded-lg cursor-pointer hover:bg-(--mid_gray)/50' data-page='setting-page'><iconify-icon icon="uil:setting" class=''></iconify-icon>Paramètres</p>
         </div>
         <div class='flex flex-col gap-2 w-40 absolute bottom-5'>
             <div class='w-full h-[1px] bg-(--mid_gray)'></div>
-            <p class='flex items-center gap-2 p-2 cursor-pointer'><iconify-icon icon="mdi:logout" class=''></iconify-icon>Déconnexion</p>
+            <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <p class='flex items-center rounded-lg gap-2 p-2 cursor-pointer hover:bg-red-700/25'><iconify-icon icon="mdi:logout" class=''></iconify-icon>Déconnexion</p>
+            </form>
         </div>
     </div>
 

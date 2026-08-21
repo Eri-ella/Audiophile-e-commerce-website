@@ -1,24 +1,7 @@
-@php
-    $categories = [
-        "elt1" => [ 
-            "name" => 'casques',
-            "status" => 'inactif',
-        ],
-        "elt2" => [ 
-            "name" => 'casques',
-            "status" => 'inactif',
-        ],
-        "elt3" => [ 
-            "name" => 'casques',
-            "status" => 'inactif',
-        ],
-    ]
-@endphp
-
-<div class='bg-(--broken_white) flex flex-col gap-3 p-5'>
+<div class='bg-(--broken_white) flex flex-col gap-5 p-5'>
     <h2 class='uppercase font-semibold text-2xl'>catégories</h2>
     <p class='text-(--mid_gray) text-base sm:pr-5'>Gérez les catégories des appareils audio de la boutique</p>
-    <a href=""  class='flex justify-center items-center w-full h-10 text-(--white_color) bg-(--orange_principal) uppercase font-semibold hover:bg-(--orange_hover) rounded-lg'>+ Ajouter une catégorie</a>
+    <a href="#add-category"  class='flex justify-center items-center w-full h-10 text-(--white_color) bg-(--orange_principal) uppercase font-semibold hover:bg-(--orange_hover) rounded-lg'>+ Ajouter une catégorie</a>
     <div class='flex gap-5'>
         <span>
             <input type="text" name="search_product" placeholder="Rechercher une catégorie" class='border-1 border-(--mid_gray)/50 hover:border-(--orange_hover) focus:outline-none focus:border-(--orange_hover) rounded-lg px-4 py-1 min-w-50 bg-(--white_color) placeholder:text-(--mid_gray)'>
@@ -42,13 +25,20 @@
             </thead>
             <tbody>
                 @forelse ($categories as $category)
-                    <tr class='border border-gray-100 rounded-lg'>
-                        <td class='capitalize p-2'>{{ $category["name"] }}</td>
+                    <tr class='border border-gray-200 rounded-lg'>
+                        <td class='capitalize p-2'>{{ $category->name }}</td>
                         <td>
+                            @if($category->status == 'Inactive')
                             <div class='flex items-center justify-center uppercase bg-red-200 text-red-400 max-w-25 rounded-lg'>
                                 <iconify-icon icon="icon-park-outline:dot"></iconify-icon>
-                                <span>{{ $category["status"] }}</span>
+                                <span>{{ $category->status }}</span>
                             </div>
+                            @else
+                            <div class='flex items-center justify-center uppercase bg-green-200 text-green-400 max-w-25 rounded-lg'>
+                                <iconify-icon icon="icon-park-outline:dot"></iconify-icon>
+                                <span>{{ $category->status }}</span>
+                            </div>
+                            @endif
                         </td>
                         <td class='text-(--mid_gray)'>
                             <iconify-icon icon="streamline-ultimate:pen-write" class=''></iconify-icon>
@@ -66,13 +56,12 @@
         </table>
     </div>
 </div>
-<form method='POST' class='flex flex-col gap-2'>
+<form method='POST' class='flex flex-col gap-2' id="add-category">
     @csrf
     <div class='flex max-[800px]:flex-col w-full bg-(--broken_white) text-xs gap-5 p-5'>
         <section class='w-full flex flex-col gap-3'>
             <h2 class='uppercase font-semibold text-2xl'>ajouter une catégorie</h2>
             <p class='text-(--mid_gray) text-base sm:pr-5'>Créez une nouvelle catégorie pour les produits de la boutique</p>
-            
             <div class='bg-(--white_color) flex flex-col gap-3 p-5 rounded-lg shadow-lg'>
                     <div>
                         <label for="name" class='font-medium'>Nom de la catégorie</label>

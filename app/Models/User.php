@@ -43,6 +43,6 @@ class User extends Authenticatable
     //  un client a plusieurs commandes
     public function orders(): HasMany
     {
-        return $this->hasMany(Order::class);
+        return $this->hasMany(Order::class, 'client_id');
     }
 }

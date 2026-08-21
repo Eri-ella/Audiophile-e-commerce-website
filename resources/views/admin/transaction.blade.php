@@ -1,33 +1,4 @@
-@php
-    $products = [
-        "elt1" => [ 
-            "numero" => 'AP-10482',
-            "mail" => 'client@mail.com',
-            "date" => '08 août 2026',
-            "price" => 2999,
-            "paiement" => 'e-money',
-            "status" => 'en attente',
-        ],
-        "elt2" => [ 
-            "numero" => 'AP-10482',
-            "mail" => 'client@mail.com',
-            "date" => '08 août 2026',
-            "price" => 2999,
-            "paiement" => 'e-money',
-            "status" => 'en attente',
-        ],
-        "elt3" => [ 
-            "numero" => 'AP-10482',
-            "mail" => 'client@mail.com',
-            "date" => '08 août 2026',
-            "price" => 2999,
-            "paiement" => 'e-money',
-            "status" => 'en attente',
-        ],
-    ]
-@endphp
-
-<div class='bg-(--broken_white) flex flex-col gap-3 p-5'>
+<div class='bg-(--broken_white) flex flex-col gap-5 p-5'>
     <div class='flex justify-between'>
         <span>
             <h2 class='uppercase font-semibold text-2xl'>transactions</h2>
@@ -63,31 +34,38 @@
                     <th class="pl-2 py-2">n° commande</th>
                     <th class="py-2">client</th>
                     <th class="py-2">date</th>
-                    <th class="py-2">articles</th>
+                    <th class="py-2">montant</th>
                     <th class="py-2">paiement</th>
                     <th class="py-2">statut</th>
                     <th class="py-2"></th>
                 </tr>
             </thead>
             <tbody>
-                @forelse ($products as $product)
+                @forelse ($orders as $order)
                     <tr class='border border-gray-200 rounded-lg'>
                         <td class='p-2 '>
-                            <span class='font-medium'>#<span>{{ $product["numero"] }}</span>
+                            <span class='font-medium'>#<span>{{ $order->id }}</span>
                         </td>
-                        <td class='capitalize'>{{ $product["mail"] }}</td>
-                        <td>{{ $product["date"] }}</td>
-                        <td>$<span>{{ $product["price"] }}</span></td>
+                        <td class='capitalize'>{{ $order->client->email  }}</td>
+                        <td>{{ $order->created_at->format('d/m/y') }}</td>
+                        <td>$<span>{{ $order->amount }}</span></td>
                         <td>
-                            <div class='flex items-center justify-center uppercase bg-red-200 text-red-400 max-w-25 max-h-5 rounded-lg py-1 px-2 text-xs font-semibold'>
+                            @if($order->payment->type == 'cash')
+                            <div class='flex items-center justify-center uppercase bg-blue-200 text-blue-400 max-w-25 max-h-5 rounded-lg py-1 px-2 text-xs font-semibold'>
+                            @else
+                            <div class='flex items-center justify-center uppercase bg-cyan-200 text-cyan-400 max-w-25 max-h-5 rounded-lg py-1 px-2 text-xs font-semibold'>
+                            @endif
                                 <iconify-icon icon="icon-park-outline:dot"></iconify-icon>
-                                <span class="ml-1">{{ $product["paiement"] }}</span>
+                                <span class="ml-1">{{ $order->payment->type }}</span>
                             </div>
                         </td>                        
                         <td>
-                            <div class='flex items-center justify-center uppercase bg-orange-200 text-orange-400 max-w-25 max-h-5 rounded-lg py-1 px-2 text-xs font-semibold'>
-                                <iconify-icon icon="icon-park-outline:dot"></iconify-icon>
-                                <span class="ml-1">{{ $product["status"] }}</span>
+                                @if($order->status == 'en attente')
+                                <div class='flex items-center justify-center uppercase bg-orange-200 text-orange-400 max-w-25 max-h-5 rounded-lg py-1 px-2 text-xs font-semibold'>                                    
+                                @else
+                                <div class='flex items-center justify-center uppercase bg-green-200 text-green-400 max-w-25 max-h-5 rounded-lg py-1 px-2 text-xs font-semibold'>
+                                @endif                                <iconify-icon icon="icon-park-outline:dot"></iconify-icon>
+                                <span class="ml-1">{{ $order->status }}</span>
                             </div>
                         </td>
                         <td class='text-(--mid_gray) text-xl'>
@@ -101,7 +79,6 @@
                         </td>
                     </tr>
                 @endforelse
-                
             </tbody>
         </table>
     </div>

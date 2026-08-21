@@ -24,7 +24,7 @@ class Order extends Model
     ];
 
     public function client (): BelongsTo {
-        return $this->BelongsTo(User::class);
+        return $this->belongsTo(User::class);
     }
 
    public function delivery(): BelongsTo {
