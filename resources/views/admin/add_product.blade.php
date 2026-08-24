@@ -5,10 +5,9 @@
 </div>
 <form method='POST' class='flex flex-col gap-2'>
     @csrf
-    <div class='flex max-[1000px]:flex-col w-full bg-(--broken_white) text-xs gap-3 p-5'>
-        <section class='w-full flex flex-col gap-3'>
-            
-            <div class='bg-(--white_color) flex flex-col gap-3 p-5 rounded-lg shadow-lg'>
+    <div class='flex max-[1000px]:flex-col w-full bg-(--broken_white) gap-3 p-5'>
+        <section class='w-full grow-2 flex flex-col gap-3'>
+            <div class='bg-(--white_color) flex flex-col gap-3 p-5 rounded-lg shadow-sm'>
                 <div class='flex flex-col gap-3'>
                     <p class='uppercase text-(--mid_gray) font-medium'>informations générales</p>
                     <div>
@@ -58,101 +57,29 @@
                             <input type="text" id="caracteristque" name="caracteristque" placeholder="Créez une nouvelle fiche produit visible sur la boutique" class='border-1 border-(--mid_gray)/50 hover:border-(--orange_hover) focus:outline-none focus:border-(--orange_hover) rounded-lg px-4 py-1 w-full bg-(--white_color) placeholder:text-(--mid_gray)'>
                             <iconify-icon icon="tabler:trash" class='text-(--mid_gray)/75 text-xl'></iconify-icon>
                         </div>
-                        <a href=""  class='text-(--orange_principal) uppercase font-semibold text-sm'>+ Ajouter une ligne</a>
+                        <a href=""  class='text-(--orange_principal) uppercase font-semibold '>+ Ajouter une ligne</a>
                     </div>
                 </div>
             </div>    
         </section>    
-        <section class='w-full h-fit flex flex-col gap-3 bg-(--white_color) flex flex-col gap-3 p-5 rounded-lg shadow-lg'>
+        <section class='w-full h-fit flex flex-col gap-3 bg-(--white_color) flex flex-col gap-3 p-5 rounded-lg shadow-sm'>
             <p  class='uppercase text-(--mid_gray) font-medium'>visuels du produit</p>
-            <div class='flex gap-5'> 
-                <div class='relative'>
-                    <label for="couverture" class='font-medium'>Image de couverture</label>
-                    <input 
-                        type="file" 
-                        id="couverture"
-                        name="couverture" 
-                        value="Glissez vos images ici ou cliquez pour parcourir — PNG, JPG (fond transparent recommandé)" 
-                        class='border-1 
-                        border-(--mid_gray)/50 
-                        hover:border-(--orange_hover) 
-                        hover:border-dashed
-                        hover:bg-(--orange_hover)/25
-                        focus:bg-(--orange_hover)/25
-                        focus:border-dashed
-                        focus:outline-none 
-                        focus:border-(--orange_hover) 
-                        rounded-lg px-4 py-1 mt-2 w-full 
-                        min-h-40 
-                        bg-(--white_color) '>
-                    
+            <div class='flex flex-col gap-5'> 
+                <p  class=''>Image de couverture</p>
+                <div class='grid grid-cols-2'>
+                    <div class='relative mb-10'>
+                        <label for="couverture" class='flex bg-(--orange_principal) text-white px-5 py-2 font-medium absolute uppercase rounded-lg'>
+                            <iconify-icon icon="material-symbols:upload" class='text-xl mr-2'></iconify-icon>
+                            Upload File</label>
+                        <input 
+                            type="file" 
+                            id="couverture"
+                            name="couverture" 
+                            class='absolute z-10 hidden'>
+                    </div>
+                    <span id="nom-fichier">Aucun fichier choisi</span>
                 </div>
-                <div class='relative'>
-                    <label for="couverture" class='font-medium'>Image 1</label>
-                    <input 
-                        type="file" 
-                        id="couverture"
-                        name="couverture" 
-                        value="Glissez vos images ici ou cliquez pour parcourir — PNG, JPG (fond transparent recommandé)" 
-                        class='border-1 
-                        border-(--mid_gray)/50 
-                        hover:border-(--orange_hover) 
-                        hover:border-dashed
-                        hover:bg-(--orange_hover)/25
-                        focus:bg-(--orange_hover)/25
-                        focus:border-dashed
-                        focus:outline-none 
-                        focus:border-(--orange_hover) 
-                        rounded-lg px-4 py-1 mt-2 w-full 
-                        min-h-40 
-                        bg-(--white_color) '>
-                    
-                </div> 
             </div>
-                <div class='flex gap-5'> 
-                <div class='relative'>
-                    <label for="couverture" class='font-medium'>Image 2</label>
-                    <input 
-                        type="file" 
-                        id="couverture"
-                        name="couverture" 
-                        value="Glissez vos images ici ou cliquez pour parcourir — PNG, JPG (fond transparent recommandé)" 
-                        class='border-1 
-                        border-(--mid_gray)/50 
-                        hover:border-(--orange_hover) 
-                        hover:border-dashed
-                        hover:bg-(--orange_hover)/25
-                        focus:bg-(--orange_hover)/25
-                        focus:border-dashed
-                        focus:outline-none 
-                        focus:border-(--orange_hover) 
-                        rounded-lg px-4 py-1 mt-2 w-full 
-                        min-h-40 
-                        bg-(--white_color) '>
-                    
-                </div>
-                <div class='relative'>
-                    <label for="couverture" class='font-medium'>Image 3</label>
-                    <input 
-                        type="file" 
-                        id="couverture"
-                        name="couverture" 
-                        value="Glissez vos images ici ou cliquez pour parcourir — PNG, JPG (fond transparent recommandé)" 
-                        class='border-1 
-                        border-(--mid_gray)/50 
-                        hover:border-(--orange_hover) 
-                        hover:border-dashed
-                        hover:bg-(--orange_hover)/25
-                        focus:bg-(--orange_hover)/25
-                        focus:border-dashed
-                        focus:outline-none 
-                        focus:border-(--orange_hover) 
-                        rounded-lg px-4 py-1 mt-2 w-full 
-                        min-h-40 
-                        bg-(--white_color) '>
-                    
-                </div> 
-            </div> 
         </section>
     </div> 
     <div class='bg-(--mid_gray)/50 w-[80%] h-[1px] self-center'> </div> 
@@ -161,3 +88,15 @@
         <a href=""  class='flex justify-center items-center h-10 text-(--white_color) bg-(--orange_principal) px-3 uppercase font-semibold hover:bg-(--orange_hover) rounded-lg'>Enregistrer le produit</a>
     </div>
 </form>
+<script>
+    const inputFichier = document.getElementById('couverture');
+    const nomFichier = document.getElementById('nom-fichier');
+
+    inputFichier.addEventListener('change', function() {
+    if (inputFichier.files.length > 0) {
+        nomFichier.textContent = inputFichier.files[0].name;
+    } else {
+        nomFichier.textContent = 'Aucun fichier choisi';
+    }
+    });
+</script>

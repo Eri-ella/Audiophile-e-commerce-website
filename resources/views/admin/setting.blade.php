@@ -1,4 +1,4 @@
-    <div class='flex flex-col w-full bg-(--broken_white) text-xs gap-5 p-5'>
+    <div class='flex flex-col w-full bg-(--broken_white) gap-5 p-5'>
         <h2 class='uppercase font-semibold text-2xl'>administrateur</h2>
         <p class='text-(--mid_gray) sm:pr-5'>Personalisez cet espace à votre image</p>
             
@@ -32,10 +32,14 @@
                             <label for="telephone" class='font-medium'>Téléphone</label>
                             <input type="text" id="telephone" name="telephone" value="{{ $admin->telephone }}" class='mt-2 border-1 border-(--mid_gray)/50 hover:border-(--orange_hover) focus:outline-none focus:border-(--orange_hover) rounded-lg px-4 py-1 w-full bg-(--white_color) placeholder:text-(--mid_gray)'>
                         </div>
-                        <p class='uppercase' class='uppercase text-(--mid_gray) font-medium'>Mot de passe</p>
+                        <p class='uppercase text-(--mid_gray) font-medium'>Mot de passe</p>
                         <div>
                             <label for="password" class='font-medium'>Mot de passe</label>
-                            <input type="password" id="password" name="password" value="{{ $admin->password }}" class='mt-2 border-1 border-(--mid_gray)/50 hover:border-(--orange_hover) focus:outline-none focus:border-(--orange_hover) rounded-lg px-4 py-1 w-full bg-(--white_color) placeholder:text-(--mid_gray)'>
+                            <div class='relative w-full'>
+                            <input type="password" id="password" name="password" value="{{ $admin->password }}" class='input-pass mt-2 border-1 border-(--mid_gray)/50 hover:border-(--orange_hover) focus:outline-none focus:border-(--orange_hover) rounded-lg px-4 py-1 w-full bg-(--white_color) placeholder:text-(--mid_gray)'>
+                                <iconify-icon icon="iconoir:eye" class='eye text-(--mid_gray) text-2xl absolute right-3 top-2 block'></iconify-icon>
+                                <iconify-icon icon="iconoir:eye-closed" class='eye-closed text-(--mid_gray) text-2xl absolute right-3 top-2 hidden'></iconify-icon>
+                            <div>
                         </div>
                     <div>
                 </div>    
@@ -45,4 +49,20 @@
             </section>    
         </div> 
     </div> 
-    
+    <script>
+        const input_pass = document.querySelector('.input-pass');
+        const eye = document.querySelector('.eye');
+        const eye_closed = document.querySelector('.eye-closed');
+
+        eye.addEventListener('click', () => {
+            input_pass.setAttribute('type', 'text');
+            eye_closed.classList.replace('hidden', 'block');
+            eye.classList.replace('block', 'hidden');
+        });
+
+        eye_closed.addEventListener('click', () => {
+            input_pass.setAttribute('type', 'password');
+            eye_closed.classList.replace('block', 'hidden');
+            eye.classList.replace('hidden', 'block');
+        });
+    </script>

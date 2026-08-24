@@ -72,7 +72,7 @@ class DashboardController extends Controller
 
         $details = $all_details->sortByDesc(function($detail){
             return $detail->quantity * $detail->product->price;
-        })->take(3);
+        })->take(4);
 
         // ** transactions recentes **
         $orders = Order::with(['client', 'payment'])
@@ -115,6 +115,11 @@ class DashboardController extends Controller
                     'categories',
                     'users',
                     'admin'));
+    }
+
+    // ** recuperation du contenu 
+    public function store (Request $request) {
+
     }
 
     // ** graphe **

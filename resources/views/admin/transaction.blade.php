@@ -28,10 +28,10 @@
         </span>
     </div>
     <div class='w-full rounded-lg bg-(--white_color) border-1 border-gray-200'>
-        <table class='p-2 text-sm w-full border-collapse'>
+        <table class='w-full border-separate border-spacing-2'>
             <thead>
-                <tr class="text-left uppercase text-(--mid_gray) font-normal border border-gray-200 rounded-lg ">
-                    <th class="pl-2 py-2">n° commande</th>
+                <tr class="uppercase bg-gray-300">
+                    <th class="py-2">n° commande</th>
                     <th class="py-2">client</th>
                     <th class="py-2">date</th>
                     <th class="py-2">montant</th>
@@ -42,7 +42,11 @@
             </thead>
             <tbody>
                 @forelse ($orders as $order)
-                    <tr class='border border-gray-200 rounded-lg'>
+                    @if($order->id % 2 == 0)
+                    <tr class='text-center border border-gray-400 rounded-lg bg-gray-100'>
+                    @else
+                    <tr class='text-center border border-gray-400 rounded-lg'>
+                    @endif
                         <td class='p-2 '>
                             <span class='font-medium'>#<span>{{ $order->id }}</span>
                         </td>
@@ -50,26 +54,27 @@
                         <td>{{ $order->created_at->format('d/m/y') }}</td>
                         <td>$<span>{{ $order->amount }}</span></td>
                         <td>
-                            @if($order->payment->type == 'cash')
-                            <div class='flex items-center justify-center uppercase bg-blue-200 text-blue-400 max-w-25 max-h-5 rounded-lg py-1 px-2 text-xs font-semibold'>
-                            @else
-                            <div class='flex items-center justify-center uppercase bg-cyan-200 text-cyan-400 max-w-25 max-h-5 rounded-lg py-1 px-2 text-xs font-semibold'>
-                            @endif
-                                <iconify-icon icon="icon-park-outline:dot"></iconify-icon>
-                                <span class="ml-1">{{ $order->payment->type }}</span>
+                            <div class='flex items-center justify-center'>
+                                @if($order->payment->type == 'cash')
+                                <div class='flex items-center justify-center uppercase bg-blue-200 text-blue-400 w-fit h-fit rounded-lg py-1 px-2 text-xs font-semibold'>
+                                @else
+                                <div class='flex items-center justify-center uppercase bg-cyan-200 text-cyan-400 w-fit h-fit rounded-lg py-1 px-2 text-xs font-semibold'>
+                                @endif
+                                    <iconify-icon icon="icon-park-outline:dot"></iconify-icon>
+                                    <span class="ml-1">{{ $order->payment->type }}</span>
+                                </div>
                             </div>
                         </td>                        
                         <td>
+                            <div class='flex items-center justify-center'>
                                 @if($order->status == 'en attente')
-                                <div class='flex items-center justify-center uppercase bg-orange-200 text-orange-400 max-w-25 max-h-5 rounded-lg py-1 px-2 text-xs font-semibold'>                                    
+                                <div class='flex items-center justify-center uppercase bg-orange-200 text-orange-400 w-fit h-fit rounded-lg py-1 px-2 text-xs font-semibold'>                                    
                                 @else
-                                <div class='flex items-center justify-center uppercase bg-green-200 text-green-400 max-w-25 max-h-5 rounded-lg py-1 px-2 text-xs font-semibold'>
+                                <div class='flex items-center justify-center uppercase bg-green-200 text-green-400 w-fit h-fit rounded-lg py-1 px-2 text-xs font-semibold'>
                                 @endif                                <iconify-icon icon="icon-park-outline:dot"></iconify-icon>
                                 <span class="ml-1">{{ $order->status }}</span>
+                                </div>
                             </div>
-                        </td>
-                        <td class='text-(--mid_gray) text-xl'>
-                            <iconify-icon icon="iconamoon:eye-thin" class=''></iconify-icon>
                         </td>
                     </tr>
                 @empty

@@ -1,44 +1,48 @@
 <div class='bg-(--broken_white) flex flex-col gap-5 p-5'>
     <h2 class='uppercase font-semibold text-2xl'>catégories</h2>
     <p class='text-(--mid_gray) text-base sm:pr-5'>Gérez les catégories des appareils audio de la boutique</p>
-    <a href="#add-category"  class='flex justify-center items-center w-full h-10 text-(--white_color) bg-(--orange_principal) uppercase font-semibold hover:bg-(--orange_hover) rounded-lg'>+ Ajouter une catégorie</a>
-    <div class='flex gap-5'>
-        <span>
+    <div class='flex max-[500px]:flex-col items-center justify-between gap-5'>
+        <span class='flex max-[700px]:flex-col items-center gap-5'>
             <input type="text" name="search_product" placeholder="Rechercher une catégorie" class='border-1 border-(--mid_gray)/50 hover:border-(--orange_hover) focus:outline-none focus:border-(--orange_hover) rounded-lg px-4 py-1 min-w-50 bg-(--white_color) placeholder:text-(--mid_gray)'>
-        </span>
-        <span>
             <select name="all_status"  class='border-1 border-(--mid_gray)/50 hover:border-(--orange_hover) focus:outline-none focus:border-(--orange_hover) rounded-lg px-2 py-1 bg-(--white_color) placeholder:text-(--mid_gray)'>
                 <option value="" disabled selected>Tous les statuts</option>
                 <option value="">Actif</option>
                 <option value="">Inactif</option>
             </select>
         </span>
+        <span class='flex self-end'>
+            <a href=""  class='text-(--white_color) bg-(--orange_principal) uppercase font-semibold hover:bg-(--orange_hover) rounded-lg p-2'>+ Ajouter une catégorie</a>
+        </span>
     </div>
     <div class='w-full overflow-hidden rounded-lg bg-(--white_color) border-1 border-gray-400'>
-        <table class=' p-2 text-sm w-full border-collapse'>
+        <table class='w-full border-separate border-spacing-2'>
             <thead>
-                <tr class="text-left uppercase text-(--mid_gray) font-normal border border-gray-200 rounded-lg ">
-                    <th class="p-2">catégorie</th>
+                <tr class="uppercase bg-gray-300">
+                    <th class="py-2">catégorie</th>
                     <th class="py-2">statut</th>
+                    <th class="py-2"></th>
                     <th class="py-2"></th>
                 </tr>
             </thead>
             <tbody>
                 @forelse ($categories as $category)
-                    <tr class='border border-gray-200 rounded-lg'>
+                    @if($category->id % 2 == 0)
+                    <tr class='text-center border border-gray-400 rounded-lg bg-gray-100'>
+                    @else
+                    <tr class='text-center border border-gray-400 rounded-lg'>
+                    @endif
                         <td class='capitalize p-2'>{{ $category->name }}</td>
                         <td>
-                            @if($category->status == 'Inactive')
-                            <div class='flex items-center justify-center uppercase bg-red-200 text-red-400 max-w-25 rounded-lg'>
-                                <iconify-icon icon="icon-park-outline:dot"></iconify-icon>
-                                <span>{{ $category->status }}</span>
+                            <div class='flex items-center justify-center'>
+                                @if($category->status == 'inactive')
+                                <div class='flex items-center justify-center uppercase bg-red-200 text-red-400 max-w-25 px-2 rounded-lg'>
+                                @else
+                                <div class='flex items-center justify-center uppercase bg-green-200 text-green-400 max-w-25 px-2 rounded-lg'>
+                                @endif
+                                    <iconify-icon icon="icon-park-outline:dot"></iconify-icon>
+                                    <span>{{ $category->status }}</span>
+                                </div>
                             </div>
-                            @else
-                            <div class='flex items-center justify-center uppercase bg-green-200 text-green-400 max-w-25 rounded-lg'>
-                                <iconify-icon icon="icon-park-outline:dot"></iconify-icon>
-                                <span>{{ $category->status }}</span>
-                            </div>
-                            @endif
                         </td>
                         <td class='text-(--mid_gray)'>
                             <iconify-icon icon="streamline-ultimate:pen-write" class=''></iconify-icon>
@@ -49,40 +53,12 @@
                     </tr>
                 @empty
                     <tr>
-                        Il n'y aucun element dans ce tableau
+                        <td colspan="7" class="text-center py-4 text-gray-500">
+                            Il n'y a aucun élément dans ce tableau
+                        </td>
                     </tr>
                 @endforelse
             </tbody>
         </table>
     </div>
 </div>
-<form method='POST' class='flex flex-col gap-2' id="add-category">
-    @csrf
-    <div class='flex max-[800px]:flex-col w-full bg-(--broken_white) text-xs gap-5 p-5'>
-        <section class='w-full flex flex-col gap-3'>
-            <h2 class='uppercase font-semibold text-2xl'>ajouter une catégorie</h2>
-            <p class='text-(--mid_gray) text-base sm:pr-5'>Créez une nouvelle catégorie pour les produits de la boutique</p>
-            <div class='bg-(--white_color) flex flex-col gap-3 p-5 rounded-lg shadow-lg'>
-                    <div>
-                        <label for="name" class='font-medium'>Nom de la catégorie</label>
-                        <input type="text" id="name" name="name" placeholder="Créez une nouvelle catégorie" class='mt-2 border-1 border-(--mid_gray)/50 hover:border-(--orange_hover) focus:outline-none focus:border-(--orange_hover) rounded-lg px-4 py-1 w-full bg-(--white_color) placeholder:text-(--mid_gray)'>
-                    </div>
-                    <div class='w-full flex flex-col'>
-                        <label for="status" class='font-medium'>Statut</label>
-                        <select id="status" name="status" class='mt-2 w-full border-1 border-(--mid_gray)/50 hover:border-(--orange_hover) focus:outline-none focus:border-(--orange_hover) rounded-lg px-2 py-1 bg-(--white_color) placeholder:text-(--mid_gray)'>
-                            <option value="" >Active</option>
-                            <option value="" >Inactive</option>
-                        </select> 
-                    </div>
-                <div class='bg-(--mid_gray)/50 w-[80%] h-[1px] my-3 self-center'> </div> 
-                <div class='flex w-full justify-end gap-5'>
-                    <a href=""  class='flex justify-center items-center h-10 border-1 border-(--mid_gray)/50 px-3 uppercase font-semibold hover:border-(--black_color) rounded-lg'>Annuler</a>
-                    <a href=""  class='flex justify-center items-center h-10 text-(--white_color) bg-(--orange_principal) px-3 uppercase font-semibold hover:bg-(--orange_hover) rounded-lg'>Enregistrer le produit</a>
-                </div>
-            </div> 
-            
-            
-    </section>
-    </div> 
-    
-</form>

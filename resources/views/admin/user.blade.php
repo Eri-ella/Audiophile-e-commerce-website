@@ -1,17 +1,3 @@
-@php
-    $products = [
-        "elt1" => [ 
-            "initial" => "MI",
-            "name" => 'midoriya izuku',
-            "email" => 'izuku@mha/com',
-            "telephone" => '+2290123252624',
-            "number" => 18,
-            "amount" => 2999,
-            "date" => '23 - 03 - 26',
-        ],
-    ]
-@endphp
-
 <div class='bg-(--broken_white) flex flex-col gap-3 p-5'>
     <h2 class='uppercase font-semibold text-2xl'>utilisateurs</h2>
     <p class='text-(--mid_gray) text-base sm:pr-5'>Clients inscrits sur la boutique</p>
@@ -20,11 +6,11 @@
             <input type="text" name="search_product" placeholder="Rechercher un utilisateur" class='border-1 border-(--mid_gray)/50 hover:border-(--orange_hover) focus:outline-none focus:border-(--orange_hover) rounded-lg px-4 py-1 min-w-50 bg-(--white_color) placeholder:text-(--mid_gray)'>
         </span>
     </div>
-    <div class='w-full overflow-hidden rounded-lg bg-(--white_color) border-1 border-gray-200'>
-        <table class=' p-2 text-sm w-full border-collapse'>
+    <div class='w-full rounded-lg bg-(--white_color) overflow-hidden'>
+        <table class='w-full border-separate border-spacing-2'>
             <thead>
-                <tr class="text-left uppercase text-(--mid_gray) font-normal border border-gray-200 rounded-lg ">
-                    <th class="pl-4 py-2">client</th>
+                <tr class="uppercase bg-gray-300">
+                    <th class="py-2">client</th>
                     <th class="py-2">e-mail</th>
                     <th class="py-2">telephone</th>
                     <th class="py-2">commandes</th>
@@ -34,7 +20,11 @@
             </thead>
             <tbody>
                 @forelse ($users as $user)
-                    <tr class='border border-gray-200 rounded-lg'>
+                    @if($user->id % 2 == 0)
+                    <tr class='text-center border border-gray-400 rounded-lg bg-gray-100'>
+                    @else
+                    <tr class='text-center border border-gray-400 rounded-lg'>
+                    @endif
                         <td class=' p-2 flex items-center gap-2 my-2 ml-2'>
                             <span class='bg-(--black_color) text-(--white_color) font-medium size-10 flex items-center justify-center rounded-full'>
                                 {{ collect(explode(' ', $user->name))->map(fn($w) => mb_substr($w, 0, 1))->join('') }}
