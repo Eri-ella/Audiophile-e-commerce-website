@@ -141,8 +141,29 @@ async function initSalesChart() {
     new ApexCharts(document.querySelector('#sales-chart'), options).render();
 }
 
+// Fonction pour activer l'onglet selon l'URL actuelle
+function setActiveTabFromUrl() {
+    const currentPath = window.location.pathname;
+    const onglets = document.querySelectorAll('.onglet');
+    
+    onglets.forEach(elt => {
+        // Retirer toutes les classes actives
+        elt.classList.remove('bg-(--orange_principal)');
+        elt.classList.remove('hover:bg-[#d18459]');
+        elt.classList.add('hover:bg-(--mid_gray)/50');
+        
+        // Vérifier si le href de l'onglet correspond à l'URL actuelle
+        if (elt.getAttribute('href') === currentPath) {
+            elt.classList.add('bg-(--orange_principal)');
+            elt.classList.add('hover:bg-[#d18459]');
+            elt.classList.remove('hover:bg-(--mid_gray)');
+        }
+    });
+}
+
+// Appeler au chargement de la page
 document.addEventListener('DOMContentLoaded', function() {
-    toggleOnglet();
+    setActiveTabFromUrl(); 
     togglePage();
     initSalesChart();
     handleTransactionClicker();

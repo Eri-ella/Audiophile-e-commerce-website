@@ -1,17 +1,19 @@
-<div class='bg-(--broken_white) flex flex-col gap-5 p-5'>
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<div 
+    x-data="{ open: false, editOpen: false, editId: null, editName: '', editStatus: '' }" class='bg-(--broken_white) flex flex-col gap-5 p-5'>
     <h2 class='uppercase font-semibold text-2xl'>catégories</h2>
     <p class='text-(--mid_gray) text-base sm:pr-5'>Gérez les catégories des appareils audio de la boutique</p>
     <div class='flex max-[500px]:flex-col items-center justify-between gap-5'>
         <span class='flex max-[700px]:flex-col items-center gap-5'>
             <input type="text" name="search_product" placeholder="Rechercher une catégorie" class='border-1 border-(--mid_gray)/50 hover:border-(--orange_hover) focus:outline-none focus:border-(--orange_hover) rounded-lg px-4 py-1 min-w-50 bg-(--white_color) placeholder:text-(--mid_gray)'>
             <select name="all_status"  class='border-1 border-(--mid_gray)/50 hover:border-(--orange_hover) focus:outline-none focus:border-(--orange_hover) rounded-lg px-2 py-1 bg-(--white_color) placeholder:text-(--mid_gray)'>
-                <option value="" disabled selected>Tous les statuts</option>
+                <option value="">Tous les statuts</option>
                 <option value="">Actif</option>
                 <option value="">Inactif</option>
             </select>
         </span>
         <span class='flex self-end'>
-            <a href=""  class='text-(--white_color) bg-(--orange_principal) uppercase font-semibold hover:bg-(--orange_hover) rounded-lg p-2'>+ Ajouter une catégorie</a>
+            <button  @click="open = true" class='text-(--white_color) bg-(--orange_principal) uppercase font-semibold hover:bg-(--orange_hover) rounded-lg p-2'>+ Ajouter une catégorie</button>
         </span>
     </div>
     <div class='w-full overflow-hidden rounded-lg bg-(--white_color) border-1 border-gray-400'>
@@ -45,10 +47,18 @@
                             </div>
                         </td>
                         <td class='text-(--mid_gray)'>
-                            <iconify-icon icon="streamline-ultimate:pen-write" class=''></iconify-icon>
+                            <button @click="editOpen = true; editId = '{{ $category->id }}'; editName = '{{ $category->name }}'; editStatus ='{{ $category->status}}'" class="cursor-pointer hover:text-blue-500">
+                                <iconify-icon icon="streamline-ultimate:pen-write" class=''></iconify-icon>
+                            </button>
                         </td>
                         <td class='text-(--mid_gray)'>
-                            <iconify-icon icon="tabler:trash" class=''></iconify-icon>
+                            <form method="POST" action={{ route('admin.delete-category', $category->id) }} onSubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette categorie');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="cursor-pointer hover:text-red-500">
+                                    <iconify-icon icon="tabler:trash"></iconify-icon>
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 @empty
@@ -61,4 +71,101 @@
             </tbody>
         </table>
     </div>
+
+    <div x-show="open" 
+        x-transition
+        class='fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 rounded-lg'
+        style="display: none;"> 
+        <div @click.away="open = false" class='flex flex-col bg-(--broken_white) gap-5 p-5 rounded-lg'>
+            <div>
+                <h2 class='uppercase font-semibold text-2xl'>ajouter une catégorie</h2>
+                <p class='text-(--mid_gray) text-base sm:pr-5'>Créez une nouvelle catégorie pour les produits de la boutique</p>
+            </div>
+            <form method='POST' action={{ route('admin.add-category') }} id="add-category" class='bg-(--white_color) flex flex-col gap-3 p-5 rounded-lg shadow-sm'>
+                @csrf
+                <div>
+                    <label for="name" class='font-medium'>Nom de la catégorie</label>
+                    <input type="text" id="name" name="name" placeholder="Créez une nouvelle catégorie" class='mt-2 border-1 border-(--mid_gray)/50 hover:border-(--orange_hover) focus:outline-none focus:border-(--orange_hover) rounded-lg px-4 py-1 w-full bg-(--white_color) placeholder:text-(--mid_gray)'>
+                </div>
+                <div class='w-full flex flex-col'>
+                    <label for="status" class='font-medium'>Statut</label>
+                    <select id="status" name="status" class='mt-2 w-full border-1 border-(--mid_gray)/50 hover:border-(--orange_hover) focus:outline-none focus:border-(--orange_hover) rounded-lg px-2 py-1 bg-(--white_color) placeholder:text-(--mid_gray)'>
+                        <option value="active" >Active</option>
+                        <option value="inactive" >Inactive</option>
+                    </select> 
+                </div>
+                <div class='bg-(--mid_gray)/50 w-[80%] h-[1px] my-3 self-center'> </div> 
+                <div class='flex w-full justify-end gap-5'>
+                    <input type="button" x-on:click="open = false" class='flex justify-center items-center h-10 border-1 border-(--mid_gray)/50 px-3 uppercase font-semibold hover:border-(--black_color) rounded-lg' value='Annuler'>
+                    <input type="submit" class='flex justify-center items-center h-10 text-(--white_color) bg-(--orange_principal) px-3 uppercase font-semibold hover:bg-(--orange_hover) rounded-lg' value='Enregistrer le produit'>
+                </div>
+            </form>
+        </div> 
+    </div>
+
+    <div x-show="editOpen" 
+        x-transition
+        class='fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 rounded-lg'
+        style="display: none;"> 
+        <div @click.away="editOpen = false" class='flex flex-col bg-(--broken_white) gap-5 p-5 rounded-lg'>
+            <div>
+                <h2 class='uppercase font-semibold text-2xl'>Modifier la catégorie</h2>
+                <p class='text-(--mid_gray) text-base sm:pr-5'>Modifier cette catégorie pour qu'elle corresponde à la vision de la boutique</p>
+            </div>
+            <form method='POST' :action="'/category/' + editId" id="edit-category" class='bg-(--white_color) flex flex-col gap-3 p-5 rounded-lg shadow-sm'>
+                @csrf
+                @method('PUT')
+                <div>
+                    <label for="edit_name" class='font-medium'>Nom de la catégorie</label>
+                    <input type="text" id="edit_name" name="name" x-model="editName" class='mt-2 border-1 border-(--mid_gray)/50 hover:border-(--orange_hover) focus:outline-none focus:border-(--orange_hover) rounded-lg px-4 py-1 w-full bg-(--white_color) placeholder:text-(--mid_gray)'>
+                </div>
+                <div class='w-full flex flex-col'>
+                    <label for="edit_status" class='font-medium'>Statut</label>
+                    <select id="edit_status" name="status" x-model="editStatus" class='mt-2 w-full border-1 border-(--mid_gray)/50 hover:border-(--orange_hover) focus:outline-none focus:border-(--orange_hover) rounded-lg px-2 py-1 bg-(--white_color) placeholder:text-(--mid_gray)'>
+                        <option value="active" >Active</option>
+                        <option value="inactive" >Inactive</option>
+                    </select> 
+                </div>
+                <div class='bg-(--mid_gray)/50 w-[80%] h-[1px] my-3 self-center'></div> 
+                <div class='flex w-full justify-end gap-5'>
+                    <input type="button" x-on:click="editOpen = false" class='flex justify-center items-center h-10 border-1 border-(--mid_gray)/50 px-3 uppercase font-semibold hover:border-black rounded-lg cursor-pointer' value='Annuler'>
+                    <input type="submit" class='flex justify-center items-center h-10 text-(--white_color) bg-(--orange_principal) px-3 uppercase font-semibold hover:bg-(--orange_hover) rounded-lg' value='Enregistrer le produit'>
+                </div>
+            </form>
+        </div> 
+    </div>
+
+    @if(session('success'))
+    <div x-data="{ show: false }" 
+        x-init="setTimeout(() => show = true, 50); setTimeout(() => show = false, 4000)" 
+        x-show="show" 
+        x-transition:enter="transition ease-out duration-500 transform"
+        x-transition:enter-start="translate-x-full opacity-0"
+        x-transition:enter-end="translate-x-0 opacity-100"
+        x-transition:leave="transition ease-in duration-300 transform"
+        x-transition:leave-start="translate-x-0 opacity-100"
+        x-transition:leave-end="translate-x-full opacity-0"
+        class="fixed top-18 right-5 z-50"
+        style="display: none;"> 
+
+            <div class='flex justify-between items-center max-w-85 gap-2 bg-white rounded-lg shadow-sm overflow-hidden'>
+            <div class='w-3 h-20 bg-(--orange_principal)'>
+            
+            </div>
+            <div>
+                <div class='bg-(--orange_principal) text-(--white_color) p-2 flex items-center justify-center rounded-full'>
+                    <iconify-icon icon="fluent-mdl2:accept-medium" class='text-sm'></iconify-icon>
+                </div>
+            </div>
+            <div class='py-2'>
+                <h4 class='font-semibold'>Succès</h4>
+                <p class='text-(--mid_gray) text-sm sm:pr-5'>{{ session('success') }}</p>
+            </div>
+            <div class='self-start py-2 pr-2'>
+                <iconify-icon icon="akar-icons:cross" class='text-sm cursor-pointer' @click="show = false"></iconify-icon>
+            
+            </div>
+        </div>
+    </div>
+    @endif
 </div>

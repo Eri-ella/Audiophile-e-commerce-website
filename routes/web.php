@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Front\ProductController;
 use App\Http\Controllers\Front\PaymentController;
 use App\Http\Controllers\Back\ConnexionController;
+use App\Http\Controllers\Back\CategoryController;
 use App\Http\Controllers\Back\DashboardController;
 use Illuminate\Auth\Middleware\Authenticate;
 
@@ -43,9 +44,24 @@ Route::get('/connexion-admin', [ConnexionController::class, 'showLoginForm'])->n
 Route::post('/connexion-admin', [ConnexionController::class, 'login'])->name('connexion-admin.login');
 
 Route::middleware(['auth'])->group(function(){
-    Route::get('/admin', [DashboardController::class,'index'])->name('admin');
+    Route::get('/tableau-bord', [DashboardController::class,'index'])->name('admin.tableau-bord');
+
+    Route::get('/product', [DashboardController::class,'index'])->name('admin.product');
+    Route::get('/add-product', [DashboardController::class,'index'])->name('admin.add-product');
+    // category 
+    Route::get('/category', [DashboardController::class,'index'])->name('admin.category');
+    Route::post('/category/store', [CategoryController::class, 'store'])->name('admin.add-category');
+    Route::delete('/category/{id}', [CategoryController::class, 'destroy'])->name('admin.delete-category');
+    Route::put('/category/{id}', [CategoryController::class, 'update'])->name('admin.update-category');
+
+    Route::get('/transaction', [DashboardController::class,'index'])->name('admin.transaction');
+    Route::get('/user', [DashboardController::class,'index'])->name('admin.user');
+    Route::get('/setting', [DashboardController::class,'index'])->name('admin.setting');
+
+    // log out
     Route::post('/logout', [ConnexionController::class, 'logout'])->name('logout');
 
     // apexcharts
     Route::get('/admin/dashboard/sales-data', [DashboardController::class, 'salesData'])->name('admin.dashboard.sales-data');
+    
 });
