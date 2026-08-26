@@ -24,7 +24,7 @@ class ConnexionController extends Controller
             "role" => 'admin',
         ], $request->filled('remember'))) {
             $request->session()->regenerate();
-            return redirect()->intended(route('admin'));
+            return redirect()->intended(route('admin.tableau-bord'));
         } return back()->withErrors([
             'email' => 'Mot de passe ou identifiant incorrect',
         ])->onlyInput('email');

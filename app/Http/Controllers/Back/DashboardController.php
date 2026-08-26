@@ -4,24 +4,20 @@ namespace App\Http\Controllers\Back;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
 use App\Http\Controllers\Controller;
-use App\Models\Order;              
-use App\Models\Product;              
-use App\Models\User;              
-use App\Models\Detail;              
-use App\Models\Payment;              
-use App\Models\Category;              
+use App\Models\Order;
+use App\Models\Product;
+use App\Models\User;
+use App\Models\Detail;
+use App\Models\Payment;
+use App\Models\Category;
 
 class DashboardController extends Controller
 {
-    // ** affichage du contenu du dashboard
-    public function index() {
-        //**
-        // TABLEAU DE BORD
-        //  */
-        // ** activités **
-        // ** revenu 
+    public function index(Request $request)
+    {
+        $section = $request->path(); 
+
         $current_month = now();
         $previous_month = now()->subMonth();
 
@@ -33,11 +29,11 @@ class DashboardController extends Controller
             ->whereYear('created_at', $previous_month->year)
             ->sum('amount');
 
-        $increase_percent = $last_month_total_amount > 0 
-            ? (($total_amount - $last_month_total_amount) / $last_month_total_amount) * 100 
+        $increase_percent = $last_month_total_amount > 0
+            ? (($total_amount - $last_month_total_amount) / $last_month_total_amount) * 100
             : ($total_amount > 0 ? 100 : 0);
 
-        // ** commande
+        // Commandes
         $total_order = Order::whereMonth('created_at', $current_month->month)
             ->whereYear('created_at', $current_month->year)
             ->count();
@@ -45,16 +41,13 @@ class DashboardController extends Controller
         $last_month_total_order = Order::whereMonth('created_at', $previous_month->month)
             ->whereYear('created_at', $previous_month->year)
             ->count();
-        $increase_order = $last_month_total_order - $total_order;
+        $increase_order = $total_order - $last_month_total_order;
 
-        // ** produit
-        $stock_product = Product::where('stock', '>', 0)
-            ->count();
+        // Produits
+        $stock_product = Product::where('stock', '>', 0)->count();
+        $out_of_stock_product = Product::where('stock', 0)->count();
 
-        $out_of_stock_product = Product::where('stock', 0)
-            ->count();
-
-        // ** user
+        // Utilisateurs
         $total_user = User::whereMonth('created_at', $current_month->month)
             ->whereYear('created_at', $current_month->year)
             ->count();
@@ -63,9 +56,9 @@ class DashboardController extends Controller
             ->whereYear('created_at', $previous_month->year)
             ->count();
 
-        $increase_user = $last_month_total_user - $total_user;
+        $increase_user = $total_user - $last_month_total_user;
 
-        // ** meilleurs ventes **
+        // Données de base pour le dashboard
         $all_details = Detail::with('product')
             ->whereMonth('created_at', $current_month->month)
             ->get();
@@ -74,67 +67,77 @@ class DashboardController extends Controller
             return $detail->quantity * $detail->product->price;
         })->take(4);
 
-        // ** transactions recentes **
-        $orders = Order::with(['client', 'payment'])
-            ->take(10)
-            ->get();
+        $view = 'admin.tableau_bord';
+        $data = [
+            'section' => $section,
+            'total_amount' => $total_amount,
+            'increase_percent' => round($increase_percent, 1),
+            'total_order' => $total_order,
+            'increase_order' => $increase_order,
+            'stock_product' => $stock_product,
+            'out_of_stock_product' => $out_of_stock_product,
+            'total_user' => $total_user,
+            'increase_user' => $increase_user,
+            'details' => $details,
+        ];
 
-        //**
-        // PRODUIT
-        //  */
-        $products = Product::with('categories')
-            ->get();
+        // La vue et les données selon la section
+        if (str_contains($section, 'product')) {
+            $view = 'admin.product';
+            $data['products'] = Product::with('categories')->get();
+            $data['categories'] = Category::all();
+            
+        } elseif (str_contains($section, 'category')) {
+            $view = 'admin.category';
+            $data['categories'] = Category::all();
+            
+        } elseif (str_contains($section, 'add-product')) {
+            $view = 'admin.add_product';
+            $data['categories'] = Category::all();
+            
+        } elseif (str_contains($section, 'transaction')) {
+            $view = 'admin.transaction';
+            $data['orders'] = Order::with(['client', 'payment'])->get(); 
+            
+        }  elseif (str_contains($section, 'user')) {
+            $view = 'admin.user';
+            $data['users'] = User::with('orders')->get();
+            
+        }  elseif (str_contains($section, 'setting')) {
+            $view = 'admin.setting';
+            $data['admin'] = Auth::user();
+            
+        } else {
+            // Dashboard par défaut
+            $view = 'admin.tableau_bord';
+            $data['orders'] = Order::with(['client', 'payment'])->latest()->take(5)->get();
+        }
 
-        //**
-        // CATEGORIE
-        //  */
-        $categories = Category::all();
-
-        //**
-        // UTILISATEURS
-        //  */
-        $users = User::with('orders')->get();
-
-        //**
-        // PARAMETRE
-        //  */
-        $admin = Auth::user();
-
-        return view('admin.admin_page',
-            compact('total_amount',
-                    'increase_percent',
-                    'total_order',
-                    'increase_order',
-                    'stock_product',
-                    'out_of_stock_product',
-                    'total_user',
-                    'increase_user',
-                    'details',
-                    'orders',
-                    'products',
-                    'categories',
-                    'users',
-                    'admin'));
+        return view('admin.admin_page', $data);
     }
 
-    // ** recuperation du contenu 
-    public function store (Request $request) {
-
-    }
-
-    // ** graphe **
-    // sales dates 
     public function salesData()
     {
-        $sales = Order::query()
-            ->selectRaw('MONTH(created_at) as month, SUM(total) as total')
+        $labels = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'];
+        
+        // Récupérer les données de vente par mois
+        $salesData = Order::selectRaw('MONTH(created_at) as month, SUM(amount) as total')
             ->whereYear('created_at', now()->year)
             ->groupBy('month')
-            ->orderBy('month');
+            ->orderBy('month')
+            ->get();
 
+        // Initialiser un tableau de 12 valeurs à 0
+        $data = array_fill(0, 12, 0);
+        
+        // Remplir les données réelles
+        foreach ($salesData as $sale) {
+            $data[$sale->month - 1] = $sale->total;
+        }
 
         return response()->json([
-            'labels' => ['Jan','Fév','Mar','Avr','Mai','Juin','Juil','Août','Sep','Oct','Nov','Déc'],
+            'labels' => $labels,
+            'data' => $data,
         ]);
     }
 }
