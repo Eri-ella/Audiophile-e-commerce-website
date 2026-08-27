@@ -112,7 +112,8 @@ class DashboardController extends Controller
             $view = 'admin.tableau_bord';
             $data['orders'] = Order::with(['client', 'payment'])->latest()->take(5)->get();
         }
-
+        $data['view']=$view;
+        
         return view('admin.admin_page', $data);
     }
 
