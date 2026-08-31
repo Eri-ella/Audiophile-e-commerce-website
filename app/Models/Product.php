@@ -30,7 +30,6 @@ class Product extends Model
         return $this->belongsTo(Category::class, 'category_id');
     }
 
-    // ✅ Table pivot = quantities, colonne quantité = value
     public function contents(): BelongsToMany
     {
         return $this->belongsToMany(Content::class, 'quantities', 'product_id', 'content_id')

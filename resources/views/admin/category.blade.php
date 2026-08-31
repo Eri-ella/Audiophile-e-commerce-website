@@ -45,7 +45,7 @@
         </span>
     </div>
 
-    <div class='w-full overflow-hidden rounded-lg bg-(--white_color) border-1 border-gray-400'>
+    <div class='w-full overflow-hidden rounded-lg bg-(--white_color) border-1 border-gray-400 shadow-sm'>
         <table class='w-full border-separate border-spacing-2'>
             <thead>
                 <tr class="uppercase bg-gray-300">
@@ -61,8 +61,8 @@
                         <td class='capitalize p-2' x-text="item.name"></td>
                         <td>
                             <div class='flex items-center justify-center'>
-                                <div class="flex items-center justify-center uppercase max-w-25 px-2 rounded-lg"
-                                     :class="item.status === 'inactive' ? 'bg-red-200 text-red-400' : 'bg-green-200 text-green-400'">
+                                <div class='flex items-center justify-center uppercase w-fit h-fit rounded-lg py-1 px-2 text-xs font-semibold'
+                                     :class="item.status === 'inactive' ? 'bg-red-200 text-red-600' : 'bg-green-200 text-green-600'">
                                     <iconify-icon icon="icon-park-outline:dot"></iconify-icon>
                                     <span x-text="item.status"></span>
                                 </div>
@@ -117,8 +117,8 @@
                 </div>
                 <div class='bg-(--mid_gray)/50 w-[80%] h-[1px] my-3 self-center'> </div> 
                 <div class='flex w-full justify-end gap-5'>
-                    <input type="button" x-on:click="open = false" class='flex justify-center items-center h-10 border-1 border-(--mid_gray)/50 px-3 uppercase font-semibold hover:border-(--black_color) rounded-lg' value='Annuler'>
-                    <input type="submit" class='flex justify-center items-center h-10 text-(--white_color) bg-(--orange_principal) px-3 uppercase font-semibold hover:bg-(--orange_hover) rounded-lg' value='Enregistrer le produit'>
+                    <input type="button" x-on:click="open = false" class='flex justify-center items-center h-10 border-1 border-(--mid_gray)/50 px-3 uppercase font-semibold hover:border-(--black_color) rounded-lg cursor-pointer' value='Annuler'>
+                    <input type="submit" class='flex justify-center items-center h-10 text-(--white_color) bg-(--orange_principal) px-3 uppercase font-semibold hover:bg-(--orange_hover) rounded-lg cursor-pointer' value='Enregistrer la categorie'>
                 </div>
             </form>
         </div> 

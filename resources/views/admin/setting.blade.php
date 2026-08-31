@@ -5,8 +5,18 @@
         <div class='flex flex-row w-full gap-5'>
 
             <section class='flex items-center flex-col gap-3 bg-(--white_color) py-5 px-10 rounded-lg shadow-sm'>
-                
-                <div class='flex items-center justify-center size-30 bg-(--black_color) text-(--white_color) text-4xl rounded-full uppercase'>{{ collect(explode(' ', $admin->name))->map(fn($w) => mb_substr($w, 0, 1))->join('') }}</div>
+                <div class='w-full relative'>
+                    <label for="profil_picture">
+                        <iconify-icon icon="streamline-ultimate:pen-write" class='bg-white p-2 rounded-full absolute right-0 bottom-2 shadow-sm'></iconify-icon>
+                    </label>
+                    <input type="file" id="profil_picture" class='hidden'/>  
+                    @if (empty($admin->profil_picture))
+                        <div class='flex items-center justify-center size-30 bg-(--black_color) text-(--white_color) text-4xl rounded-full uppercase'>{{ collect(explode(' ', $admin->name))->map(fn($w) => mb_substr($w, 0, 1))->join('') }}</div>
+                    @else                  
+                        <div class='flex items-center justify-center size-30 bg-(--black_color) text-(--white_color) text-4xl rounded-full uppercase'></div>
+                    @endif                  
+
+                </div>
                 <p>Admin</p>
                 <p class='font-medium text-base capitalize'>{{ $admin->name }}</p>
             </section>
