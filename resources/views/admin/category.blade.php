@@ -1,22 +1,51 @@
-<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 <div 
-    x-data="{ open: false, editOpen: false, editId: null, editName: '', editStatus: '' }" class='bg-(--broken_white) flex flex-col gap-5 p-5'>
+    x-data='{ 
+        open: false, 
+        editOpen: false, 
+        editId: null, 
+        editName: "", 
+        editStatus: "",
+        search: "",
+        searchStatus: "",
+        items: @json($categories),
+        get filteredItems() {
+            let result = this.items;
+
+            if (this.search){
+                result = result.filter(
+                    item => item.name.toLowerCase().includes(this.search.toLowerCase())
+                );
+            }
+
+            if (this.searchStatus !== ""){
+                result = result.filter(
+                    item => item.status.toLowerCase() === this.searchStatus.toLowerCase()
+                );
+            }
+            return result;
+        }
+        
+    }' 
+    class="bg-(--broken_white) flex flex-col gap-5 p-5">
+
     <h2 class='uppercase font-semibold text-2xl'>catégories</h2>
     <p class='text-(--mid_gray) text-base sm:pr-5'>Gérez les catégories des appareils audio de la boutique</p>
+
     <div class='flex max-[500px]:flex-col items-center justify-between gap-5'>
         <span class='flex max-[700px]:flex-col items-center gap-5'>
-            <input type="text" name="search_product" placeholder="Rechercher une catégorie" class='border-1 border-(--mid_gray)/50 hover:border-(--orange_hover) focus:outline-none focus:border-(--orange_hover) rounded-lg px-4 py-1 min-w-50 bg-(--white_color) placeholder:text-(--mid_gray)'>
-            <select name="all_status"  class='border-1 border-(--mid_gray)/50 hover:border-(--orange_hover) focus:outline-none focus:border-(--orange_hover) rounded-lg px-2 py-1 bg-(--white_color) placeholder:text-(--mid_gray)'>
+            <input type="text" name="search_product" x-model="search" placeholder="Rechercher une catégorie" class='border-1 border-(--mid_gray)/50 hover:border-(--orange_hover) focus:outline-none focus:border-(--orange_hover) rounded-lg px-4 py-1 min-w-50 bg-(--white_color) placeholder:text-(--mid_gray)'>
+            <select name="all_status" x-model="searchStatus" class='border-1 border-(--mid_gray)/50 hover:border-(--orange_hover) focus:outline-none focus:border-(--orange_hover) rounded-lg px-2 py-1 bg-(--white_color) placeholder:text-(--mid_gray)'>
                 <option value="">Tous les statuts</option>
-                <option value="">Actif</option>
-                <option value="">Inactif</option>
+                <option value="active">Actif</option>
+                <option value="inactive">Inactif</option>
             </select>
         </span>
         <span class='flex self-end'>
-            <button  @click="open = true" class='text-(--white_color) bg-(--orange_principal) uppercase font-semibold hover:bg-(--orange_hover) rounded-lg p-2'>+ Ajouter une catégorie</button>
+            <button @click="open = true" class='text-(--white_color) bg-(--orange_principal) uppercase font-semibold hover:bg-(--orange_hover) rounded-lg p-2'>+ Ajouter une catégorie</button>
         </span>
     </div>
-    <div class='w-full overflow-hidden rounded-lg bg-(--white_color) border-1 border-gray-400'>
+
+    <div class='w-full overflow-hidden rounded-lg bg-(--white_color) border-1 border-gray-400 shadow-sm'>
         <table class='w-full border-separate border-spacing-2'>
             <thead>
                 <tr class="uppercase bg-gray-300">
@@ -27,32 +56,25 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse ($categories as $category)
-                    @if($category->id % 2 == 0)
-                    <tr class='text-center border border-gray-400 rounded-lg bg-gray-100'>
-                    @else
-                    <tr class='text-center border border-gray-400 rounded-lg'>
-                    @endif
-                        <td class='capitalize p-2'>{{ $category->name }}</td>
+                <template x-for="item in filteredItems" :key="item.id">
+                    <tr :class="item.id % 2 == 0 ? 'text-center border border-gray-400 rounded-lg bg-gray-100' : 'text-center border border-gray-400 rounded-lg'">
+                        <td class='capitalize p-2' x-text="item.name"></td>
                         <td>
                             <div class='flex items-center justify-center'>
-                                @if($category->status == 'inactive')
-                                <div class='flex items-center justify-center uppercase bg-red-200 text-red-400 max-w-25 px-2 rounded-lg'>
-                                @else
-                                <div class='flex items-center justify-center uppercase bg-green-200 text-green-400 max-w-25 px-2 rounded-lg'>
-                                @endif
+                                <div class='flex items-center justify-center uppercase w-fit h-fit rounded-lg py-1 px-2 text-xs font-semibold'
+                                     :class="item.status === 'inactive' ? 'bg-red-200 text-red-600' : 'bg-green-200 text-green-600'">
                                     <iconify-icon icon="icon-park-outline:dot"></iconify-icon>
-                                    <span>{{ $category->status }}</span>
+                                    <span x-text="item.status"></span>
                                 </div>
                             </div>
                         </td>
                         <td class='text-(--mid_gray)'>
-                            <button @click="editOpen = true; editId = '{{ $category->id }}'; editName = '{{ $category->name }}'; editStatus ='{{ $category->status}}'" class="cursor-pointer hover:text-blue-500">
-                                <iconify-icon icon="streamline-ultimate:pen-write" class=''></iconify-icon>
+                            <button @click="editOpen = true; editId = item.id; editName = item.name; editStatus = item.status" class="cursor-pointer hover:text-blue-500">
+                                <iconify-icon icon="streamline-ultimate:pen-write"></iconify-icon>
                             </button>
                         </td>
                         <td class='text-(--mid_gray)'>
-                            <form method="POST" action={{ route('admin.delete-category', $category->id) }} onSubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette categorie');">
+                            <form method="POST" :action="'{{ url('category') }}/' + item.id" @submit.prevent="confirm('Êtes-vous sûr ?') && $el.submit()">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="cursor-pointer hover:text-red-500">
@@ -61,13 +83,12 @@
                             </form>
                         </td>
                     </tr>
-                @empty
-                    <tr>
-                        <td colspan="7" class="text-center py-4 text-gray-500">
-                            Il n'y a aucun élément dans ce tableau
-                        </td>
-                    </tr>
-                @endforelse
+                </template>
+                <tr x-show="filteredItems.length === 0">
+                    <td colspan="4" class="text-center py-4 text-gray-500">
+                        Il n'y a aucun élément dans ce tableau
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
@@ -96,8 +117,8 @@
                 </div>
                 <div class='bg-(--mid_gray)/50 w-[80%] h-[1px] my-3 self-center'> </div> 
                 <div class='flex w-full justify-end gap-5'>
-                    <input type="button" x-on:click="open = false" class='flex justify-center items-center h-10 border-1 border-(--mid_gray)/50 px-3 uppercase font-semibold hover:border-(--black_color) rounded-lg' value='Annuler'>
-                    <input type="submit" class='flex justify-center items-center h-10 text-(--white_color) bg-(--orange_principal) px-3 uppercase font-semibold hover:bg-(--orange_hover) rounded-lg' value='Enregistrer le produit'>
+                    <input type="button" x-on:click="open = false" class='flex justify-center items-center h-10 border-1 border-(--mid_gray)/50 px-3 uppercase font-semibold hover:border-(--black_color) rounded-lg cursor-pointer' value='Annuler'>
+                    <input type="submit" class='flex justify-center items-center h-10 text-(--white_color) bg-(--orange_principal) px-3 uppercase font-semibold hover:bg-(--orange_hover) rounded-lg cursor-pointer' value='Enregistrer la categorie'>
                 </div>
             </form>
         </div> 
@@ -148,10 +169,8 @@
         class="fixed top-18 right-5 z-50"
         style="display: none;"> 
 
-            <div class='flex justify-between items-center max-w-85 gap-2 bg-white rounded-lg shadow-sm overflow-hidden'>
-            <div class='w-3 h-20 bg-(--orange_principal)'>
-            
-            </div>
+        <div class='flex justify-between items-center max-w-85 gap-2 bg-white rounded-lg shadow-sm overflow-hidden'>
+            <div class='w-3 h-20 bg-(--orange_principal)'></div>
             <div>
                 <div class='bg-(--orange_principal) text-(--white_color) p-2 flex items-center justify-center rounded-full'>
                     <iconify-icon icon="fluent-mdl2:accept-medium" class='text-sm'></iconify-icon>

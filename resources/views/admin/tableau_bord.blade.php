@@ -94,9 +94,9 @@
     <div class='flex flex-col gap-5 bg-(--white_color) p-5 rounded-lg shadow-sm'>
         <span class='flex justify-between items-center'>
             <h3 class='flex items-center uppercase text-xl font-medium'>transactions récentes</h3>
-            <p class='transaction-clicker text-(--orange_principal) cursor-pointer hover:underline'>Voir tout</p>
+            <a href={{ route('admin.transaction') }} class='transaction-clicker text-(--orange_principal) cursor-pointer hover:underline'>Voir tout</a>
         </span>
-        <div class='w-full rounded-lg bg-(--white_color) overflow-hidden'>
+        <div class='w-full rounded-lg bg-(--white_color) overflow-hidden shadow-sm'>
             <table class='w-full border-separate border-spacing-2'>
                 <thead>
                     <tr class="uppercase bg-gray-300">
@@ -122,9 +122,9 @@
                             <td>
                                 <div class='flex items-center justify-center'>
                                     @if($order->status == 'en attente')
-                                    <div class='flex items-center justify-center uppercase bg-orange-200 text-orange-400 w-fit h-fit rounded-lg py-1 px-2 text-xs font-semibold'>                                    
+                                    <div class='flex items-center justify-center uppercase bg-orange-200 text-orange-600 w-fit h-fit rounded-lg py-1 px-2 text-xs font-semibold'>                                    
                                     @else
-                                    <div class='flex items-center justify-center uppercase bg-green-200 text-green-400 w-fit h-fit rounded-lg py-1 px-2 text-xs font-semibold'>
+                                    <div class='flex items-center justify-center uppercase bg-green-200 text-green-600 w-fit h-fit rounded-lg py-1 px-2 text-xs font-semibold'>
                                     @endif
                                         <iconify-icon icon="icon-park-outline:dot"></iconify-icon>
                                         <span class="ml-1">{{ $order->status }}</span>

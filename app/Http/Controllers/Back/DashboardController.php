@@ -84,15 +84,11 @@ class DashboardController extends Controller
         // La vue et les données selon la section
         if (str_contains($section, 'product')) {
             $view = 'admin.product';
-            $data['products'] = Product::with('categories')->get();
+            $data['products'] = Product::with('categories', 'contents')->get();
             $data['categories'] = Category::all();
             
         } elseif (str_contains($section, 'category')) {
             $view = 'admin.category';
-            $data['categories'] = Category::all();
-            
-        } elseif (str_contains($section, 'add-product')) {
-            $view = 'admin.add_product';
             $data['categories'] = Category::all();
             
         } elseif (str_contains($section, 'transaction')) {
@@ -112,7 +108,8 @@ class DashboardController extends Controller
             $view = 'admin.tableau_bord';
             $data['orders'] = Order::with(['client', 'payment'])->latest()->take(5)->get();
         }
-
+        $data['view']=$view;
+        
         return view('admin.admin_page', $data);
     }
 
@@ -120,17 +117,14 @@ class DashboardController extends Controller
     {
         $labels = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'];
         
-        // Récupérer les données de vente par mois
         $salesData = Order::selectRaw('MONTH(created_at) as month, SUM(amount) as total')
             ->whereYear('created_at', now()->year)
             ->groupBy('month')
             ->orderBy('month')
             ->get();
 
-        // Initialiser un tableau de 12 valeurs à 0
         $data = array_fill(0, 12, 0);
         
-        // Remplir les données réelles
         foreach ($salesData as $sale) {
             $data[$sale->month - 1] = $sale->total;
         }

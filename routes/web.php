@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Front\ProductController;
 use App\Http\Controllers\Front\PaymentController;
+use App\Http\Controllers\Back\ProductController as ProductBackController;
 use App\Http\Controllers\Back\ConnexionController;
 use App\Http\Controllers\Back\CategoryController;
 use App\Http\Controllers\Back\DashboardController;
@@ -46,8 +47,13 @@ Route::post('/connexion-admin', [ConnexionController::class, 'login'])->name('co
 Route::middleware(['auth'])->group(function(){
     Route::get('/tableau-bord', [DashboardController::class,'index'])->name('admin.tableau-bord');
 
+    // product
     Route::get('/product', [DashboardController::class,'index'])->name('admin.product');
-    Route::get('/add-product', [DashboardController::class,'index'])->name('admin.add-product');
+    Route::post('/product/store', [ProductBackController::class, 'store'])->name('admin.add-product');
+    Route::delete('/product/{id}', [ProductBackController::class, 'destroy'])->name('admin.delete-product');
+    Route::put('/product/{id}', [ProductBackController::class, 'update'])->name('admin.update-product');
+
+    //Route::get('/add-product', [DashboardController::class,'index'])->name('admin.add-product');
     // category 
     Route::get('/category', [DashboardController::class,'index'])->name('admin.category');
     Route::post('/category/store', [CategoryController::class, 'store'])->name('admin.add-category');

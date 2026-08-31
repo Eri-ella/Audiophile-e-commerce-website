@@ -32,11 +32,6 @@
            data-page='category-page'>
             <iconify-icon icon="vaadin:lines-list" class='text-[10px]'></iconify-icon>Catégorie
         </a>
-        <a href="{{ route('admin.add-product') }}" 
-           class='onglet onglet-product flex items-center gap-2 p-2 rounded-lg cursor-pointer hover:bg-(--mid_gray)/50' 
-           data-page='add-product-page'>
-            <iconify-icon icon="ic:baseline-plus"></iconify-icon>Ajouter un article
-        </a>
     </div>
     
     <div class='flex flex-col gap-2'>

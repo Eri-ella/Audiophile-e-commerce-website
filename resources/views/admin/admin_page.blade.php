@@ -19,8 +19,6 @@
                 @include('admin.product')
             @elseif (str_contains($section, 'category'))
                 @include('admin.category')
-            @elseif (str_contains($section, 'add-product'))
-                @include('admin.add_product')
             @elseif (str_contains($section, 'transaction'))
                 @include('admin.transaction')
             @elseif (str_contains($section, 'user'))
