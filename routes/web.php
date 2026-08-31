@@ -62,7 +62,10 @@ Route::middleware(['auth'])->group(function(){
 
     Route::get('/transaction', [DashboardController::class,'index'])->name('admin.transaction');
     Route::get('/user', [DashboardController::class,'index'])->name('admin.user');
+    
+    // adminitrateur
     Route::get('/setting', [DashboardController::class,'index'])->name('admin.setting');
+    Route::put('/setting/{id}', [ConnexionController::class,'update'])->name('admin.update-setting');
 
     // log out
     Route::post('/logout', [ConnexionController::class, 'logout'])->name('logout');

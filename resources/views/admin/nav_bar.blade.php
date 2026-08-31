@@ -7,7 +7,15 @@
         <iconify-icon icon="material-symbols:search" class='absolute right-2 top-1 text-xl text-(--mid_gray)/50 cursor-pointer'></iconify-icon>
     </div>
     <div class='flex gap-3'>
-        <div class='flex justify-center items-center w-10 h-10 bg-(--black_color) text-(--white_color) rounded-full cursor-pointer uppercase'>{{ collect(explode(' ', $admin->name))->map(fn($w) => mb_substr($w, 0, 1))->join('') }}</div>
+        @if($admin->profil)
+            <div class='flex items-center justify-center size-10 bg-(--black_color) rounded-full overflow-hidden'>
+                <img src="{{ asset('storage/' . $admin->profil) }}" alt="Profil" class="size-30 rounded-full"/>
+            </div>
+        @else
+            <div class='flex items-center justify-center size-10 bg-(--black_color) text-(--white_color) text-4xl rounded-full uppercase'>
+                {{ collect(explode(' ', $admin->name))->map(fn($w) => mb_substr($w, 0, 1))->join('') }}
+            </div>
+        @endif
         <div>
             <p class='capitalize'>{{ $admin->name }}</p>
             <p class='uppercase text-(--mid_gray) text-xs'>Administrateur</p>
