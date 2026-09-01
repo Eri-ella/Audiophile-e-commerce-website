@@ -78,7 +78,7 @@
                         <div>
                             <label for="password" class='font-medium'>Mot de passe</label>
                             <div class='relative w-full'>
-                            <input type="password" id="password" name="password" placeholder="Laisser ce champ vide pour ne pas changer le mot de passe" class='input-pass mt-2 border-1 border-(--mid_gray)/50 hover:border-(--orange_hover) focus:outline-none focus:border-(--orange_hover) rounded-lg px-4 py-1 w-full bg-(--white_color) placeholder:text-(--mid_gray)'>
+                            <input type="password" id="password" name="password" placeholder="Laissez ce champ vide pour ne pas changer le mot de passe" class='input-pass mt-2 border-1 border-(--mid_gray)/50 hover:border-(--orange_hover) focus:outline-none focus:border-(--orange_hover) rounded-lg px-4 py-1 w-full bg-(--white_color) placeholder:text-(--mid_gray)'>
                                 <iconify-icon icon="iconoir:eye" class='eye text-(--mid_gray) text-2xl absolute right-3 top-2 block'></iconify-icon>
                                 <iconify-icon icon="iconoir:eye-closed" class='eye-closed text-(--mid_gray) text-2xl absolute right-3 top-2 hidden'></iconify-icon>
                             <div>
