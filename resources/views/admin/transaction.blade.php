@@ -9,12 +9,9 @@
             let result = this.items;
 
             if (this.search){
-                let query = this.search.toLowerCase();
-                result = result.filter(item => {
-                    let clientName = item.user && item.user.name ? item.user.name.toLowerCase() : "";
-                    let clientEmail = item.user && item.user.email ? item.user.email.toLowerCase() : "";
-                    return clientName.includes(query) || clientEmail.includes(query);
-                });
+                result = result.filter(
+                    item => item.client.email.toLowerCase().includes(this.search.toLowerCase())
+                );
             }
 
             if (this.searchStatus) {
@@ -36,7 +33,7 @@
             <p class='text-(--mid_gray) text-base sm:pr-5'>Historique des paiements de tous les clients</p>
         </span>
         <span>
-            <a href="" class='flex justify-center items-center px-3 py-2 border-1 border-gray-200 uppercase font-semibold hover:bg-gray-100 rounded-lg'>Exporter en csv</a>
+            {{-- <a href="" class='flex justify-center items-center px-3 py-2 border-1 border-gray-200 uppercase font-semibold hover:bg-gray-100 rounded-lg'>Exporter en csv</a> --}}
         </span>
     </div>
 

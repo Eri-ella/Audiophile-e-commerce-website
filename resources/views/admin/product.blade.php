@@ -66,7 +66,11 @@
             </select>
         </span>
         <span class='place-self-end'>
-            <p @click="open = true" class='product-clicker p-2 text-(--white_color) bg-(--orange_principal) uppercase font-semibold hover:bg-(--orange_hover) rounded-lg cursor-pointer'>+ Ajouter un appareil</p>
+            <p @click="open = true" 
+                x-effect="document.body.classList.toggle('overflow-hidden', open)"
+                class='product-clicker p-2 text-(--white_color) bg-(--orange_principal) uppercase font-semibold hover:bg-(--orange_hover) rounded-lg cursor-pointer modal-fixe'>
+                + Ajouter un appareil
+            </p>
         </span>
     </div>
     <div class='w-full rounded-lg bg-(--white_color) overflow-hidden shadow-sm'>
@@ -108,6 +112,8 @@
                         </td>
                         <td class='text-(--mid_gray)'>
                             <button 
+                                x-effect="document.body.classList.toggle('overflow-hidden', open)"
+                                class="cursor-pointer hover:text-blue-500 modal-fixe"            
                                 @click="editOpen = true; 
                                 editId = item.id; 
                                 editName = item.name; 
@@ -121,8 +127,8 @@
                                 editImage1 = item.image_1;
                                 editImage2 = item.image_2;
                                 editImage3 = item.image_3;
-                                editContents = item.contents.map(c => ({ content: c.name, quantity: c.pivot.value }));"                                
-                                class="cursor-pointer hover:text-blue-500">                                
+                                editContents = item.contents.map(c => ({ content: c.name, quantity: c.pivot.value }));">                                 
+                  
                                 <iconify-icon icon="streamline-ultimate:pen-write"></iconify-icon>
                             </button>
                         </td>

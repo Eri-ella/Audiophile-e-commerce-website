@@ -121,10 +121,12 @@
                             <td>$<span>{{ $order->amount }}</span></td>                    
                             <td>
                                 <div class='flex items-center justify-center'>
-                                    @if($order->status == 'en attente')
+                                    @if($order->status == 'pending')
                                     <div class='flex items-center justify-center uppercase bg-orange-200 text-orange-600 w-fit h-fit rounded-lg py-1 px-2 text-xs font-semibold'>                                    
-                                    @else
+                                    @elseif($order->status == 'paid')
                                     <div class='flex items-center justify-center uppercase bg-green-200 text-green-600 w-fit h-fit rounded-lg py-1 px-2 text-xs font-semibold'>
+                                    @else
+                                    <div class='flex items-center justify-center uppercase bg-red-200 text-red-600 w-fit h-fit rounded-lg py-1 px-2 text-xs font-semibold'>
                                     @endif
                                         <iconify-icon icon="icon-park-outline:dot"></iconify-icon>
                                         <span class="ml-1">{{ $order->status }}</span>

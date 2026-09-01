@@ -45,7 +45,7 @@ async function initSalesChart() {
 
         const options = {
             chart: {
-                type: 'area',
+                type: 'line',
                 height: 260,
                 toolbar: { show: false },
                 fontFamily: 'Manrope, sans-serif',
@@ -55,15 +55,10 @@ async function initSalesChart() {
                 categories: labels,
                 labels: { style: { colors: '#6C6C6C', fontSize: '11px' } },
             },
-            yaxis: {
-                labels: { formatter: (v) => '$' + v.toLocaleString() },
+            stroke: {
+                curve: "smooth",
             },
             colors: ['#D87D4A'],
-            stroke: { curve: 'smooth', width: 3 },
-            fill: {
-                type: 'gradient',
-                gradient: { shadeIntensity: 1, opacityFrom: 0.35, opacityTo: 0, stops: [0, 90, 100] },
-            },
             dataLabels: { enabled: false },
             grid: { borderColor: '#E7E7E7', strokeDashArray: 4 },
             tooltip: { y: { formatter: (v) => '$' + v.toLocaleString() } },

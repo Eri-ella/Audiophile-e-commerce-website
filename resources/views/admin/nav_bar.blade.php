@@ -7,7 +7,7 @@
             <a 
                 href="{{ route('admin.setting') }}"
                 class='flex items-center justify-center size-10 bg-(--black_color) rounded-full overflow-hidden'>
-                <img src="{{ asset('storage/' . $admin->profil) }}" alt="Profil" class="size-30 rounded-full"/>
+                <img src="{{ asset('storage/' . $admin->profil) }}" alt="Profil" class="size-10 rounded-full"/>
             </a>
         @else
             <a
