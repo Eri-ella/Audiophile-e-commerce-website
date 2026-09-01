@@ -52,6 +52,7 @@ Route::middleware(['auth'])->group(function(){
     Route::post('/product/store', [ProductBackController::class, 'store'])->name('admin.add-product');
     Route::delete('/product/{id}', [ProductBackController::class, 'destroy'])->name('admin.delete-product');
     Route::put('/product/{id}', [ProductBackController::class, 'update'])->name('admin.update-product');
+    Route::patch('/product/{id}/toggle', [ProductBackController::class, 'toggleStatus'])->name('product.toggle');
 
     //Route::get('/add-product', [DashboardController::class,'index'])->name('admin.add-product');
     // category 
@@ -59,10 +60,14 @@ Route::middleware(['auth'])->group(function(){
     Route::post('/category/store', [CategoryController::class, 'store'])->name('admin.add-category');
     Route::delete('/category/{id}', [CategoryController::class, 'destroy'])->name('admin.delete-category');
     Route::put('/category/{id}', [CategoryController::class, 'update'])->name('admin.update-category');
+    Route::patch('/category/{id}/toggle', [CategoryController::class, 'toggleStatus'])->name('category.toggle');
 
     Route::get('/transaction', [DashboardController::class,'index'])->name('admin.transaction');
     Route::get('/user', [DashboardController::class,'index'])->name('admin.user');
+    
+    // adminitrateur
     Route::get('/setting', [DashboardController::class,'index'])->name('admin.setting');
+    Route::put('/setting/{id}', [ConnexionController::class,'update'])->name('admin.update-setting');
 
     // log out
     Route::post('/logout', [ConnexionController::class, 'logout'])->name('logout');

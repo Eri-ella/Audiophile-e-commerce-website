@@ -128,5 +128,12 @@ class ProductController extends Controller
 
         return redirect()->route('admin.product')->with('success', 'Produit supprimé avec succès !');
     }
+
+    public function toggleStatus($id) {
+        $product = Product::findOrFail($id);
+        $product->status = $product->status === 'active' ? 'inactive' : 'active';
+        $product->save();
+        return redirect()->route('admin.product')->with('success', 'Statut du produit modifié !');
+    }
 }
 

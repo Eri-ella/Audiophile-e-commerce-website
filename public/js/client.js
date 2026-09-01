@@ -49,5 +49,4 @@ function appearCart() {
 
 document.addEventListener('DOMContentLoaded', function(){
     appearMenu();
-    appearCart();
 })

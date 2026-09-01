@@ -10,7 +10,6 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            // ✅ Pas de constrained() : la table orders n'existe pas encore à ce stade
             $table->foreignId('order_id')->nullable()->index();
             $table->string('type')->default('e-money');
             $table->string('status')->default('pending');
@@ -21,6 +20,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('payments');   // ✅ corrigé : 'payments' pas 'payment'
+        Schema::dropIfExists('payments');  
     }
 };

@@ -15,7 +15,6 @@ class Payment extends Model
         'type',
         'status',
         'fedapay_id',
-        // ❌ SUPPRIMER 'number' et 'pin' (sécurité)
     ];
 
     // Un payment appartient à UNE commande

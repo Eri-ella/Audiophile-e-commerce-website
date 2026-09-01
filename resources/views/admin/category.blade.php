@@ -45,7 +45,7 @@
         </span>
     </div>
 
-    <div class='w-full overflow-hidden rounded-lg bg-(--white_color) border-1 border-gray-400 shadow-sm'>
+    <div class='w-full overflow-hidden rounded-lg bg-(--white_color) shadow-sm'>
         <table class='w-full border-separate border-spacing-2'>
             <thead>
                 <tr class="uppercase bg-gray-300">
@@ -74,11 +74,11 @@
                             </button>
                         </td>
                         <td class='text-(--mid_gray)'>
-                            <form method="POST" :action="'{{ url('category') }}/' + item.id" @submit.prevent="confirm('Êtes-vous sûr ?') && $el.submit()">
+                            <form method="POST" :action="'{{ url('category') }}/' + item.id + '/toggle'" @submit.prevent="$el.submit()">
                                 @csrf
-                                @method('DELETE')
-                                <button type="submit" class="cursor-pointer hover:text-red-500">
-                                    <iconify-icon icon="tabler:trash"></iconify-icon>
+                                @method('PATCH')
+                                <button type="submit" class="cursor-pointer hover:text-orange-500">
+                                    <iconify-icon icon="material-symbols:settings-outline"></iconify-icon>
                                 </button>
                             </form>
                         </td>
@@ -188,3 +188,4 @@
     </div>
     @endif
 </div>
+
