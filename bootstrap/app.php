@@ -12,7 +12,13 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        
+        // 🆕 Fait confiance à ngrok (détecte HTTPS correctement)
+        $middleware->trustProxies(at: '*');
+
+        // Désactive CSRF pour le webhook FedaPay
+        $middleware->validateCsrfTokens(except: [
+            'webhook/fedapay',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
