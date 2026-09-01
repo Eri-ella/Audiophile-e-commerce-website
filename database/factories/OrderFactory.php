@@ -13,10 +13,9 @@ class OrderFactory extends Factory
     public function definition(): array
     {
         return [
-            // ✅ Un des 5 vrais clients (pas de client fantôme)
             'client_id'   => User::where('role', 'client')->inRandomOrder()->first()?->id ?? User::factory(),
             'delivery_id' => Delivery::factory(),
-            'payment_id'  => Payment::factory(),   // ✅ sûr maintenant (Payment ne crée plus d'order)
+            'payment_id'  => Payment::factory(),  
             'amount'      => fake()->numberBetween(500, 20000),
             'status'      => fake()->randomElement(['paid', 'pending', 'failed']),
         ];

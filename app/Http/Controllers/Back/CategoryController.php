@@ -37,4 +37,11 @@ class CategoryController extends Controller
 
         return redirect()->route('admin.category')->with('success', 'Catégorie supprimée avec succès !');
     }
+
+    public function toggleStatus($id) {
+        $category = Category::findOrFail($id);
+        $category->status = $category->status === 'active' ? 'inactive' : 'active';
+        $category->save();
+        return redirect()->route('admin.category')->with('success', 'Statut de la categorie modifié !');
+    }
 }

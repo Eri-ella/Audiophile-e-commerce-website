@@ -33,7 +33,7 @@
             <iconify-icon icon="vaadin:lines-list" class='text-[10px]'></iconify-icon>Catégorie
         </a>
     </div>
-    
+
     <div class='flex flex-col gap-2'>
         <h4 class='uppercase text-(--white_color)/50'>activité</h4>
         <a href="{{ route('admin.transaction') }}" 

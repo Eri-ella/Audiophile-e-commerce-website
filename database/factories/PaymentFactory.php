@@ -13,7 +13,7 @@ class PaymentFactory extends Factory
             'type'     => fake()->randomElement(['e-money', 'cash']),
             'status'   => fake()->randomElement(['approved', 'pending', 'declined']),
             'fedapay_id' => null,
-            'order_id' => null,   // ✅ C'EST ICI QU'ON CASSE LA BOUCLE
+            'order_id' => null,  
         ];
     }
 }

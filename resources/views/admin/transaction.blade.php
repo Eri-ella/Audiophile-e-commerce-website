@@ -47,8 +47,9 @@
         <span>
             <select x-model="searchStatus" class='border-1 border-(--mid_gray)/50 hover:border-(--orange_hover) focus:outline-none focus:border-(--orange_hover) rounded-lg px-2 py-1 bg-(--white_color)'>
                 <option value="">Tous les statuts</option>
-                <option value="confirmé">Confirmé</option>
-                <option value="en attente">En attente</option>
+                <option value="paid">Payé</option>
+                <option value="pending">En attente</option>
+                <option value="failed">Echoué</option>
             </select>
         </span>
         <span>
@@ -97,7 +98,7 @@
                         <td>
                             <div class='flex items-center justify-center'>
                                 <div class='flex items-center justify-center uppercase w-fit h-fit rounded-lg py-1 px-2 text-xs font-semibold'
-                                     :class="item.status === 'en attente' ? 'bg-orange-200 text-orange-600' : 'bg-green-200 text-green-600'">                                    
+                                     :class="item.status === 'pending' ? 'bg-orange-200 text-orange-600' : (item.status === 'paid' ? 'bg-green-200 text-green-600' :'bg-red-200 text-red-600')">                                    
                                     <iconify-icon icon="icon-park-outline:dot"></iconify-icon>
                                     <span class="ml-1" x-text="item.status"></span>
                                 </div>
