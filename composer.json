@@ -11,6 +11,7 @@
     "require": {
         "php": "^8.3",
         "fedapay/fedapay-php": "*",
+        "kkiapay/kkiapay-php": "dev-master",
         "laravel/framework": "^13.8",
         "laravel/tinker": "^3.0"
     },
