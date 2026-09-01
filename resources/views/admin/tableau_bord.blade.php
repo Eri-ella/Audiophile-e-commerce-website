@@ -70,8 +70,14 @@
                 @foreach ($details as $detail)
                 <div class='flex items-center justify-between'>
                     <span class=' p-2 flex items-center gap-2 my-2 ml-2'>
-                        <span class='bg-(--mid_gray)/25 size-10 flex items-center justify-center rounded-lg'>
-                            <iconify-icon icon="ri:headphone-line"></iconify-icon>
+                        <span class='bg-gray-300 size-10 flex items-center justify-center rounded-lg'>
+                            @if($detail->product->category_id == 1)
+                                <iconify-icon icon="ri:headphone-line"></iconify-icon>
+                            @elseif($detail->product->category_id == 2)
+                                <iconify-icon icon="tabler:earphone-bluetooth"></iconify-icon>
+                            @elseif($detail->product->category_id == 3)
+                                <iconify-icon icon="material-symbols:speaker-outline-sharp"></iconify-icon>
+                            @endif
                         </span>
                         <span class='flex flex-col text-xs'>
                             <span class='font-medium'>{{ $detail->product->name }}</span>
@@ -88,13 +94,13 @@
     <div class='flex flex-col gap-5 bg-(--white_color) p-5 rounded-lg shadow-sm'>
         <span class='flex justify-between items-center'>
             <h3 class='flex items-center uppercase text-xl font-medium'>transactions récentes</h3>
-            <p class='transaction-clicker text-(--orange_principal) cursor-pointer'>Voir tout</p>
+            <a href={{ route('admin.transaction') }} class='text-(--orange_principal) cursor-pointer hover:underline'>Voir tout</a>
         </span>
-        <div class='w-full rounded-lg bg-(--white_color)'>
-            <table class='p-2 text-sm w-full border-collapse'>
+        <div class='w-full rounded-lg bg-(--white_color) overflow-hidden shadow-sm'>
+            <table class='w-full border-separate border-spacing-2'>
                 <thead>
-                    <tr class="text-left uppercase text-(--mid_gray) font-normal border border-gray-400 rounded-lg ">
-                        <th class="pl-2 py-2">n° commande</th>
+                    <tr class="uppercase bg-gray-300">
+                        <th class="py-2">n° commande</th>
                         <th class="py-2">client</th>
                         <th class="py-2">montant</th>
                         <th class="py-2">statut</th>
@@ -103,20 +109,28 @@
                 </thead>
                 <tbody>
                     @forelse ($orders as $order)
-                        <tr class='border border-gray-400 rounded-lg'>
+                        @if($order->id % 2 == 0)
+                        <tr class='text-center border border-gray-400 rounded-lg bg-gray-100'>
+                        @else
+                        <tr class='text-center border border-gray-400 rounded-lg'>
+                        @endif
                             <td class='p-2 '>
                                 <span class='font-medium'>#<span>{{ $order->id }}</span>
                             </td>
                             <td class='capitalize'>{{ $order->client->email }}</td>
                             <td>$<span>{{ $order->amount }}</span></td>                    
                             <td>
-                                @if($order->status == 'en attente')
-                                <div class='flex items-center justify-center uppercase bg-orange-200 text-orange-400 max-w-25 max-h-5 rounded-lg py-1 px-2 text-xs font-semibold'>                                    
-                                @else
-                                <div class='flex items-center justify-center uppercase bg-green-200 text-green-400 max-w-25 max-h-5 rounded-lg py-1 px-2 text-xs font-semibold'>
-                                @endif
-                                    <iconify-icon icon="icon-park-outline:dot"></iconify-icon>
-                                    <span class="ml-1">{{ $order->status }}</span>
+                                <div class='flex items-center justify-center'>
+                                    @if($order->status == 'pending')
+                                    <div class='flex items-center justify-center uppercase bg-orange-200 text-orange-600 w-fit h-fit rounded-lg py-1 px-2 text-xs font-semibold'>                                    
+                                    @elseif($order->status == 'paid')
+                                    <div class='flex items-center justify-center uppercase bg-green-200 text-green-600 w-fit h-fit rounded-lg py-1 px-2 text-xs font-semibold'>
+                                    @else
+                                    <div class='flex items-center justify-center uppercase bg-red-200 text-red-600 w-fit h-fit rounded-lg py-1 px-2 text-xs font-semibold'>
+                                    @endif
+                                        <iconify-icon icon="icon-park-outline:dot"></iconify-icon>
+                                        <span class="ml-1">{{ $order->status }}</span>
+                                    </div>
                                 </div>
                             </td>
                             <td>{{ $order->created_at->format('d/m/y') }}</td>

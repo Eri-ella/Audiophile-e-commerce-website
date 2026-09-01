@@ -10,8 +10,13 @@
         'resources/js/app.js',
         'public/js/client.js',
     ])
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
-<body class='flex flex-col'>
+<body 
+    x-data='{ 
+        open: false, 
+    }'  
+    class='flex flex-col'>
 
     {{-- ===== Toast : "X item(s) has been added to your cart..." ===== --}}
     @if (session('cart_success'))
@@ -64,7 +69,7 @@
             $cartCount = collect(session('cart', []))->sum('qty');
         @endphp
         <div class="relative">
-            <iconify-icon icon="mdi-light:cart" class='text-2xl cart-box-clicker'></iconify-icon>
+            <iconify-icon icon="mdi-light:cart" @click="open = true" class='text-2xl cart-box-clicker cursor-pointer'></iconify-icon>
             @if ($cartCount > 0)
                 <span class="pointer-events-none absolute -right-2 -top-2 flex h-[18px] w-[18px] items-center justify-center rounded-full bg-(--orange_principal) text-[11px] font-bold text-white">
                     {{ $cartCount }}
@@ -74,7 +79,17 @@
     </header>
     <div class='hidden menu justify-center md:hidden'>@include('layout.product_layout')</div>
     @yield('acceuil-content')
-    <div class='hidden cart-box fixed top-35 right-25 z-20'>@include('client.cart_box')</div>
+        <div x-show="open" 
+        x-transition
+        class='fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 rounded-lg'
+        style="display: none;"> 
+            <div @click.away="open = false" 
+                x-effect="document.body.classList.toggle('overflow-hidden', open)"
+                class='fixed top-35 right-25 z-20 modal-fixe'>
+                {{-- <div class='hidden cart-box '> --}}
+                @include('client.cart_box')
+            </div>
+        </div>
     <footer class='flex flex-col justify-between items-center bg-(--hard_black) text-(--white_color) md:px-35 px-10 py-10 min-h-100 relative'>
         <div class='flex flex-col md:flex-row justify-between w-full max-[460px]:items-center '>
             <div>

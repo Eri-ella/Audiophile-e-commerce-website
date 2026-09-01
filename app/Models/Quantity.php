@@ -13,5 +13,7 @@ class Quantity extends Model
 
     protected $fillable = [
         'value',
+        'content_id',
+        'product_id',
     ];
 }

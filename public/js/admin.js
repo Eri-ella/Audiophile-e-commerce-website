@@ -1,83 +1,20 @@
 import ApexCharts from 'apexcharts';
 
 // change de couleur des onglets selectionnés - admin
-
-// change de couleur des onglets selectionnés - admin
 function toggleOnglet() {
-    const onglet_tab = document.querySelectorAll('.onglet');
-    
-    onglet_tab.forEach(element => {
-        element.addEventListener('click', () => {
-            onglet_tab.forEach(elt => {
-                elt.classList.remove('bg-(--orange_principal)');
-                elt.classList.remove('hover:bg-[#d18459]');
-                elt.classList.add('hover:bg-(--mid_gray)/50');
-            });
-            element.classList.add('bg-(--orange_principal)');
-            element.classList.add('hover:bg-[#d18459]');
-            element.classList.remove('hover:bg-(--mid_gray)');
-        });
-    });
-}
+    const currentPath = window.location.pathname;
+    const onglets = document.querySelectorAll('.onglet');
 
-// Gérer le clic sur "Voir tout" dans les transactions
-function handleTransactionClicker() {
-    const transaction_clicker = document.querySelector('.transaction-clicker');
-    const transaction_onglet = document.querySelector('.onglet-transaction');
-    const pageId = transaction_onglet?.dataset.page;
-    
-    if (!transaction_clicker || !transaction_onglet) return;
-    
-    transaction_clicker.addEventListener('click', (e) => {
-        e.preventDefault();
+        onglets.forEach(elt => {
+        elt.classList.remove('bg-(--orange_principal)', 'hover:bg-[#d18459]');
+        elt.classList.add('hover:bg-(--mid_gray)/50');
         
-        const page = document.getElementById(pageId);
-        const toutesLesPages = document.querySelectorAll('[id$="-page"]');
-        
-        if (page && transaction_onglet) {
-            changePage(page, toutesLesPages);
-            
-            const onglet_tab = document.querySelectorAll('.onglet');
-            onglet_tab.forEach(elt => {
-                elt.classList.remove('bg-(--orange_principal)');
-                elt.classList.remove('hover:bg-[#d18459]');
-                elt.classList.add('hover:bg-(--mid_gray)/50');
-            });
-            transaction_onglet.classList.add('bg-(--orange_principal)');
-            transaction_onglet.classList.add('hover:bg-[#d18459]');
-            transaction_onglet.classList.remove('hover:bg-(--mid_gray)');
+        if (elt.href.endsWith(currentPath)) {
+            elt.classList.add('bg-(--orange_principal)', 'hover:bg-[#d18459]');
+            elt.classList.remove('hover:bg-(--mid_gray)/50'); // Fixed mismatch here
         }
     });
-}
 
-// Gérer le clic sur "+ Ajouter un appareil" dans les produits
-function handleProductClicker() {
-    const product_clicker = document.querySelector('.product-clicker');
-    const product_onglet = document.querySelector('.onglet-product');
-    const pageId = product_onglet?.dataset.page;
-    
-    if (!product_clicker || !product_onglet) return;
-    
-    product_clicker.addEventListener('click', (e) => {
-        e.preventDefault();
-        
-        const page = document.getElementById(pageId);
-        const toutesLesPages = document.querySelectorAll('[id$="-page"]');
-        
-        if (page && product_onglet) {
-            changePage(page, toutesLesPages);
-            
-            const onglet_tab = document.querySelectorAll('.onglet');
-            onglet_tab.forEach(elt => {
-                elt.classList.remove('bg-(--orange_principal)');
-                elt.classList.remove('hover:bg-[#d18459]');
-                elt.classList.add('hover:bg-(--mid_gray)/50');
-            });
-            product_onglet.classList.add('bg-(--orange_principal)');
-            product_onglet.classList.add('hover:bg-[#d18459]');
-            product_onglet.classList.remove('hover:bg-(--mid_gray)');
-        }
-    });
 }
 
 // fontions d'affichage des pages de la partie admin
@@ -95,56 +32,48 @@ function changePage (pageActive, toutesLesPages) {
     } 
 }
 
-function togglePage() {
-    const onglets = document.querySelectorAll('.onglet');
-    const toutesLesPages = document.querySelectorAll('[id$="-page"]');
-
-    onglets.forEach(onglet => {
-        const pageId = onglet.dataset.page;
-        if (!pageId) return;
-
-        const page = document.getElementById(pageId);
-        if (!page) {
-            console.warn(`Page avec l'id "${pageId}" introuvable.`);
-            return;
-        }
-
-        onglet.addEventListener('click', () => {
-            changePage(page, toutesLesPages);
-        });
-    });
-}
-
 // fonction d'affichage du graphe 
-
 async function initSalesChart() {
-    const res = await fetch('/admin/dashboard/sales-data');
-    const { labels, data } = await res.json();
+    const chartEl = document.querySelector('#sales-chart');
+    if (!chartEl) return;   
 
-    const options = {
-        chart: {
-            type: 'line',
-            height: 200,
-        },
-        series: [{
-            name: 'sales',
-            data: [30, 30, 125, 80, 125, 30, 30, 91, 125, 30, 91, 125]
-        }],
-        xaxis: {
-            categories: ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Jui', 'Jul', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec']
-        },
-        fill: {
-            colors: ['#D87D4A']
-        }
-    };
+    try {
+        const res = await fetch('/admin/dashboard/sales-data');
+        if (!res.ok) throw new Error(`Réponse HTTP ${res.status}`);
 
-    new ApexCharts(document.querySelector('#sales-chart'), options).render();
+        const { labels, data } = await res.json();
+
+        const options = {
+            chart: {
+                type: 'line',
+                height: 260,
+                toolbar: { show: false },
+                fontFamily: 'Manrope, sans-serif',
+            },
+            series: [{ name: 'Ventes', data }],
+            xaxis: {
+                categories: labels,
+                labels: { style: { colors: '#6C6C6C', fontSize: '11px' } },
+            },
+            stroke: {
+                curve: "smooth",
+            },
+            colors: ['#D87D4A'],
+            dataLabels: { enabled: false },
+            grid: { borderColor: '#E7E7E7', strokeDashArray: 4 },
+            tooltip: { y: { formatter: (v) => '$' + v.toLocaleString() } },
+        };
+
+        new ApexCharts(chartEl, options).render();
+    } catch (err) {
+        console.error('Impossible de charger le graphe des ventes :', err);
+    }
 }
 
 document.addEventListener('DOMContentLoaded', function() {
     toggleOnglet();
-    togglePage();
     initSalesChart();
     handleTransactionClicker();
     handleProductClicker();
 });
+
