@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a9c70a2786f01fa204c72220f4a865b9",
+    "content-hash": "e2f77c797227d4397902d25b217adeb7",
     "packages": [
         {
             "name": "brick/math",
@@ -559,6 +559,58 @@
                 "source": "https://github.com/fedapay/fedapay-php/tree/0.4.8"
             },
             "time": "2026-03-23T00:50:01+00:00"
+        },
+        {
+            "name": "feexpayme/feexpay-sdk-php",
+            "version": "dev-foxinnovs-patch-1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/foxinnovs/feexpay-sdk-php.git",
+                "reference": "942031eef5ffd5f1b819f7db2a787d7d3514c84f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/foxinnovs/feexpay-sdk-php/zipball/942031eef5ffd5f1b819f7db2a787d7d3514c84f",
+                "reference": "942031eef5ffd5f1b819f7db2a787d7d3514c84f",
+                "shasum": ""
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Feexpay\\FeexpayPhp\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "LOUGBEGNON",
+                    "email": "amedeelougbegnon3@gmail.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Foxinnovs",
+                    "email": "foxinnovs@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Php sdk of Feexpay - Online payment solution by credit card and mobile money\"",
+            "homepage": "https://github.com/foxinnovs/feexpay-sdk-php",
+            "keywords": [
+                "Feexpay",
+                "integration",
+                "mobile",
+                "money"
+            ],
+            "support": {
+                "email": "contact@feexpay.me",
+                "issues": "https://github.com/foxinnovs/feexpay-sdk-php/issues",
+                "source": "https://github.com/foxinnovs/feexpay-sdk-php/tree/foxinnovs-patch-1"
+            },
+            "time": "2023-08-09T00:00:00+00:00"
         },
         {
             "name": "fruitcake/php-cors",
@@ -1569,16 +1621,16 @@
         },
         {
             "name": "league/commonmark",
-            "version": "2.9.1",
+            "version": "2.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/commonmark.git",
-                "reference": "73cb188c785abfa7a7bec73487148202968274c6"
+                "reference": "d2d1aa8b35e072966c89bc0c66cf926e56767dc4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/73cb188c785abfa7a7bec73487148202968274c6",
-                "reference": "73cb188c785abfa7a7bec73487148202968274c6",
+                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/d2d1aa8b35e072966c89bc0c66cf926e56767dc4",
+                "reference": "d2d1aa8b35e072966c89bc0c66cf926e56767dc4",
                 "shasum": ""
             },
             "require": {
@@ -1615,7 +1667,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "2.10-dev"
+                    "dev-main": "2.11-dev"
                 }
             },
             "autoload": {
@@ -1672,7 +1724,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-08-09T14:10:38+00:00"
+            "time": "2026-08-11T16:06:25+00:00"
         },
         {
             "name": "league/config",
@@ -10065,6 +10117,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "feexpayme/feexpay-sdk-php": 20,
         "kkiapay/kkiapay-php": 20
     },
     "prefer-stable": true,
