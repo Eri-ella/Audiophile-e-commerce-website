@@ -14,7 +14,10 @@ class Payment extends Model
         'order_id',
         'type',
         'status',
+        'provider',    
+        'external_id',   
         'fedapay_id',
+        'kkiapay_id',
     ];
 
     // Un payment appartient à UNE commande

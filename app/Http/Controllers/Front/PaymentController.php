@@ -10,46 +10,44 @@ use App\Models\Product;
 use App\Models\User;
 use App\Mail\OrderConfirmedMail;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
 use FedaPay\FedaPay;
 use FedaPay\Transaction;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Kkiapay\Kkiapay;
 
 class PaymentController extends Controller
 {
     // ===== Affiche le formulaire de paiement (checkout) =====
     public function create()
     {
-        $confirmedId = session('confirmed_order_id');
         $cart = session('cart', []);
 
-        if (empty($cart) && !$confirmedId) {
+        if (empty($cart)) {
             return redirect()->route('cart');
         }
 
-        $commande = null;
-        if ($confirmedId) {
-            $commande = Order::with(['client', 'delivery', 'payment', 'products'])->find($confirmedId);
-        }
-
-        return view('client.cart', [
-            'cart'     => $cart,
-            'commande' => $commande,
-        ]);
+        return view('client.checkout', ['cart' => $cart]);
     }
 
     // ===== Traite la soumission du formulaire =====
     public function store(Request $request)
     {
+        Log::info('Payment Form Data', $request->all());
+
         $validated = $request->validate([
-            'name'           => 'required|string|max:255',
-            'email'          => 'required|email',
-            'phone'          => 'required|min:8',
-            'address'        => 'required|string|max:255',
-            'zip'            => 'required|numeric',
-            'city'           => 'required|string|max:255',
-            'country'        => 'required|string|max:255',
-            'payment_method' => 'required|in:e-money,cash',
+            'name'             => 'required|string|max:255',
+            'email'            => 'required|email',
+            'phone'            => 'required|min:8',
+            'address'          => 'required|string|max:255',
+            'zip'              => 'required|numeric',
+            'city'             => 'required|string|max:255',
+            'country'          => 'required|string|max:255',
+            'payment_method'   => 'required|in:e-money,cash',
+            'payment_provider' => 'required_if:payment_method,e-money|in:fedapay,kkiapay',
+        ], [
+            'payment_provider.in' => 'Le prestataire de paiement doit être soit FedaPay, soit Kkiapay.',
         ]);
 
         $cart = session('cart', []);
@@ -60,7 +58,7 @@ class PaymentController extends Controller
         $total      = collect($cart)->sum(fn ($i) => $i['price'] * $i['qty']);
         $grandTotal = $total + 50;
 
-        // 🟦 1. Tout créer en BDD
+        // 1. Création en BDD (transaction atomique)
         $commandeId = DB::transaction(function () use ($validated, $cart, $grandTotal) {
             $client = User::updateOrCreate(
                 ['email' => $validated['email']],
@@ -89,6 +87,7 @@ class PaymentController extends Controller
             $payment = Payment::create([
                 'order_id' => $commande->id,
                 'type'     => $validated['payment_method'],
+                'provider' => $validated['payment_method'] === 'e-money' ? $validated['payment_provider'] : 'cash',
                 'status'   => $validated['payment_method'] === 'cash' ? 'approved' : 'pending',
             ]);
 
@@ -102,26 +101,38 @@ class PaymentController extends Controller
             return $commande->id;
         });
 
-        // 💵 CASH → on reste sur checkout + modale + email
+        // 2. Gestion CASH → confirmation immédiate
         if ($validated['payment_method'] === 'cash') {
-            session()->forget('cart');
-
             $commande = Order::with(['client', 'delivery', 'products'])->find($commandeId);
-            Mail::to($commande->client->email)->send(new OrderConfirmedMail($commande));
+            $this->finalizeOrder($commande, Payment::where('order_id', $commandeId)->first());
 
-            // ✅ Redirection vers cart avec commande en flash
-            return redirect()->route('cart')->with('confirmed_order_id', $commandeId);
+            return redirect()->route('payment.success', $commandeId);
         }
 
-        // 💳 E-MONEY → appel FedaPay
+        // 3. Gestion E-MONEY (FedaPay ou Kkiapay)
         $commande = Order::with('client')->findOrFail($commandeId);
+        $amountXof = (int) round($commande->amount * config('services.fedapay.usd_to_xof', 600));
 
+        if ($validated['payment_provider'] === 'fedapay') {
+            return $this->processFedaPay($commande, $amountXof);
+        }
+
+        if ($validated['payment_provider'] === 'kkiapay') {
+            return $this->processKkiapay($commande, $amountXof);
+        }
+
+        return redirect()->route('cart')->withErrors(['payment' => 'Méthode de paiement non reconnue.']);
+    }
+
+    // ===== Logique FedaPay =====
+    private function processFedaPay($commande, $amountXof)
+    {
         FedaPay::setApiKey(config('services.fedapay.secret'));
         FedaPay::setEnvironment(config('services.fedapay.env'));
 
         try {
             $transaction = Transaction::create([
-                'amount'      => (int) round($commande->amount),
+                'amount'      => $amountXof,
                 'currency'    => ['iso' => 'XOF'],
                 'description' => 'Commande #' . $commande->id . ' - Audiophile',
                 'customer'    => [
@@ -129,30 +140,45 @@ class PaymentController extends Controller
                     'firstname'    => $commande->client->name,
                     'lastname'     => $commande->client->name,
                     'phone_number' => [
-                        'number'  => preg_replace('/[^0-9+]/', '', $commande->client->telephone ?? ''),
+                        'number'  => preg_replace('/[^0-9]/', '', $commande->client->telephone ?? ''),
                         'country' => 'bj',
                     ],
                 ],
-                'callback_url' => route('payment.callback', $commande->id),
+                'callback_url' => route('payment.fedapay.callback', $commande->id),
             ]);
 
-            Payment::where('order_id', $commande->id)->update(['fedapay_id' => $transaction->id]);
+            Payment::where('order_id', $commande->id)->update(['external_id' => $transaction->id]);
 
             $token = $transaction->generateToken();
-
             return redirect($token->url);
 
         } catch (\Throwable $e) {
             $commande->update(['status' => 'failed']);
-
-            return redirect()
-                ->route('cart')
-                ->withErrors(['payment' => 'Service de paiement indisponible : ' . $e->getMessage()]);
+            Log::error('FedaPay Error', ['message' => $e->getMessage()]);
+            return redirect()->route('cart')->withErrors(['payment' => 'FedaPay indisponible : ' . $e->getMessage()]);
         }
     }
 
-    // 🔄 FedaPay renvoie le client ici après paiement
-    public function callback(Request $request, $orderId)
+    // ===== Logique Kkiapay (widget JS côté client) =====
+    private function processKkiapay($commande, $amountXof)
+    {
+        $phone = preg_replace('/[^0-9]/', '', $commande->client->telephone ?? '');
+        if (strlen($phone) === 8) {
+            $phone = '229' . $phone;
+        }
+
+        return view('client.kkiapay_widget', [
+            'commande'    => $commande,
+            'amountXof'   => $amountXof,
+            'phone'       => $phone,
+            'publicKey'   => config('services.kkiapay.public_key'),
+            'sandbox'     => config('services.kkiapay.sandbox', true),
+            'callbackUrl' => route('payment.kkiapay.callback', $commande->id),
+        ]);
+    }
+
+    // ===== Callback FedaPay (appelé via redirection du navigateur, GET) =====
+    public function fedapayCallback(Request $request, $orderId)
     {
         $commande = Order::findOrFail($orderId);
         $payment  = Payment::where('order_id', $commande->id)->first();
@@ -160,24 +186,106 @@ class PaymentController extends Controller
         FedaPay::setApiKey(config('services.fedapay.secret'));
         FedaPay::setEnvironment(config('services.fedapay.env'));
 
-        $transactionId = $request->query('id') ?? $request->query('transaction_id') ?? $payment?->fedapay_id;
-        $transaction   = Transaction::retrieve($transactionId);
+        $transactionId = $request->query('id') ?? $request->query('transaction_id') ?? $payment?->external_id;
 
-        if ($transaction && $transaction->status === 'approved') {
-            $commande->update(['status' => 'paid']);
-            $payment?->update(['status' => 'approved']);
-            session()->forget('cart');
-
-            $commande->load(['client', 'delivery', 'products']);
-            Mail::to($commande->client->email)->send(new OrderConfirmedMail($commande));
-
-            // ✅ On revient sur cart + modale
-            return redirect()->route('cart')->with('confirmed_order_id', $orderId);
+        if (!$transactionId) {
+            return redirect()->route('cart')->withErrors(['payment' => 'ID de transaction manquant.']);
         }
 
-        $commande->update(['status' => 'failed']);
-        $payment?->update(['status' => 'declined']);
-        return view('client.payment_failed', compact('commande'));
+        try {
+            $transaction = Transaction::retrieve($transactionId);
+
+            if ($transaction && $transaction->status === 'approved') {
+                $this->finalizeOrder($commande, $payment);
+                return redirect()->route('payment.success', $orderId);
+            }
+
+            $commande->update(['status' => 'failed']);
+            $payment?->update(['status' => 'declined']);
+            return view('client.payment_failed', compact('commande'));
+
+        } catch (\Throwable $e) {
+            Log::error('FedaPay Callback Error', ['message' => $e->getMessage()]);
+            return redirect()->route('cart')->withErrors(['payment' => 'Erreur FedaPay: ' . $e->getMessage()]);
+        }
+    }
+
+    // ===== Callback Kkiapay (appelé en AJAX/fetch par le widget JS, POST) =====
+    // Utilise le VRAI SDK PHP (verifyTransaction), pas une URL REST inventée.
+    public function kkiapayCallback(Request $request, $orderId)
+    {
+        $commande = Order::findOrFail($orderId);
+        $payment  = Payment::where('order_id', $commande->id)->first();
+
+        $transactionId = $request->input('transaction_id') ?? $request->query('transaction_id');
+
+        if (!$transactionId) {
+            return response()->json(['success' => false, 'message' => 'ID de transaction manquant.'], 422);
+        }
+
+        try {
+            $kkiapay = new Kkiapay(
+                config('services.kkiapay.public_key'),
+                config('services.kkiapay.private_key'),
+                config('services.kkiapay.secret'),
+                config('services.kkiapay.sandbox', true)
+            );
+
+            $result = $kkiapay->verifyTransaction($transactionId);
+
+            Log::info('KKiaPay Verify Result', (array) $result);
+
+            $payment?->update(['external_id' => $transactionId]);
+
+            $status = is_array($result) ? ($result['status'] ?? null) : ($result->status ?? null);
+
+            if ($status === 'SUCCESS') {
+                $this->finalizeOrder($commande, $payment);
+
+                return response()->json([
+                    'success'      => true,
+                    'redirect_url' => route('payment.success', $orderId),
+                ]);
+            }
+
+            $commande->update(['status' => 'failed']);
+            $payment?->update(['status' => 'declined']);
+
+            return response()->json(['success' => false, 'message' => 'Paiement non approuvé par KKiaPay.'], 422);
+
+        } catch (\Throwable $e) {
+            Log::error('KKiaPay Callback Error', ['message' => $e->getMessage()]);
+            $commande->update(['status' => 'failed']);
+            $payment?->update(['status' => 'declined']);
+
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
+
+    // ===== Méthode utilitaire pour finaliser une commande réussie =====
+    private function finalizeOrder($commande, $payment)
+    {
+        $commande->update(['status' => 'paid']);
+        $payment?->update(['status' => 'approved']);
+        session()->forget('cart');
+
+        $commande->load(['client', 'delivery', 'products']);
+
+        try {
+            Mail::to($commande->client->email)->send(new OrderConfirmedMail($commande));
+        } catch (\Throwable $e) {
+            // On ne bloque JAMAIS la confirmation de commande à cause d'un
+            // souci d'envoi d'email (config SMTP down, etc.) — on log juste.
+            Log::error('Erreur envoi email confirmation', ['message' => $e->getMessage()]);
+        }
+    }
+
+    // ===== Page de succès unifiée (FedaPay, KKiaPay, Cash) =====
+    public function success(string $id)
+    {
+        $commande = Order::with(['client', 'delivery', 'payment', 'products'])->findOrFail($id);
+
+        return view('client.order_success', compact('commande'));
     }
 
     public function show(string $id)

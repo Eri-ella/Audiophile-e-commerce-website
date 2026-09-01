@@ -9,6 +9,10 @@
     $shipping   = count($cart) > 0 ? 50 : 0;         
     $vat        = round($total * 0.2, 2);             
     $grandTotal = $total + $shipping;
+    
+    // Conversion USD → FCFA pour FedaPay / KikiPay
+    $usdToXof   = config('services.fedapay.usd_to_xof', 600);
+    $grandTotalXof = (int) round($grandTotal * $usdToXof);
 @endphp
 
 <div class="min-h-screen w-full bg-[#F2F2F2] pb-24">
@@ -108,11 +112,22 @@
                         </div>
                     </div>
 
+                    {{-- 🆕 Select pour choisir entre FedaPay et KikiPay (juste après les radios, avant le texte) --}}
+                    <div id="payment-provider-container" class="mt-6">
+                        <label for="payment_provider" class="text-xs font-bold text-[#101010] mb-2 block">Choisir le type</label>
+                        <select name="payment_provider" id="payment_provider"
+                                class="h-14 w-full rounded-lg border border-black/15 px-[1.5em] text-sm text-[#101010] outline-none transition-colors focus:border-[#D87D4A] focus:ring-2 focus:ring-[#D87D4A]/10 bg-white">
+                            <option value="fedapay">FedaPay</option>
+                            <option value="kkiapay">Kkiapay</option>
+                        </select>
+                    </div>
+
+                    {{-- Textes explicatifs --}}
                     <div id="e-money-fields" class="mt-6 rounded-lg bg-[#FAFAFA] p-5 text-sm leading-[1.7] text-[#101010]/70">
                         <p class="mb-2 flex items-center gap-2 font-bold text-[#101010]">
                              Paiement sécurisé
                         </p>
-                        <p>Après avoir cliqué sur "Continue & Pay", vous serez redirigé vers la page de paiement sécurisée de FedaPay où vous pourrez choisir votre moyen de paiement (Mobile Money, carte bancaire, etc.).</p>
+                        <p>Après avoir cliqué sur "Continue & Pay", vous serez redirigé vers la page de paiement sécurisée de <span id="provider-name" class="font-bold text-[#D87D4A]">FedaPay</span> où vous pourrez choisir votre moyen de paiement (Mobile Money, carte bancaire, etc.).</p>
                     </div>
 
                     <div id="cash-fields" class="mt-6 hidden flex-col gap-6 text-base leading-[1.8] text-[#101010]/50">
@@ -156,6 +171,18 @@
                         <p class="text-lg uppercase text-[#000000]/50">Grand Total</p>
                         <p class="text-lg font-bold text-[#D87D4A]">$ {{ number_format($grandTotal, 0, ',', ',') }}</p>
                     </div>
+                    
+                    @if (count($cart) > 0)
+                        <div class="flex items-center justify-between border-t border-black/10 pt-2">
+                            <p class="text-sm uppercase text-[#000000]/40">≈ en FCFA</p>
+                            <p class="text-sm font-bold text-[#808080]">
+                                {{ number_format($grandTotalXof, 0, ',', ' ') }} F
+                            </p>
+                        </div>
+                        <p class="text-xs text-[#000000]/40 italic">
+                            Taux : 1 $ = {{ number_format($usdToXof, 0, ',', ' ') }} F
+                        </p>
+                    @endif
                 </div>
 
                 <button type="submit"
@@ -173,55 +200,98 @@
     const eMoney = document.getElementById('e-money');
     const cash = document.getElementById('cash');
     const cashFields = document.getElementById('cash-fields');
+    const providerContainer = document.getElementById('payment-provider-container');
+    const providerSelect = document.getElementById('payment_provider');
+    const providerNameSpan = document.getElementById('provider-name');
 
     function toggleFields() {
         const isCash = cash.checked;
+        
+        // Afficher/masquer le select provider
+        providerContainer.classList.toggle('hidden', isCash);
+        
+        // Afficher/masquer les blocs de texte
+        document.getElementById('e-money-fields').classList.toggle('hidden', isCash);
         cashFields.classList.toggle('hidden', !isCash);
         cashFields.classList.toggle('flex', isCash);
+        
+        // Gérer l'attribut required du select (évite les erreurs de validation HTML5 quand caché)
+        providerSelect.required = !isCash;
+    }
+
+    function updateProviderText() {
+        const selectedProvider = providerSelect.options[providerSelect.selectedIndex].text;
+        providerNameSpan.textContent = selectedProvider;
     }
 
     eMoney.addEventListener('change', toggleFields);
     cash.addEventListener('change', toggleFields);
+    providerSelect.addEventListener('change', updateProviderText);
     
+    // Initialisation au chargement
     toggleFields();
+    updateProviderText();
 </script>
 
-{{-- ============================================================ --}}
-{{-- ✅ MODALE RÉCAP APRÈS PAIEMENT - FOND FLOUTÉ                   --}}
-{{-- ============================================================ --}}
+
+{{-- MODALE RÉCAP APRÈS PAIEMENT (Design compact & centré)        --}}
+
 @if (isset($commande) && $commande)
-<div class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/50 px-4 py-8 backdrop-blur-md">
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 py-8 backdrop-blur-md">
 
-    <div class="w-full max-w-[480px] rounded-xl bg-white p-8 shadow-2xl">
+    <div class="w-full max-w-[480px] rounded-2xl bg-white p-8 shadow-2xl">
 
-        <h1 class="mb-2 text-xl font-bold uppercase leading-snug text-[#101010]">
-            Thank you for your order
+        {{-- Icône de succès --}}
+        <div class="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[#D87D4A]">
+            <svg width="20" height="15" viewBox="0 0 14 11" xmlns="http://www.w3.org/2000/svg">
+                <path fill="none" stroke="#FFF" stroke-width="2" d="m1 4.526 3.973 4.056L12.246 1"/>
+            </svg>
+        </div>
+
+        {{-- Titre et sous-titre --}}
+        <h1 class="mb-2 text-2xl font-bold uppercase leading-tight text-[#101010]">
+            Thank you<br>for your order
         </h1>
         <p class="mb-6 text-sm text-[#808080]">
-            Commande #{{ $commande->id }} — email de confirmation sous peu.
+            Commande #{{ $commande->id }} — vous recevrez un email de confirmation sous peu.
         </p>
 
-        {{-- ✅ PRODUITS avec la bonne image (image_1 avec fallback sur image_description) --}}
-        <div class="rounded-lg bg-[#F2F2F2] p-4">
+        {{-- Liste des produits --}}
+        <div class="mb-6 rounded-xl bg-[#F2F2F2] p-5">
             @foreach ($commande->products as $product)
-                <div class="mb-4 flex items-center gap-3 last:mb-0">
-                    <img src="{{ asset($product->image_1 ?? $product->image_description) }}" 
+                <div class="flex items-center gap-4 py-3 first:pt-0 last:pb-0 border-b border-black/5 last:border-0">
+                    <img src="{{ asset($product->image_1 ?? $product->image_description) }}"
                          alt="{{ $product->name }}"
-                         class="h-12 w-12 flex-shrink-0 rounded-lg object-cover">
-                    <p class="text-sm font-bold text-[#101010]">{{ $product->name }}</p>
-                    <p class="ml-auto text-sm font-bold text-[#808080]">x{{ $product->pivot->quantity }}</p>
+                         class="h-16 w-16 flex-shrink-0 rounded-lg object-cover">
+                    
+                    <div class="flex flex-1 items-center justify-between">
+                        <span class="text-sm font-bold text-[#101010] truncate pr-4">
+                            {{ $product->name }}
+                        </span>
+                        <div class="text-right">
+                            <span class="text-sm font-bold text-[#101010] block">
+                                $ {{ number_format($product->price, 0, ',', ',') }}
+                            </span>
+                            <span class="text-xs text-[#808080]">
+                                x{{ $product->pivot->quantity }}
+                            </span>
+                        </div>
+                    </div>
                 </div>
             @endforeach
         </div>
 
-        {{-- ✅ TOTAL EN BAS, SANS FOND NOIR --}}
-        <div class="mt-4 flex items-center justify-between border-t border-black/10 pt-4">
-            <p class="text-sm uppercase text-[#808080]">Grand total</p>
-            <p class="text-lg font-bold text-[#D87D4A]">$ {{ number_format($commande->amount, 0, ',', ',') }}</p>
+        {{-- Total avec texte VISIBLE sur fond noir --}}
+        <div class="mb-8 flex items-center justify-between rounded-xl bg-black p-5">
+            <span class="text-sm uppercase tracking-wide text-white/60">Grand Total</span>
+            <span class="text-2xl font-bold text-white">
+                $ {{ number_format($commande->amount ?? 0, 0, ',', ',') }}
+            </span>
         </div>
 
+        {{-- Bouton de retour --}}
         <a href="{{ route('acceuil') }}"
-           class="mt-6 block bg-[#D87D4A] py-3 text-center text-xs font-bold uppercase tracking-[0.15em] text-white transition-colors hover:bg-[#FBAF85]">
+           class="block w-full rounded-lg bg-[#D87D4A] py-4 text-center text-sm font-bold uppercase tracking-[0.15em] text-white transition-colors hover:bg-[#FBAF85]">
             Back to home
         </a>
     </div>

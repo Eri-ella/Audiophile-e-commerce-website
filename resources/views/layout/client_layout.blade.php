@@ -5,8 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Acceuil</title>
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    @vite([
+        'resources/css/app.css',
+        'resources/js/app.js',
+        'public/js/client.js',
+    ])
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    @vite(['public/js/client.js'])
 </head>
 <body 
     x-data='{ 
@@ -20,7 +24,7 @@
              class="fixed left-1/2 top-6 z-50 flex -translate-x-1/2 items-center gap-3 whitespace-nowrap rounded-lg bg-white px-6 py-4 shadow-[0_20px_50px_rgba(0,0,0,0.2)] transition-all duration-300">
             <div class="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-(--orange_principal)">
                 <svg width="12" height="9" viewBox="0 0 14 11" xmlns="http://www.w3.org/2000/svg">
-                    <path fill="none" stroke="#FFF" stroke-width="2" d="m1 4.526 3.973 4.056L12.246 1" />
+                    <path fill="none" stroke="#FFF" stroke-width="2" d="m 4.526 3.973 4.056L12.246 1" />
                 </svg>
             </div>
             <p class="text-sm font-medium text-(--hard_black)">
@@ -119,6 +123,5 @@
             </div>
         </div>
     </footer>
-    @vite(['public/js/client.js'])
 </body>
 </html>
