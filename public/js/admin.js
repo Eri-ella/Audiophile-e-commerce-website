@@ -1,8 +1,6 @@
 import ApexCharts from 'apexcharts';
 
 // change de couleur des onglets selectionnés - admin
-
-// change de couleur des onglets selectionnés - admin
 function toggleOnglet() {
     const onglet_tab = document.querySelectorAll('.onglet');
     
@@ -118,27 +116,45 @@ function togglePage() {
 // fonction d'affichage du graphe 
 
 async function initSalesChart() {
-    const res = await fetch('/admin/dashboard/sales-data');
-    const { labels, data } = await res.json();
+    const chartEl = document.querySelector('#sales-chart');
+    if (!chartEl) return;   
 
-    const options = {
-        chart: {
-            type: 'line',
-            height: 200,
-        },
-        series: [{
-            name: 'sales',
-            data: [30, 30, 125, 80, 125, 30, 30, 91, 125, 30, 91, 125]
-        }],
-        xaxis: {
-            categories: ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Jui', 'Jul', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec']
-        },
-        fill: {
-            colors: ['#D87D4A']
-        }
-    };
+    try {
+        const res = await fetch('/admin/dashboard/sales-data');
+        if (!res.ok) throw new Error(`Réponse HTTP ${res.status}`);
 
-    new ApexCharts(document.querySelector('#sales-chart'), options).render();
+        const { labels, data } = await res.json();
+
+        const options = {
+            chart: {
+                type: 'area',
+                height: 260,
+                toolbar: { show: false },
+                fontFamily: 'Manrope, sans-serif',
+            },
+            series: [{ name: 'Ventes', data }],
+            xaxis: {
+                categories: labels,
+                labels: { style: { colors: '#6C6C6C', fontSize: '11px' } },
+            },
+            yaxis: {
+                labels: { formatter: (v) => '$' + v.toLocaleString() },
+            },
+            colors: ['#D87D4A'],
+            stroke: { curve: 'smooth', width: 3 },
+            fill: {
+                type: 'gradient',
+                gradient: { shadeIntensity: 1, opacityFrom: 0.35, opacityTo: 0, stops: [0, 90, 100] },
+            },
+            dataLabels: { enabled: false },
+            grid: { borderColor: '#E7E7E7', strokeDashArray: 4 },
+            tooltip: { y: { formatter: (v) => '$' + v.toLocaleString() } },
+        };
+
+        new ApexCharts(chartEl, options).render();
+    } catch (err) {
+        console.error('Impossible de charger le graphe des ventes :', err);
+    }
 }
 
 // Fonction pour activer l'onglet selon l'URL actuelle
@@ -160,7 +176,6 @@ function setActiveTabFromUrl() {
         }
     });
 }
-
 // Appeler au chargement de la page
 document.addEventListener('DOMContentLoaded', function() {
     setActiveTabFromUrl(); 
