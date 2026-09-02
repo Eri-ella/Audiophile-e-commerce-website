@@ -185,17 +185,56 @@ class PaymentController extends Controller
     // ===== Logique FeexPay =====
     private function processFeexpay($commande, $amountXof)
     {
-        $feexpay = new FeexpayClass (
-            env('FEEXPAY_SHOP_ID'),
-            env('FEEXPAY_TOKEN'),
-            env('FEEXPAY_CALLBACK_URL'),
-            env('FEEXPAY_MODE'),
-        );
+        $client = $commande->client;
+        $payment = Payment::where('order_id', $commande->id)->first();
 
-        $response = $feexpay->paiementCard(
-            $amountXof,
-            
-        );
+        $email = $client->email;
+        $name = $client->name;
+        $phone = $client->telephone;
+        $country = $commande->delivery->country ?? 'Bénin';
+        $city = $commande->delivery->city ?? 'Cotonou';
+        $address = $commande->delivery->address ?? $city;
+
+        $phone = preg_replace('/[^0-9]/', '', $commande->client->telephone ?? '');
+        if (strlen($phone) === 8) {
+            $phone = '229' . $phone;
+        }
+
+        $cardType = 'VISA';
+
+        try {
+            $feexpay = new FeexpayClass (
+                env('FEEXPAY_SHOP_ID'),
+                env('FEEXPAY_TOKEN'),
+                env('FEEXPAY_CALLBACK_URL'),
+                env('FEEXPAY_MODE'),
+            );
+
+            $response = $feexpay->paiementCard(
+                $amountXof,
+                $cardType,
+                $email,
+                $name,
+                $phone,
+                $country,
+                $city,
+                $address,
+                'XOF'
+            );
+
+            if (isset($response['id'])) {
+                $payment->update(['external_id' => $response['id']]);
+            }
+            if (isset($response['url'])) {
+                return redirect()->away($response['url']);
+            }
+
+            Log::error('Feexpay error', ['response' => $response]);
+            return redirect()->route('cart')->withError(['payement' => 'Erreur Feexpay']);
+        } catch (\Throwable $e) {
+            Log::error('Feexpay init error', ['messahe' => $e->getMessage()]);
+            return redirect()->route('cart')->withError(['payement' => 'Feexpay indisponible : ' . $e->getMessage()]);
+        }
     }
 
     // ===== Callback FedaPay (appelé via redirection du navigateur, GET) =====
