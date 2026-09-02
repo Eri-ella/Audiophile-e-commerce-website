@@ -207,7 +207,7 @@ class PaymentController extends Controller
         \Paydunya\Setup::setPublicKey(config('services.paydunya.public_key'));
         \Paydunya\Setup::setPrivateKey(config('services.paydunya.private_key'));
         \Paydunya\Setup::setToken(config('services.paydunya.token'));
-        \Paydunya\Setup::setMode(config('services.paydunya.mode'));
+        \Paydunya\Setup::setMode(config('services.paydunya.mode', 'test'));
 
         $invoice = new \Paydunya\Checkout\CheckoutInvoice();
         $invoice->addItem("Commande #{$commande->id}", 1, $amountXof, $amountXof);
@@ -365,7 +365,31 @@ class PaymentController extends Controller
     // ===== Callback PayDunya =====
     public function paudunyaCallback(Request $request, $orderId)
     {
-        
+        $commande = Oder::findorFail($orderId);
+        $payment = Payment::where('order_id', $commande->id)->first();
+
+        $token = $request->query('token');
+        if(!token) {
+            return redirect()->route('cart')->withErrors([
+                'payment' => 'Token Paydunya manquant.'
+            ]);
+        }
+        \Paydunya\Setup::setMasterKey(config('services.paydunya.master_key'));
+        \Paydunya\Setup::setPublicKey(config('services.paydunya.public_key'));
+        \Paydunya\Setup::setPrivateKey(config('services.paydunya.private_key'));
+        \Paydunya\Setup::setToken(config('services.paydunya.token'));
+        \Paydunya\Setup::setMode(config('services.paydunya.mode', 'test'));
+
+        $invoice = new \Paydunya\Checkout\CheckoutInvoice();
+        if ($invoice->confirm($token)) {
+            if ($invoice->getStatus() === 'completed') {
+                $this->finalizeOrder($commande, $payment);
+                return redirect()->route('payment.success', $orderId);
+            }
+            $commande->update(['status' => 'failed']);
+            $payment?->update(['status' => 'declined']);
+            return view('client.payment_failed', compact('commande'));
+        }
     }
 
     // ===== Méthode utilitaire pour finaliser une commande réussie =====
