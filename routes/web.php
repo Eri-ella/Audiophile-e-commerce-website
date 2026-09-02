@@ -59,7 +59,7 @@ Route::get('/payment/fedapay/callback/{orderId}', [PaymentController::class, 'fe
 Route::post('/payment/kkiapay/callback/{orderId}', [PaymentController::class, 'kkiapayCallback'])->name('payment.kkiapay.callback');
 
 // Callback FeexPay 
-Route::get('/payment/feexpay/callback/{orderId}', [PaymentController::class, 'feexCallback'])->name('payment.feexpay.callback');
+Route::get('/payment/feexpay/callback/{orderId}', [PaymentController::class, 'feexpayCallback'])->name('payment.feexpay.callback');
 
 // ==========================================
 // ADMIN

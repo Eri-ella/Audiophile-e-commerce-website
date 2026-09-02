@@ -49,4 +49,11 @@ return [
         'sandbox'     => env('KKIAPAY_SANDBOX', true),
     ],
 
+    'feexpay' => [
+        'shop_id'      => env('FEEXPAY_SHOP_ID'),
+        'token'        => env('FEEXPAY_TOKEN'),
+        'callback_url' => env('FEEXPAY_CALLBACK_URL'),
+        'mode'         => env('FEEXPAY_MODE', 'SANDBOX'),
+    ],    
+
 ];
