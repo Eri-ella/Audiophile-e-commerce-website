@@ -200,6 +200,30 @@ class PaymentController extends Controller
         ]);
     }
 
+    // ===== Logique FeexPay =====
+    private function processPaydunya($commande, $amountXof) 
+    {
+        \Paydunya\Setup::setMasterKey(config('services.paydunya.master_key'));
+        \Paydunya\Setup::setPublicKey(config('services.paydunya.public_key'));
+        \Paydunya\Setup::setPrivateKey(config('services.paydunya.private_key'));
+        \Paydunya\Setup::setToken(config('services.paydunya.token'));
+        \Paydunya\Setup::setMode(config('services.paydunya.mode'));
+
+        $invoice = new \Paydunya\Checkout\CheckoutInvoice();
+        $invoice->addItem("Commande #{$commande->id}", 1, $amountXof, $amountXof);
+        $invoice->setTotalAmount($amountXof);
+        $invoice->setDescription("Commande Audiophile #{$commande->id}");
+        $invoice->setReturnUrl(route('payment.paydunya.callback', $commande->id));
+        $invoice->setCancelUrl(route('cart'));
+        $invoice->addCustomData('order_id', $commande->id);
+
+        if ($invoice->create()) {
+            Payment::where('order_id', $commande->id)->update(['external_id' => $invoice->token]);
+            return redirect()->away($invoice->getInvoiceUrl());
+        }
+        Log::error('PauDunya Error', ['response' => $invoice->getResponseText()]);
+        return redirect()->route('cart')->withErrors(['payment' => 'PayDunya indisponible : ' . $invoice->getResponseText()]);
+    }
 
     // ===== Callback FedaPay (appelé via redirection du navigateur, GET) =====
     public function fedapayCallback(Request $request, $orderId)
@@ -336,6 +360,12 @@ class PaymentController extends Controller
                 'payment' => 'Feexpay indisponible : ' . $e->getMessage()
             ]);
         }
+    }
+
+    // ===== Callback PayDunya =====
+    public function paudunyaCallback(Request $request, $orderId)
+    {
+        
     }
 
     // ===== Méthode utilitaire pour finaliser une commande réussie =====
