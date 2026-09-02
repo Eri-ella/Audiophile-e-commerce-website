@@ -58,6 +58,9 @@ Route::get('/payment/fedapay/callback/{orderId}', [PaymentController::class, 'fe
 // Callback KKiaPay : appelé en AJAX (fetch) depuis le widget JS → doit être en POST
 Route::post('/payment/kkiapay/callback/{orderId}', [PaymentController::class, 'kkiapayCallback'])->name('payment.kkiapay.callback');
 
+// Callback FeexPay 
+Route::get('/payment/feexpay/callback/{orderId}', [PaymentController::class, 'feexCallback'])->name('payment.feexpay.callback');
+
 // ==========================================
 // ADMIN
 // ==========================================

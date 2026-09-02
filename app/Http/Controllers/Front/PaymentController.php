@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use FedaPay\FedaPay;
 use FedaPay\Transaction;
 use Kkiapay\Kkiapay;
+use Feexpay\FeexpayPhp\FeexpayClass;
 
 class PaymentController extends Controller
 {
@@ -121,6 +122,10 @@ class PaymentController extends Controller
             return $this->processKkiapay($commande, $amountXof);
         }
 
+        if ($validated['payment_provider'] === 'feexpay') {
+            return $this->processFeexpay($commande, $amountXof);
+        }
+
         return redirect()->route('cart')->withErrors(['payment' => 'Méthode de paiement non reconnue.']);
     }
 
@@ -175,6 +180,22 @@ class PaymentController extends Controller
             'sandbox'     => config('services.kkiapay.sandbox', true),
             'callbackUrl' => route('payment.kkiapay.callback', $commande->id),
         ]);
+    }
+
+    // ===== Logique FeexPay =====
+    private function processFeexpay($commande, $amountXof)
+    {
+        $feexpay = new FeexpayClass (
+            env('FEEXPAY_SHOP_ID'),
+            env('FEEXPAY_TOKEN'),
+            env('FEEXPAY_CALLBACK_URL'),
+            env('FEEXPAY_MODE'),
+        );
+
+        $response = $feexpay->paiementCard(
+            $amountXof,
+            
+        );
     }
 
     // ===== Callback FedaPay (appelé via redirection du navigateur, GET) =====
@@ -254,13 +275,19 @@ class PaymentController extends Controller
             return response()->json(['success' => false, 'message' => 'Paiement non approuvé par KKiaPay.'], 422);
 
         } catch (\Throwable $e) {
-            Log::error('KKiaPay Callback Error', ['message' => $e->getMessage()]);
+            Log::error('KKiaPay Callback Error', ['message' => $e->getMessage()]); 
             $commande->update(['status' => 'failed']);
             $payment?->update(['status' => 'declined']);
 
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
+
+    // ===== Callback FeexPay =====
+    public function feexpayCallback(Request $request, $orderId)   
+    {
+
+    } 
 
     // ===== Méthode utilitaire pour finaliser une commande réussie =====
     private function finalizeOrder($commande, $payment)

@@ -119,6 +119,7 @@
                                 class="h-14 w-full rounded-lg border border-black/15 px-[1.5em] text-sm text-[#101010] outline-none transition-colors focus:border-[#D87D4A] focus:ring-2 focus:ring-[#D87D4A]/10 bg-white">
                             <option value="fedapay">FedaPay</option>
                             <option value="kkiapay">Kkiapay</option>
+                            <option value="feexpay">Feexpay</option> {{-- Select FeexPay --}}
                         </select>
                     </div>
 
