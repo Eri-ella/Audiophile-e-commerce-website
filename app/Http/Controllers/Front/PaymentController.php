@@ -46,9 +46,9 @@ class PaymentController extends Controller
             'city'             => 'required|string|max:255',
             'country'          => 'required|string|max:255',
             'payment_method'   => 'required|in:e-money,cash',
-            'payment_provider' => 'required_if:payment_method,e-money|in:fedapay,kkiapay,feexpay',
+            'payment_provider' => 'required_if:payment_method,e-money|in:fedapay,kkiapay,feexpay,paydunya',
         ], [
-            'payment_provider.in' => 'Le prestataire de paiement doit être soit FedaPay, soit Kkiapay, soit Feexpay.',
+            'payment_provider.in' => 'Le prestataire de paiement doit être soit FedaPay, Kkiapay, Feexpay ou Paydunya.',
         ]);
 
         $cart = session('cart', []);
@@ -123,6 +123,10 @@ class PaymentController extends Controller
         }
 
         if ($validated['payment_provider'] === 'feexpay') {
+            return $this->processFeexpay($commande, $amountXof);
+        }
+
+        if ($validated['payment_provider'] === 'paydunya') {
             return $this->processFeexpay($commande, $amountXof);
         }
 
