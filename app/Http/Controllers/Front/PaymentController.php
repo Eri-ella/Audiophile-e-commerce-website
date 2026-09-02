@@ -325,8 +325,33 @@ class PaymentController extends Controller
     // ===== Callback FeexPay =====
     public function feexpayCallback(Request $request, $orderId)   
     {
+        $client = $commande->client;
+        $payment = Payment::where('order_id', $commande->id)->first();
 
-    } 
+        try {
+            $feexpay = new FeexpayClass (
+                env('FEEXPAY_SHOP_ID'),
+                env('FEEXPAY_TOKEN'),
+                env('FEEXPAY_CALLBACK_URL'),
+                env('FEEXPAY_MODE'),
+            );
+
+            $status = $feexpay->getPaiementStatus($request->all());
+
+            if (isset($status) && $status['status'] === 'success') {
+                $this->finalizeOrder($commande, $payment);
+                return redirect()->route('payment.success', $orderId);
+            }
+
+            $commande->update(['status' => 'failed']);
+            $payment?->update(['status' => 'declined']);
+            return redirect()->view('client.payment_failed', compact('commande'));
+
+        } catch (\Throwable $e) {
+            Log::error('Feexpay init error', ['messahe' => $e->getMessage()]);
+            return redirect()->route('cart')->withError(['payement' => 'Feexpay indisponible : ' . $e->getMessage()]);
+        }
+    }
 
     // ===== Méthode utilitaire pour finaliser une commande réussie =====
     private function finalizeOrder($commande, $payment)
